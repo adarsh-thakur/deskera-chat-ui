@@ -99,7 +99,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             />
                             {this.getDocumentPicker()}
                             <DKIcon
-                                src={DKIcons.ic_white_open}
+                                src={DKIcons.ic_document}
                                 className="unselectable cursor-hand p-s border-radius-m"
                                 onClick={() => {
                                     this.openImagePicker();

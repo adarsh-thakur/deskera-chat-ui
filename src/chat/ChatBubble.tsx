@@ -9,51 +9,30 @@ import {
 	DKSpinner,
 } from 'deskera-ui-library';
 import { MESSAGE_TYPE } from '../Utility/Constants';
-import { getFormattedTimeFromDate, highlightString, isEmptyObject, triggerDownload } from '../Utility/Utility';
+import {
+	getFormattedTimeFromDate,
+	highlightString,
+	isEmptyObject,
+	triggerDownload,
+} from '../Utility/Utility';
 
 export interface IChatBubbleProps {
 	messages?: any[];
-	searchText: String;
+	searchText?: String;
 	data: any;
-	currentUserId: any;
-	currentTenantId?: any;
 	onActionButtonClick?: (messageId, threadId, attachmentId) => void;
 }
 export default class ChatBubble extends Component<IChatBubbleProps, any> {
-	messagesEndRef: RefObject<any>;
 	constructor(props) {
 		super(props);
 		this.state = {
 			showImagePopup: false,
-			messages: this.props.messages,
 			showActionList: false,
 		};
-		this.messagesEndRef = React.createRef();
 	}
-	componentDidMount() {
-		this.scrollToBottom();
-		if (this.props.data.type === 'multimedia') {
-			this.getAttachment(this.props.data.body.attachments[0]);
-		}
-	}
-	componentWillReceiveProps(nextProps) {
-		this.setState({ messages: nextProps.messages });
-	}
-
-	scrollToBottom = () => {
-		this.messagesEndRef.current &&
-			this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-	};
+	componentDidMount() {}
+	componentWillReceiveProps(nextProps) {}
 	render() {
-		let isReceiver =
-			this.props.data.from?.id !=
-			(this.props.currentUserId != null
-				? this.props.currentUserId
-				: 'UserManager.getUserIamID()') &&
-			this.props.data.from?.id !=
-			(this.props.currentTenantId != null
-				? this.props.currentTenantId
-				: 'UserManager.getUserTenantID()');
 		return (
 			<div
 				className="row display-flex parent-width"
@@ -62,48 +41,55 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				{this.state.showImagePopup && this.imagePopup()}
 				<>
 					<div
-						className={`justify-content-start align-items-end ${isReceiver ? 'row' : 'row-reverse'
-							}`}
+						className={`justify-content-start align-items-end ${
+							!this.props.data.sender ? 'row' : 'row-reverse'
+						}`}
 					>
 						<DKContactIcon
-							title={`${isReceiver ? 'R' : 'S'}`}
-							className={`flex-shrink-0 border-m display-only-web bg-gray3 ${isReceiver ? 'ml-s' : 'mr-s'
-								}`}
+							title={`${!this.props.data.sender ? 'R' : 'S'}`}
+							className={`flex-shrink-0 border-m display-only-web bg-gray3 ${
+								this.props.data.sender ? 'ml-s' : 'mr-s'
+							}`}
 						/>
 						<div
-							className={`m-v-s p-s fs-m position-relative ${isReceiver
-								? 'ml-m chat-bubble-receiver'
-								: 'mr-m text-white chat-bubble-sender'
-								}`}
+							className={`m-v-s p-s fs-m position-relative ${
+								!this.props.data.sender
+									? 'ml-m chat-bubble-receiver'
+									: 'mr-m text-white chat-bubble-sender'
+							}`}
 							style={{
-								backgroundColor: isReceiver ? '#dcdcdc' : '#1c73e8',
+								backgroundColor: !this.props.data.sender
+									? '#dcdcdc'
+									: '#1c73e8',
 								display: 'inline',
 								maxWidth: '35%',
 								minWidth: '15%',
 							}}
 						>
-							{!isReceiver && this.props.data.updatedBy == 'UserManager.getUserIamID()' && (
-								<div
-									className="p-s"
-									onClick={() =>
-										this.setState({
-											showActionList:
-												!this.state.showActionList,
-										})
-									}
-								>
-									<DKIcon
-										className="bubble-arrow position-absolute"
-										style={{
-											height: 14,
-											top: 5,
-											right: 8,
-											opacity: 0.5,
-										}}
-										src={DKIcons.ic_arrow_down2}
-									/>
-								</div>
-							)}
+							{this.props.data.sender &&
+								this.props.data.updatedBy ==
+									'UserManager.getUserIamID()' && (
+									<div
+										className="p-s"
+										onClick={() =>
+											this.setState({
+												showActionList:
+													!this.state.showActionList,
+											})
+										}
+									>
+										<DKIcon
+											className="bubble-arrow position-absolute"
+											style={{
+												height: 14,
+												top: 5,
+												right: 8,
+												opacity: 0.5,
+											}}
+											src={DKIcons.ic_arrow_down2}
+										/>
+									</div>
+								)}
 							{this.state.showActionList &&
 								this.getActionListPicker(
 									this.props.data._id,
@@ -123,11 +109,12 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 									right: '10px',
 								}}
 							>
-								{getFormattedTimeFromDate(new Date(this.props.data?.sentAt))}
+								{getFormattedTimeFromDate(
+									new Date(this.props.data?.sentAt)
+								)}
 							</div>
 						</div>
 					</div>
-					<div ref={this.messagesEndRef} />
 				</>
 			</div>
 		);
@@ -170,20 +157,9 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			return messageText;
 		}
 	};
-	getAttachment = (attachment) => {
-		// Chat.getAttachment(attachment, this.props.data?.threadId).then(
-		// 	(response: any) => {
-		// 		this.setState({
-		// 			link: response?.downloadLink
-		// 				? response?.downloadLink
-		// 				: null,
-		// 		});
-		// 	}
-		// );
-	};
 	getDisplayContent = (type, content, attachment) => {
-		let isAttachmentPreset =
-			attachment != undefined && this.displayFileIconByType(attachment);
+		// let isAttachmentPreset =
+		// 	attachment != undefined && this.displayFileIconByType(attachment);
 		switch (type) {
 			case MESSAGE_TYPE.TEXT:
 				return (
@@ -192,80 +168,80 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 						className="fs-r text-align-left mb-m"
 					/>
 				);
-			case MESSAGE_TYPE.MULTIMEDIA:
-				return (
-					<div className="document-container">
-						<div
-							className="display-flex mb-m justify-content-center position-relative p-m"
-						>
-							{isAttachmentPreset === 'img' && (
-								<div
-									className="display-flex mb-m cursor-hand"
-									style={{
-										maxWidth: 230,
-									}}
-									onClick={() => this.showImage(attachment)}
-								>
-									<img
-										src={attachment}
-										className="parent-width"
-										alt="chat-image"
-									/>
-								</div>
-							)}
-							{attachment == undefined && (
-								<DKSpinner
-									iconClassName="ic-s-2"
-									className="ml-m"
-								/>
-							)}
-							{isAttachmentPreset === 'pdf' && (
-								<DKIcon
-									src={require("../assests/svgs/pdf.svg") as string}
-									className="ic-m unselectable cursor-hand border-radius-m"
-								/>
-							)}
-							{isAttachmentPreset === 'doc' && (
-								<DKIcon
-									src={require("../assests/svgs/word.svg") as string}
-									className="ic-m unselectable cursor-hand border-radius-m"
-								/>
-							)}
-							{isAttachmentPreset === 'excel' && (
-								<DKIcon
-									src={require("../assests/svgs/excel.svg") as string}
-									className="ic-m unselectable cursor-hand border-radius-m"
-								/>
-							)}
-							{isAttachmentPreset === 'powerpoint' && (
-								<DKIcon
-									src={require("../assests/svgs/powerpoint.svg") as string}
-									className="ic-m unselectable cursor-hand border-radius-m"
-								/>
-							)}
-							{isAttachmentPreset === 'file' && (
-								<DKIcon
-									src={DKIcons.ic_document}
-									className="ic-m unselectable cursor-hand border-radius-m"
-								/>
-							)}
-						</div>
-						{isAttachmentPreset != 'img' && (
-							<div className="mb-m justify-content-center border-radius-m position-absolute transparent-background display-none download-button">
-								<DKIcon
-									src={DKIcons.white.ic_download}
-									className="ic-l unselectable cursor-hand border-radius-m d-flex align-self-center"
-									style={{
-										width: 22,
-									}}
-									onClick={() =>
-										this.downloadDocument(attachment)
-									}
-								/>
-							</div>
-						)}
-					</div>
-				);
+			// case MESSAGE_TYPE.MULTIMEDIA:
+			// 	return (
+			// 		<div className="document-container">
+			// 			<div
+			// 				className="display-flex mb-m justify-content-center position-relative p-m"
+			// 			>
+			// 				{isAttachmentPreset === 'img' && (
+			// 					<div
+			// 						className="display-flex mb-m cursor-hand"
+			// 						style={{
+			// 							maxWidth: 230,
+			// 						}}
+			// 						onClick={() => this.showImage(attachment)}
+			// 					>
+			// 						<img
+			// 							src={attachment}
+			// 							className="parent-width"
+			// 							alt="chat-image"
+			// 						/>
+			// 					</div>
+			// 				)}
+			// 				{attachment == undefined && (
+			// 					<DKSpinner
+			// 						iconClassName="ic-s-2"
+			// 						className="ml-m"
+			// 					/>
+			// 				)}
+			// 				{isAttachmentPreset === 'pdf' && (
+			// 					<DKIcon
+			// 						src={require("../assests/svgs/pdf.svg") as string}
+			// 						className="ic-m unselectable cursor-hand border-radius-m"
+			// 					/>
+			// 				)}
+			// 				{isAttachmentPreset === 'doc' && (
+			// 					<DKIcon
+			// 						src={require("../assests/svgs/word.svg") as string}
+			// 						className="ic-m unselectable cursor-hand border-radius-m"
+			// 					/>
+			// 				)}
+			// 				{isAttachmentPreset === 'excel' && (
+			// 					<DKIcon
+			// 						src={require("../assests/svgs/excel.svg") as string}
+			// 						className="ic-m unselectable cursor-hand border-radius-m"
+			// 					/>
+			// 				)}
+			// 				{isAttachmentPreset === 'powerpoint' && (
+			// 					<DKIcon
+			// 						src={require("../assests/svgs/powerpoint.svg") as string}
+			// 						className="ic-m unselectable cursor-hand border-radius-m"
+			// 					/>
+			// 				)}
+			// 				{isAttachmentPreset === 'file' && (
+			// 					<DKIcon
+			// 						src={DKIcons.ic_document}
+			// 						className="ic-m unselectable cursor-hand border-radius-m"
+			// 					/>
+			// 				)}
+			// 			</div>
+			// 			{isAttachmentPreset != 'img' && (
+			// 				<div className="mb-m justify-content-center border-radius-m position-absolute transparent-background display-none download-button">
+			// 					<DKIcon
+			// 						src={DKIcons.white.ic_download}
+			// 						className="ic-l unselectable cursor-hand border-radius-m d-flex align-self-center"
+			// 						style={{
+			// 							width: 22,
+			// 						}}
+			// 						onClick={() =>
+			// 							this.downloadDocument(attachment)
+			// 						}
+			// 					/>
+			// 				</div>
+			// 			)}
+			// 		</div>
+			// 	);
 			default:
 				return (
 					<div

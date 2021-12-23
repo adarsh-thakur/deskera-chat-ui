@@ -13,7 +13,7 @@ export interface ThreadPayload {
         tenants?: string[];
     };
 }
-export type userType = 'user' | 'tenant';
+export type userType = 'USER' | 'TENANT';
 export type messageType = "text" | "multimedia";
 export interface MessagePayload {
     from: {
