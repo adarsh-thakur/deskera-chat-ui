@@ -15,4 +15,4 @@ const deskeraChat = {
   render: render,
 }
 window.deskeraChat = deskeraChat;
-render({ tenantId: 69882 });
+render({ tenantId: 70223 });

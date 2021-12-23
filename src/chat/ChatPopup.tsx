@@ -16,7 +16,7 @@ export default function ChatPopup() {
     const [showChatHistory, setShowChatHistory] = useState(false);
     const [email, setEmail] = useState('');
     const [cookies, setCookieData] = useState(null);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<any[]>([]);
     const messageTopRef: any = useRef();
     const messageBottomRef: any = useRef();
     const tenantServiceInstance = TenantService.getInstance();
@@ -62,6 +62,7 @@ export default function ChatPopup() {
     }
 
     const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT) => {
+        console.log(data, messageType);
         const payload: MessagePayload = {
             threadId: cookies.threadId,
             type: messageType,
@@ -74,12 +75,12 @@ export default function ChatPopup() {
                 tenants: [tenantServiceInstance.getTenantId()]
             },
             from: {
-                id: cookies.id,
+                id: cookies.userId,
                 type: 'USER'
             }
         };
         ChatService.sendMessages(payload).then(res => {
-
+            getMessagesByThreadId(cookies.threadId);
         });
     }
 
@@ -112,7 +113,7 @@ export default function ChatPopup() {
             className={`scroll-y-only-web hide-scroll-bar parent-width border-s parent-width border-radius-s border-box flex-wrap justify-content-start`}
         >
             <p ref={messageTopRef} />
-            {showChatHistory && <div className="dk-chat-screen parent-size shadow-s border-radius-m">
+            {showChatHistory && <div className="dk-chat-screen parent-size border-radius-m">
                 {messages?.map((message, index) => {
                     const updatedMessage = { ...message, sender: message.from?.id == cookies?.id };
                     return (

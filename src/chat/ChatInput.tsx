@@ -125,7 +125,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
         });
     };
     onSend = () => {
-        if (this.messageBox?.current?.textContent) return;
+        if (!this.messageBox?.current?.textContent) return;
         if (this.state.attachmentIds.length > 0) {
             this.props.onSend(
                 this.state.attachmentIds,

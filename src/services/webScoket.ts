@@ -58,7 +58,7 @@ export default class WebSocketService {
         this._retryIntervalInMs = retryIntervalInMs;
         this._retryCount = retryCount;
 
-        setTimeout(function () {
+        setTimeout(() => {
             if (this._webSocket && this._webSocket.readyState === WEBSOCKET_READY_STATE.CONNECTING) {
                 this.startConnectionRetry(this._retryIntervalInMs, this._retryCount);
                 return;
