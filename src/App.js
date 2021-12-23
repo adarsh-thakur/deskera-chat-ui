@@ -1,7 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
-import ChatBubble from './chat/ChatBubble';
+import ChatPopup from './chat/ChatPopup';
+import { TenantService } from './services/tenant';
+import WebSocketService from './services/webScoket';
+import { getRandomHexString } from './Utility/Utility';
 
-const App = () => <ChatBubble />;
+const TENANT_ID_KEY = 'tenantid';
+
+const App = (props) => {
+    const initChat = (tenantId) => {
+        const tenantService = TenantService.getInstance();
+        tenantService.setTenantId(tenantId);
+        tenantService.setUserId(getRandomHexString());
+        const webSocketService = WebSocketService.getInstance();
+        webSocketService.openConnection();
+    }
+    const extractTenantInfo = () => {
+        const chatScriptEl = document.getElementById('deskera-chat-script');
+        if (chatScriptEl?.dataset?.[TENANT_ID_KEY]) {
+            initChat(chatScriptEl.dataset[TENANT_ID_KEY]);
+        } else {
+            if (props?.data?.tenantId) {
+                initChat(props.data.tenantId);
+            }
+        }
+    }
+    extractTenantInfo();
+    return <ChatPopup />;
+};
 
 export default App;

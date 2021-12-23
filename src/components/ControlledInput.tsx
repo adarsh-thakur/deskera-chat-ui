@@ -79,7 +79,7 @@ class ControlledInput extends Component<
             text={
               this.props.invalidMessage
                 ? this.props.invalidMessage
-                : `Enter a valid ${this.props.name.toLowerCase()}`
+                : `Enter a valid ${this.props?.name?.toLowerCase() || `value`}`
             }
             className="text-red mt-s ml-xs"
             style={{ fontSize: 11 }}

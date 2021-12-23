@@ -3,7 +3,7 @@ import { DKButton, DKIcon, DKIcons } from 'deskera-ui-library';
 // import Utility from '../../utility/Utility';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
-import { MESSAGE_TYPE } from '../Constants';
+import { MESSAGE_TYPE } from '../Utility/Constants';
 
 export interface IChatInputBoxProps {
     onSend: (data, msgType?) => void;
@@ -59,7 +59,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                                 : null
                         }
                         dir="ltr"
-                        className={`row dk-chat-input p-s`}
+                        className={`row dk-chat-input p-s align-items-start`}
                         onPaste={(e) => {
                             e.preventDefault();
                             const text = e.clipboardData.getData('text/plain');
@@ -72,7 +72,8 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             <div
                                 className="position-absolute"
                                 style={{
-                                    bottom: 75,
+                                    bottom: 110,
+                                    right:50
                                 }}
                             >
                                 <Picker
