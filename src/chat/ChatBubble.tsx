@@ -15,6 +15,7 @@ import {
 	isEmptyObject,
 	triggerDownload,
 } from '../Utility/Utility';
+import { FILE_TYPE } from '../Utility/Enum';
 
 export interface IChatBubbleProps {
 	messages?: any[];
@@ -96,11 +97,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 									this.props.data.threadId,
 									this.props.data.body?.attachments[0]
 								)}
-							{this.getDisplayContent(
-								this.props.data.type,
-								this.props.data.body.text,
-								this.state.link
-							)}
+							{this.getDisplayContent()}
 							<div
 								className={`position-absolute`}
 								style={{
@@ -124,7 +121,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			showActionList: !this.state.showActionList,
 		});
 	};
-	displayFileIconByType(file) {
+	getFileTypeByFile(file) {
 		const imageExtensions = ['png', 'jpeg', 'jpg', 'jpeg', 'svg', 'bmp'];
 		const documentFileExtensions = ['doc', 'docx'];
 		const pdfFileExtensions = ['pdf'];
@@ -157,97 +154,32 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			return messageText;
 		}
 	};
-	getDisplayContent = (type, content, attachment) => {
-		// let isAttachmentPreset =
-		// 	attachment != undefined && this.displayFileIconByType(attachment);
+	getDisplayContent = () => {
+		const { type, body } = this.props.data;
 		switch (type) {
 			case MESSAGE_TYPE.TEXT:
 				return (
 					<DKLabel
-						text={this.findSearchContent(content)}
+						text={this.findSearchContent(body.text)}
 						className="fs-r text-align-left mb-m"
 					/>
 				);
-			// case MESSAGE_TYPE.MULTIMEDIA:
-			// 	return (
-			// 		<div className="document-container">
-			// 			<div
-			// 				className="display-flex mb-m justify-content-center position-relative p-m"
-			// 			>
-			// 				{isAttachmentPreset === 'img' && (
-			// 					<div
-			// 						className="display-flex mb-m cursor-hand"
-			// 						style={{
-			// 							maxWidth: 230,
-			// 						}}
-			// 						onClick={() => this.showImage(attachment)}
-			// 					>
-			// 						<img
-			// 							src={attachment}
-			// 							className="parent-width"
-			// 							alt="chat-image"
-			// 						/>
-			// 					</div>
-			// 				)}
-			// 				{attachment == undefined && (
-			// 					<DKSpinner
-			// 						iconClassName="ic-s-2"
-			// 						className="ml-m"
-			// 					/>
-			// 				)}
-			// 				{isAttachmentPreset === 'pdf' && (
-			// 					<DKIcon
-			// 						src={require("../assests/svgs/pdf.svg") as string}
-			// 						className="ic-m unselectable cursor-hand border-radius-m"
-			// 					/>
-			// 				)}
-			// 				{isAttachmentPreset === 'doc' && (
-			// 					<DKIcon
-			// 						src={require("../assests/svgs/word.svg") as string}
-			// 						className="ic-m unselectable cursor-hand border-radius-m"
-			// 					/>
-			// 				)}
-			// 				{isAttachmentPreset === 'excel' && (
-			// 					<DKIcon
-			// 						src={require("../assests/svgs/excel.svg") as string}
-			// 						className="ic-m unselectable cursor-hand border-radius-m"
-			// 					/>
-			// 				)}
-			// 				{isAttachmentPreset === 'powerpoint' && (
-			// 					<DKIcon
-			// 						src={require("../assests/svgs/powerpoint.svg") as string}
-			// 						className="ic-m unselectable cursor-hand border-radius-m"
-			// 					/>
-			// 				)}
-			// 				{isAttachmentPreset === 'file' && (
-			// 					<DKIcon
-			// 						src={DKIcons.ic_document}
-			// 						className="ic-m unselectable cursor-hand border-radius-m"
-			// 					/>
-			// 				)}
-			// 			</div>
-			// 			{isAttachmentPreset != 'img' && (
-			// 				<div className="mb-m justify-content-center border-radius-m position-absolute transparent-background display-none download-button">
-			// 					<DKIcon
-			// 						src={DKIcons.white.ic_download}
-			// 						className="ic-l unselectable cursor-hand border-radius-m d-flex align-self-center"
-			// 						style={{
-			// 							width: 22,
-			// 						}}
-			// 						onClick={() =>
-			// 							this.downloadDocument(attachment)
-			// 						}
-			// 					/>
-			// 				</div>
-			// 			)}
-			// 		</div>
-			// 	);
+			case MESSAGE_TYPE.MULTIMEDIA:
+				return (
+					<div className="document-container">
+						<div className="display-flex mb-m justify-content-center position-relative p-m">
+							{this.getFilePlaceholder(
+								body.attachments[0].url
+							)}
+						</div>
+					</div>
+				);
 			default:
 				return (
 					<div
 						className="display-flex mb-m"
 						dangerouslySetInnerHTML={{
-							__html: content,
+							__html: body.text,
 						}}
 						style={{
 							fontSize: '12px',
@@ -257,6 +189,45 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				);
 		}
 	};
+	getFilePlaceholder = (fileLink) => {
+		const fileType = this.getFileTypeByFile(fileLink);
+		if (fileType === FILE_TYPE.IMAGE) {
+			return (
+				<div
+					className="display-flex mb-m cursor-hand"
+					style={{
+						maxWidth: 230,
+					}}
+					onClick={() => this.showImage(fileLink)}
+				>
+					<img
+						src={fileLink}
+						className="parent-width"
+						alt="chat-image"
+					/>
+				</div>
+			);
+		} else {
+			return (
+				<DKIcon
+					src={this.getFileIconByFileType(fileType)}
+					className="ic-m unselectable cursor-hand border-radius-m"
+				/>
+			);
+		}
+	};
+	getFileIconByFileType = (type) => {
+		switch (type) {
+			case FILE_TYPE.PDF:
+				return require('../assests/svgs/pdf.svg') as string;
+			case FILE_TYPE.EXCEL:
+				return require('../assests/svgs/excel.svg') as string;
+			case FILE_TYPE.POWERPOINT:
+				return require('../assests/svgs/powerpoint.svg') as string;
+			default:
+				return require('../assests/svgs/word.svg') as string;
+		}
+	}
 	showImage = (image = null) => {
 		this.setState({ showImagePopup: !this.state.showImagePopup, image });
 	};

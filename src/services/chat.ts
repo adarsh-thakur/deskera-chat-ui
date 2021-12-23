@@ -8,5 +8,16 @@ export const ChatService = {
         return httpClient.get(`${API_CONSTANT.getOpenEndPoint(API_CONSTANT.CHAT.GET_MESSAGES_BY_ID(threadId))}`, { params });
     },
     sendMessages:(payload:MessagePayload) => httpClient.post(`${API_CONSTANT.getOpenEndPoint(API_CONSTANT.CHAT.SEND_MESSAGE)}`, payload),
-    createChatThread: (payload: any) => { }
+    createChatThread: (payload: any) => { },
+    uploadAttachments: (attachments: FormData, threadId: string) => {
+        return httpClient.post(`${API_CONSTANT.getOpenEndPoint(API_CONSTANT.CHAT.UPLOAD_ATTACHMENT)}`, attachments, {
+            params: {
+                threadId
+            },
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        }
+        )
+    }
 }

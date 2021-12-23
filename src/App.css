@@ -60,3 +60,11 @@ border-top-right-radius: 15px;
 .chat-bubble-sender:hover, .chat-bubble-receiver:hover > .bubble-arrow{
     display: block;
 }
+.dk-chat-input[placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+.dk-chat-input[placeholder]:empty:focus:before {
+  content: "";
+}

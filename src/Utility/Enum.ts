@@ -16,3 +16,11 @@ export enum LOCAL_MESSAGE_EVENT_TYPE {
     NEW_MSG = 'new-message',
     NEW_THREAD = 'new-thread'
 }
+export enum FILE_TYPE {
+	IMAGE = 'img',
+	PDF = 'pdf',
+	DOC = 'doc',
+	EXCEL = 'excel',
+	POWERPOINT = 'powerpoint',
+	FILE = 'file',
+}

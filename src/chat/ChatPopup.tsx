@@ -64,13 +64,12 @@ export default function ChatPopup() {
     }
 
     const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT) => {
-        console.log(data, messageType);
         const payload: MessagePayload = {
             threadId: cookies.threadId,
             type: messageType,
             body: {
                 text: messageType === MESSAGE_TYPE.TEXT ? data : '',
-                attachmentIds: messageType === MESSAGE_TYPE.MULTIMEDIA ? data : []
+                attachments: messageType === MESSAGE_TYPE.MULTIMEDIA ? data : []
             },
             to: {
                 users: [cookies.id],
@@ -91,6 +90,21 @@ export default function ChatPopup() {
         setMessages(messagesClone.reverse());
         getMessagesByThreadId(cookies.threadId);
     }
+
+    const onAttachmentAdd = (formData: FormData) => {
+		ChatService.uploadAttachments(formData, cookies.threadId).then(
+			(res:any) => {
+                if (res?.attachments?.length) {
+                    const attachments = res.attachments.map(attachment => ({
+                        id: attachment._id,
+                        url:attachment.downloadLink
+                    }))
+                    sendMessage(attachments, MESSAGE_TYPE.MULTIMEDIA);
+                }
+			}
+		);
+	};
+
     /* effects goes here */
     useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
@@ -171,6 +185,7 @@ export default function ChatPopup() {
             guest={true}
             onSend={sendMessage}
             currentThreadId={cookies?.threadId}
+            onAttachment={onAttachmentAdd}
         />
     }
 

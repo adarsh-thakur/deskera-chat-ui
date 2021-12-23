@@ -10,6 +10,7 @@ export interface IChatInputBoxProps {
     currentThread?: any;
     currentThreadId?: any;
     guest?: boolean;
+    onAttachment?: (formData: FormData) => void;
 }
 
 export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
@@ -125,7 +126,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
         });
     };
     onSend = () => {
-        if (!this.messageBox?.current?.textContent) return;
+        if (this.messageBox?.current?.textContent) return;
         if (this.state.attachmentIds.length > 0) {
             this.props.onSend(
                 this.state.attachmentIds,
@@ -198,7 +199,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             let file = e.target.files.item(index);
                             formData.append('attachment', file);
                         }
-                        this.uploadImageToAWS(formData);
+                        this.props.onAttachment(formData);
                     }
                 }}
             />
@@ -228,7 +229,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             let file = e.target.files.item(index);
                             formData.append('attachment', file);
                         }
-                        this.uploadImageToAWS(formData);
+                        this.props.onAttachment(formData);
                     }
                 }}
             />
@@ -259,19 +260,4 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
             }
         }
     };
-    uploadImageToAWS(imageData) {
-        // let threadId = this.props.currentThread?._id
-        //     ? this.props.currentThread?._id
-        //     : this.props.currentThreadId;
-        // let guest = this.props.guest;
-        // this.messageBox.current.innerHTML = `<img src=${DKIcons.ic_document} height=40 />`;
-        // Chat.uploadAttachment(imageData, threadId, guest).then(
-        //     (response: any) => {
-        //         this.setState({ attachmentIds: response.attachmentIds }, () => {
-        //             this.imagePickerExists = false;
-        //             this.documentPickerExists = false;
-        //         });
-        //     }
-        // );
-    }
 }
