@@ -48,7 +48,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 						<DKContactIcon
 							title={`${!this.props.data.sender ? 'R' : 'S'}`}
 							className={`flex-shrink-0 border-m display-only-web bg-gray3 ${
-								this.props.data.sender ? 'ml-s' : 'mr-s'
+								!this.props.data.sender ? 'ml-s' : 'mr-s'
 							}`}
 						/>
 						<div

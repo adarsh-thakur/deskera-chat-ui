@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+.chat-bubble-sender,.chat-bubble-receiver{
+  max-width: 80%;
+  background-attachment: fixed;
+  position: relative;
+}
+.chat-bubble-sender {
+border-bottom-left-radius: 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+}
+.chat-bubble-receiver {
+border-bottom-right-radius: 15px;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+}
+.chat-float-icon{
+  transition: transform .5s ease;
+}
+.bubble-arrow {
+  display: none;
+}
+.chat-bubble-sender:hover, .chat-bubble-receiver:hover > .bubble-arrow{
+    display: block;
+}
