@@ -101,12 +101,8 @@ export default class WebSocketService {
             switch (eventData.eventType) {
                 case WS_EVENT_TYPE.PONG:
                     return;
-                case WS_EVENT_TYPE.NEW_CHAT_THREAD:
-                    customEvent.dispatch(LOCAL_MESSAGE_EVENT_TYPE.NEW_THREAD, event.data);
-                    break;
                 case WS_EVENT_TYPE.NEW_CHAT_MESSAGE:
-                    customEvent.dispatch(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, event.data);
-                    // ChatManager.setMessages(event.data.threadId, event.data)
+                    customEvent.dispatch(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, eventData);
                     break;
                 default:
                     break;

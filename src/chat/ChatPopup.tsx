@@ -8,6 +8,8 @@ import { GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
 import { ChatService } from '../services/chat';
 import { MessagePayload, SignUpPayload, userType } from '../model/ChatModel';
 import ChatBubble from './ChatBubble';
+import { customEvent } from '../services/customEvents';
+import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
 
 export default function ChatPopup() {
     /* state definitions goes here*/
@@ -56,8 +58,8 @@ export default function ChatPopup() {
     }
 
     const getMessagesByThreadId = (threadId) => {
-        ChatService.getMessagesByThreadId(threadId).then((res: any) => {
-            setMessages(res.data);
+        ChatService.getMessagesByThreadId(threadId).then((res: { data: any[] }) => {
+            setMessages(res.data.reverse());
         });
     }
 
@@ -83,17 +85,26 @@ export default function ChatPopup() {
             getMessagesByThreadId(cookies.threadId);
         });
     }
-
+    const onMessageReceived = (data) => {
+        let messagesClone = [...messages];
+        messagesClone.push(JSON.parse(data.message));
+        setMessages(messagesClone.reverse());
+        getMessagesByThreadId(cookies.threadId);
+    }
     /* effects goes here */
     useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
-            let cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
+            const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
             setCookieData(cookie);
             tenantServiceInstance.setUserId(cookie.userId);
             setShowChatHistory(true);
             getMessagesByThreadId(cookie.threadId);
         }
         scrollToBottom();
+        customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
+        return () => {
+            customEvent.remove(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
+        }
     }, []);
 
     /* helper renderer goes here */
