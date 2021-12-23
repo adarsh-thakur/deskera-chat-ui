@@ -122,7 +122,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 		});
 	};
 	getFileTypeByFile(file) {
-		const imageExtensions = ['png', 'jpeg', 'jpg', 'jpeg', 'svg', 'bmp'];
+		const imageExtensions = ['png', 'jpeg', 'jpg', 'jpeg', 'svg', 'bmp', 'gif'];
 		const documentFileExtensions = ['doc', 'docx'];
 		const pdfFileExtensions = ['pdf'];
 		const pptFileExtensions = ['ppt', 'pptx'];
@@ -219,13 +219,13 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 	getFileIconByFileType = (type) => {
 		switch (type) {
 			case FILE_TYPE.PDF:
-				return require('../assests/svgs/pdf.svg') as string;
+				return require('../assests/svgs/pdf.svg').default as string;
 			case FILE_TYPE.EXCEL:
-				return require('../assests/svgs/excel.svg') as string;
+				return require('../assests/svgs/excel.svg').default as string;
 			case FILE_TYPE.POWERPOINT:
-				return require('../assests/svgs/powerpoint.svg') as string;
+				return require('../assests/svgs/powerpoint.svg').default as string;
 			default:
-				return require('../assests/svgs/word.svg') as string;
+				return require('../assests/svgs/word.svg').default as string;
 		}
 	}
 	showImage = (image = null) => {

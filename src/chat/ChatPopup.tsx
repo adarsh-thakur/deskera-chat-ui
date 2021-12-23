@@ -84,11 +84,13 @@ export default function ChatPopup() {
             getMessagesByThreadId(cookies.threadId);
         });
     }
+
     const onMessageReceived = (data) => {
-        let messagesClone = [...messages];
-        messagesClone.push(JSON.parse(data.message));
-        setMessages(messagesClone.reverse());
-        getMessagesByThreadId(cookies.threadId);
+        const newMessage = JSON.parse(data.message);
+        const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
+        if (newMessage.from.id !== tenantServiceInstance.getUserId() && cookie) {
+            getMessagesByThreadId(cookie.threadId);
+        }
     }
 
     const onAttachmentAdd = (formData: FormData) => {
@@ -104,7 +106,17 @@ export default function ChatPopup() {
 			}
 		);
 	};
-
+    const createObserver = () => {
+        const options = {
+            root: document.querySelector('#chat-wrapper'),
+            rootMargin: '1px',
+            threshold: 1,
+        }
+        let observer = new IntersectionObserver((entries, observer) => {
+            console.log('we are on top');
+        }, options);
+        observer.observe(messageTopRef.current);
+    }
     /* effects goes here */
     useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
@@ -115,6 +127,7 @@ export default function ChatPopup() {
             getMessagesByThreadId(cookie.threadId);
         }
         scrollToBottom();
+        createObserver();
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
         return () => {
             customEvent.remove(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
@@ -137,7 +150,7 @@ export default function ChatPopup() {
             style={{ minHeight: 270, maxHeight: 270, overflowX: 'auto' }}
             className={`scroll-y-only-web hide-scroll-bar parent-width border-s parent-width border-radius-s border-box flex-wrap justify-content-start`}
         >
-            <p ref={messageTopRef} />
+            <div ref={messageTopRef} id="message-top-ref"></div>
             {showChatHistory && <div className="dk-chat-screen parent-size border-radius-m">
                 {messages?.map((message, index) => {
                     const updatedMessage = { ...message, sender: message.from?.id == cookies?.id };
@@ -149,7 +162,7 @@ export default function ChatPopup() {
                     );
                 })}
             </div>}
-            <div id="bottom" ref={messageBottomRef} />
+            <div ref={messageBottomRef} id="message-bottom-ref" />
         </div>
     }
 
