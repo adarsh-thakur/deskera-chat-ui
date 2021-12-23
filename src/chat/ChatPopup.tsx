@@ -57,7 +57,7 @@ export default function ChatPopup() {
 
     const getMessagesByThreadId = (threadId) => {
         ChatService.getMessagesByThreadId(threadId).then((res: any) => {
-            setMessages(res);
+            setMessages(res.data);
         });
     }
 
@@ -75,7 +75,7 @@ export default function ChatPopup() {
             },
             from: {
                 id: cookies.id,
-                type: 'user'
+                type: 'USER'
             }
         };
         ChatService.sendMessages(payload).then(res => {
@@ -114,15 +114,12 @@ export default function ChatPopup() {
             <p ref={messageTopRef} />
             {showChatHistory && <div className="dk-chat-screen parent-size shadow-s border-radius-m">
                 {messages?.map((message, index) => {
+                    const updatedMessage = { ...message, sender: message.from?.id == cookies?.id };
                     return (
-                        // <ChatBubble
-                        //     data={message}
-                        //     searchText={''}
-                        //     currentUserId={cookies?.id}
-                        //     currentTenantId={tenantServiceInstance.getTenantId()}
-                        //     onActionButtonClick={(messageId, threadId, attachemntId) => { }}
-                        // />
-                        ''
+                        <ChatBubble
+                            data={updatedMessage}
+                            onActionButtonClick={(messageId, threadId, attachemntId) => { }}
+                        />
                     );
                 })}
             </div>}
