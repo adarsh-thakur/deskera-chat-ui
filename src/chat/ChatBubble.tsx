@@ -219,13 +219,13 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 	getFileIconByFileType = (type) => {
 		switch (type) {
 			case FILE_TYPE.PDF:
-				return require('../assests/svgs/pdf.svg').default as string;
+				return 'http://crm-ui-dev.deskera.xyz/chat-ui/pdf.svg';
 			case FILE_TYPE.EXCEL:
-				return require('../assests/svgs/excel.svg').default as string;
+				return 'http://crm-ui-dev.deskera.xyz/chat-ui/excel.svg';
 			case FILE_TYPE.POWERPOINT:
-				return require('../assests/svgs/powerpoint.svg').default as string;
+				return 'http://crm-ui-dev.deskera.xyz/chat-ui/powerpoint.svg';
 			default:
-				return require('../assests/svgs/word.svg').default as string;
+				return 'http://crm-ui-dev.deskera.xyz/chat-ui/word.svg';
 		}
 	}
 	showImage = (image = null) => {

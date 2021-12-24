@@ -68,6 +68,9 @@
   "scripts": {
     "start": "env-cmd -f .env.development node scripts/start.js",
     "build": "env-cmd -f .env.development node scripts/build.js",
+    "build:qa": "env-cmd -f .env.qa node scripts/build.js",
+    "build:stage": "env-cmd -f .env.staging node scripts/build.js",
+    "build:prod": "env-cmd -f .env.production node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
