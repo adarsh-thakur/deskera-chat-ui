@@ -3,7 +3,7 @@ import { DKIcons, DKIcon, DKLabel, INPUT_TYPE, INPUT_VIEW_DIRECTION, DKButton } 
 import ControlledInput from '../components/ControlledInput';
 import ChatInputBox from './ChatInput';
 import { TenantService } from '../services/tenant';
-import { decodeJSON, encodeJSON, eraseCookie, getCookie, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
+import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
 import { ChatService } from '../services/chat';
 import { MessagePayload, SignUpPayload, userType } from '../model/ChatModel';
@@ -53,7 +53,7 @@ export default function ChatPopup() {
     }
 
     const setCookiesValue = (data) => {
-        setCookie(GUEST_USER_COOKIE, encodeJSON(data), 365, 'deskera.xyz');
+        setCookie(GUEST_USER_COOKIE, encodeJSON(data), 365, getDomain(window.location.hostname));
         setCookieData(decodeJSON(getCookie(GUEST_USER_COOKIE)));
     }
 
@@ -112,10 +112,16 @@ export default function ChatPopup() {
             rootMargin: '1px',
             threshold: 1,
         }
-        let observer = new IntersectionObserver((entries, observer) => {
-            console.log('we are on top');
+        const observer = new IntersectionObserver((entries, observer) => {
+            const entry = entries[0];
+            if (entry.target === messageTopRef.current && entry.isIntersecting) {
+                console.log('intersecting top');
+            } else if (entry.target === messageBottomRef.current && entry.isIntersecting) {
+                console.log('intersecting bottom');
+            }
         }, options);
         observer.observe(messageTopRef.current);
+        observer.observe(messageBottomRef.current);
     }
     /* effects goes here */
     useEffect(() => {
@@ -134,6 +140,9 @@ export default function ChatPopup() {
         }
     }, []);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
     /* helper renderer goes here */
     const renderHeader = () => {
         return <div className="border-radius-m row bg-blue p-v-l p-h-s">
@@ -170,7 +179,7 @@ export default function ChatPopup() {
         return <>
             <ControlledInput
                 value={email}
-                placeHolder="enter your email or skip to chat"
+                placeHolder="Enter your email or skip to chat"
                 type={INPUT_TYPE.EMAIL}
                 direction={INPUT_VIEW_DIRECTION.VERTICAL}
                 onChange={(e) => setEmail(e.target.value)}
@@ -208,10 +217,11 @@ export default function ChatPopup() {
                 className="row position-absolute justify-content-between"
                 style={{
                     opacity: showPopup ? 1 : 0,
+                    visibility: showPopup ? 'visible' : 'hidden',
                     width: 350,
                     bottom: 80,
                     right: 20,
-                    transition: '.3s ease-in'
+                    transition: 'visibility 0s, opacity 0.5s ease-in',
                 }}
             >
                 <div className="parent-size border-m shadow-m border-radius-m bg-white">

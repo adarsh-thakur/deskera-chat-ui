@@ -96,3 +96,20 @@ export const encodeJSON = (json) => {
 export const decodeJSON = (base64String) => {
     return JSON.parse(decodeURI(atob(base64String)));
 }
+/**
+ *
+ * @param url - url from which to extract the domain
+ * @param subdomain - need the subdomain to be extracted
+ * @returns - returns the domain
+ */
+export const getDomain = (url, subdomain = false) => {
+    url = url.replace(/(https?:\/\/)?(www.)?/i, '');
+    if (!subdomain) {
+        url = url.split('.');
+        url = url.slice(url.length - 2).join('.');
+    }
+    if (url.indexOf('/') !== -1) {
+        return url.split('/')[0];
+    }
+    return url;
+}
