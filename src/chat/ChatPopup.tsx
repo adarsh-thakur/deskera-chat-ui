@@ -145,7 +145,7 @@ export default function ChatPopup() {
     }, [messages]);
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="border-radius-m row bg-blue p-v-l p-h-s">
+        return <div className="row bg-blue p-v-l p-h-s" style={{borderTopLeftRadius:8, borderTopRightRadius:8}}>
             <DKLabel
                 className="text-white fw-b fs-m"
                 text={'Hey there 👋🏻'}
@@ -157,7 +157,7 @@ export default function ChatPopup() {
         return <div
             id="chat-wrapper"
             style={{ minHeight: 270, maxHeight: 270, overflowX: 'auto' }}
-            className={`scroll-y-only-web hide-scroll-bar parent-width border-s parent-width border-radius-s border-box flex-wrap justify-content-start`}
+            className={`scroll-y-only-web hide-scroll-bar parent-width parent-width border-box flex-wrap justify-content-start`}
         >
             <div ref={messageTopRef} id="message-top-ref"></div>
             {showChatHistory && <div className="dk-chat-screen parent-size border-radius-m">
@@ -224,7 +224,7 @@ export default function ChatPopup() {
                     transition: 'visibility 0s, opacity 0.5s ease-in',
                 }}
             >
-                <div className="parent-size border-m shadow-m border-radius-m bg-white">
+                <div className="parent-size shadow-m border-radius-m bg-white">
                     {renderHeader()}
                     {renderChatHistory()}
                     <div className="p-m">

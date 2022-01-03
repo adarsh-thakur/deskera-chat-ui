@@ -31,3 +31,6 @@ border-top-right-radius: 15px;
 .dk-chat-input[placeholder]:empty:focus:before {
   content: "";
 }
+.dk-chat-input:focus-visible {
+  outline: none !important;
+}
