@@ -86,8 +86,8 @@ export const getCookie = (name) => {
     }
     return null;
 }
-export const eraseCookie = (cookieName) => {
-    document.cookie = cookieName + '=; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+export const eraseCookie = (cookieName, domain) => {
+    document.cookie = cookieName + '=; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=' + domain + ';';
 }
 export const encodeJSON = (json) => {
     let temp = encodeURI(JSON.stringify(json));

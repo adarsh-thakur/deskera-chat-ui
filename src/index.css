@@ -18,3 +18,6 @@ code {
   -ms-user-select: none;
   user-select: none;
 }
+.pre-wrap{
+  white-space: pre-wrap;
+}

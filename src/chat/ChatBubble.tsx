@@ -20,6 +20,8 @@ import { FILE_TYPE } from '../Utility/Enum';
 export interface IChatBubbleProps {
 	messages?: any[];
 	searchText?: String;
+	accentColor?: string;
+	avatar?: string;
 	data: any;
 	onActionButtonClick?: (messageId, threadId, attachmentId) => void;
 }
@@ -59,11 +61,9 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 									: 'mr-m text-white chat-bubble-sender'
 							}`}
 							style={{
-								backgroundColor: !this.props.data.sender
-									? '#dcdcdc'
-									: '#1c73e8',
+								backgroundColor: !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
 								display: 'inline',
-								maxWidth: '35%',
+								maxWidth: '50%',
 								minWidth: '15%',
 							}}
 						>

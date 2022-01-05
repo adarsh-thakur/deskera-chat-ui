@@ -7,7 +7,7 @@ import { getRandomHexString } from './Utility/Utility';
 const TENANT_ID_KEY = 'tenantid';
 
 const App = (props) => {
-    const initChat = (tenantId) => {
+    const initChat = ({tenantId}) => {
         const tenantService = TenantService.getInstance();
         tenantService.setTenantId(tenantId);
         tenantService.setUserId(getRandomHexString());
@@ -20,12 +20,12 @@ const App = (props) => {
             initChat(chatScriptEl.dataset[TENANT_ID_KEY]);
         } else {
             if (props?.data?.tenantId) {
-                initChat(props.data.tenantId);
+                initChat(props.data);
             }
         }
     }
     extractTenantInfo();
-    return <ChatPopup />;
+    return <ChatPopup {...props.data} />;
 };
 
 export default App;

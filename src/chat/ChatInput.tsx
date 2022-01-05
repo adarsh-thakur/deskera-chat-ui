@@ -1,6 +1,5 @@
 import React, { Component, RefObject } from 'react';
 import { DKButton, DKIcon, DKIcons } from 'deskera-ui-library';
-// import Utility from '../../utility/Utility';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import { MESSAGE_TYPE } from '../Utility/Constants';
@@ -9,6 +8,7 @@ export interface IChatInputBoxProps {
     onSend: (data, msgType?) => void;
     currentThread?: any;
     currentThreadId?: any;
+	accentColor?: string;
     guest?: boolean;
     onAttachment?: (formData: FormData) => void;
 }
@@ -60,7 +60,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                                 : null
                         }
                         dir="ltr"
-                        className={`row dk-chat-input p-s align-items-start`}
+                        className={`row dk-chat-input p-s align-items-start pre-wrap`}
                         onPaste={(e) => {
                             e.preventDefault();
                             const text = e.clipboardData.getData('text/plain');
@@ -111,8 +111,11 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                         </div>
                         <DKButton
                             title="Send"
-                            className="fs-m dk-chat-input-send-btn bg-blue text-white p-h-l ml-s"
-                            style={{ height: '36px' }}
+                            className="fs-m dk-chat-input-send-btn text-white p-h-l ml-s"
+                            style={{
+                                height: '36px',
+                                backgroundColor: this.props.accentColor ? this.props.accentColor : '#1c73e8',
+                            }}
                             onClick={this.onSend}
                         />
                     </div>

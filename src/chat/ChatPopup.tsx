@@ -11,7 +11,7 @@ import ChatBubble from './ChatBubble';
 import { customEvent } from '../services/customEvents';
 import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
 
-export default function ChatPopup() {
+export default function ChatPopup(props: any) {
     /* state definitions goes here*/
     const [showPopup, setShowPopup] = useState(false);
     const [isEmailValid, setEmailValid] = useState(true);
@@ -40,15 +40,20 @@ export default function ChatPopup() {
         if (!skip) {
             validateEmail();
         }
-        eraseCookie(GUEST_USER_COOKIE);
+        eraseCookie(GUEST_USER_COOKIE,getDomain(window.location.hostname));
+        signUp(email);
+    }
+
+    const signUp = (email) => {
         const payload: SignUpPayload = {
-            email: skip ? '' : email,
+            email,
             userId: tenantServiceInstance.getUserId(),
             tenantId: String(tenantServiceInstance.getTenantId()),
         };
-        ChatService.signUp(payload).then((res: any) => {
+        return ChatService.signUp(payload).then((res: any) => {
             setCookiesValue({ ...res, ...payload, id: res.userId });
             setShowChatHistory(true);
+            return res;
         });
     }
 
@@ -105,7 +110,8 @@ export default function ChatPopup() {
                 }
 			}
 		);
-	};
+    }
+
     const createObserver = () => {
         const options = {
             root: document.querySelector('#chat-wrapper'),
@@ -123,14 +129,34 @@ export default function ChatPopup() {
         observer.observe(messageTopRef.current);
         observer.observe(messageBottomRef.current);
     }
+
+    const clearSession = () => {
+        eraseCookie(GUEST_USER_COOKIE,getDomain(window.location.hostname));
+        setShowChatHistory(false);
+        setMessages([]);
+    }
+
+    const sendUserInfoAsMessage = () => {
+        let message = `Name: ${props.name}\nPhone: ${props.phone}\nEmail: ${props.email}`;
+        sendMessage(message);
+    }
     /* effects goes here */
     useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
-            const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
+        const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
             setCookieData(cookie);
             tenantServiceInstance.setUserId(cookie.userId);
             setShowChatHistory(true);
             getMessagesByThreadId(cookie.threadId);
+        } else if (isValidEmail(props.email)) {
+            // if deskeraChat initialized with email, then sign up user
+            signUp(props.email);
+        }
+        // clear the chat after sessionDuration
+        if (props?.sessionDuration > 0) {
+            setTimeout(() => {
+                clearSession();
+            }, props.sessionDuration);
         }
         scrollToBottom();
         createObserver();
@@ -145,7 +171,12 @@ export default function ChatPopup() {
     }, [messages]);
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="row bg-blue p-v-l p-h-s" style={{borderTopLeftRadius:8, borderTopRightRadius:8}}>
+        return <div className="row p-v-l p-h-s"
+            style={{
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+            }}>
             <DKLabel
                 className="text-white fw-b fs-m"
                 text={'Hey there 👋🏻'}
@@ -165,6 +196,8 @@ export default function ChatPopup() {
                     const updatedMessage = { ...message, sender: message.from?.id == cookies?.id };
                     return (
                         <ChatBubble
+                            accentColor={props.accentColor}
+                            avatar={props.avatar}
                             data={updatedMessage}
                             onActionButtonClick={(messageId, threadId, attachemntId) => { }}
                         />
@@ -190,7 +223,10 @@ export default function ChatPopup() {
             <div className="row">
                 <DKButton
                     title="Submit"
-                    className="fs-m border-m text-white bg-blue mt-m"
+                    className="fs-m border-m text-white mt-m"
+                    style={{
+                    backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                    }}
                     onClick={() => signUpUser()}
                 />
                 <DKButton
@@ -205,6 +241,7 @@ export default function ChatPopup() {
     const renderChatInput = () => {
         return <ChatInputBox
             guest={true}
+            accentColor={props.accentColor}
             onSend={sendMessage}
             currentThreadId={cookies?.threadId}
             onAttachment={onAttachmentAdd}
@@ -238,13 +275,14 @@ export default function ChatPopup() {
 
     const renderBubble = () => {
         return <div
-            className="bg-blue position-absolute d-flex align-items-center justify-content-center user-select-none"
+            className="position-absolute d-flex align-items-center justify-content-center user-select-none"
             style={{
                 bottom: 15,
                 right: 20,
                 height: 50,
                 width: 50,
-                borderRadius: 25
+                borderRadius: 25,
+                backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
             }}
             onClick={() => setShowPopup(!showPopup)}
         >
