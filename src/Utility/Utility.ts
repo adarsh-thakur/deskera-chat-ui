@@ -113,3 +113,13 @@ export const getDomain = (url, subdomain = false) => {
     }
     return url;
 }
+export const getFormattedTime =(date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let x = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    let time = hours + ":" + minutes + "" + x;
+    return time;
+  }
