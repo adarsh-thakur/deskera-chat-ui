@@ -40,7 +40,7 @@ export default function ChatPopup(props: any) {
         if (!skip) {
             validateEmail();
         }
-        eraseCookie(GUEST_USER_COOKIE,getDomain(window.location.hostname));
+        eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
         signUp(email);
     }
 
@@ -99,17 +99,17 @@ export default function ChatPopup(props: any) {
     }
 
     const onAttachmentAdd = (formData: FormData) => {
-		ChatService.uploadAttachments(formData, cookies.threadId).then(
-			(res:any) => {
+        ChatService.uploadAttachments(formData, cookies.threadId).then(
+            (res: any) => {
                 if (res?.attachments?.length) {
                     const attachments = res.attachments.map(attachment => ({
                         id: attachment._id,
-                        url:attachment.downloadLink
+                        url: attachment.downloadLink
                     }))
                     sendMessage(attachments, MESSAGE_TYPE.MULTIMEDIA);
                 }
-			}
-		);
+            }
+        );
     }
 
     const createObserver = () => {
@@ -131,7 +131,7 @@ export default function ChatPopup(props: any) {
     }
 
     const clearSession = () => {
-        eraseCookie(GUEST_USER_COOKIE,getDomain(window.location.hostname));
+        eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
         setShowChatHistory(false);
         setMessages([]);
     }
@@ -143,12 +143,12 @@ export default function ChatPopup(props: any) {
     /* effects goes here */
     useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
-        const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
+            const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
             setCookieData(cookie);
             tenantServiceInstance.setUserId(cookie.userId);
             setShowChatHistory(true);
             getMessagesByThreadId(cookie.threadId);
-        } else if (isValidEmail(props.email)) {
+        } else if (props.email && isValidEmail(props.email)) {
             // if deskeraChat initialized with email, then sign up user
             signUp(props.email);
         }
@@ -187,10 +187,12 @@ export default function ChatPopup(props: any) {
     const renderChatHistory = () => {
         return <div
             id="chat-wrapper"
-            style={{ minHeight: 270, maxHeight: 270, overflowX: 'auto' }}
-            className={`scroll-y-only-web hide-scroll-bar parent-width parent-width border-box flex-wrap justify-content-start`}
+            style={{
+                overflowX: 'auto'
+            }}
+            className={`scroll-y-only-web hide-scroll-bar parent-size border-box flex-wrap justify-content-start p-v-l`}
         >
-            <div ref={messageTopRef} id="message-top-ref"></div>
+            <div ref={messageTopRef} id="message-top-ref" className="width-0 height-0"></div>
             {showChatHistory && <div className="dk-chat-screen parent-size border-radius-m">
                 {messages?.map((message, index) => {
                     const updatedMessage = { ...message, sender: message.from?.id == cookies?.id };
@@ -204,13 +206,14 @@ export default function ChatPopup(props: any) {
                     );
                 })}
             </div>}
-            <div ref={messageBottomRef} id="message-bottom-ref" />
+            <div ref={messageBottomRef} id="message-bottom-ref" className="width-0 height-0" />
         </div>
     }
 
     const renderEmailInput = () => {
         return <>
             <ControlledInput
+                className="p-h-s"
                 value={email}
                 placeHolder="Enter your email or skip to chat"
                 type={INPUT_TYPE.EMAIL}
@@ -220,12 +223,12 @@ export default function ChatPopup(props: any) {
                 invalid={!isEmailValid}
                 autoFocus
             />
-            <div className="row">
+            <div className="row p-h-s pb-s">
                 <DKButton
                     title="Submit"
                     className="fs-m border-m text-white mt-m"
                     style={{
-                    backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                        backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
                     }}
                     onClick={() => signUpUser()}
                 />
@@ -240,6 +243,7 @@ export default function ChatPopup(props: any) {
 
     const renderChatInput = () => {
         return <ChatInputBox
+            className='p-s'
             guest={true}
             accentColor={props.accentColor}
             onSend={sendMessage}
@@ -251,23 +255,22 @@ export default function ChatPopup(props: any) {
     const renderPopup = () => {
         return (
             <div
-                className="row position-absolute justify-content-between"
+                className="column position-absolute justify-content-between shadow-m border-radius-m bg-white"
                 style={{
                     opacity: showPopup ? 1 : 0,
                     visibility: showPopup ? 'visible' : 'hidden',
                     width: 350,
+                    height: '80vh',
                     bottom: 80,
                     right: 20,
                     transition: 'visibility 0s, opacity 0.5s ease-in',
                 }}
             >
-                <div className="parent-size shadow-m border-radius-m bg-white">
-                    {renderHeader()}
-                    {renderChatHistory()}
-                    <div className="p-m">
-                        {!showChatHistory && renderEmailInput()}
-                        {showChatHistory && renderChatInput()}
-                    </div>
+                {renderHeader()}
+                {renderChatHistory()}
+                <div className="parent-width">
+                    {!showChatHistory && renderEmailInput()}
+                    {showChatHistory && renderChatInput()}
                 </div>
             </div>
         );

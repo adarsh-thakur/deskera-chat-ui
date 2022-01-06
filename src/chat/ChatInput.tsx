@@ -5,6 +5,7 @@ import { Picker } from 'emoji-mart';
 import { MESSAGE_TYPE } from '../Utility/Constants';
 
 export interface IChatInputBoxProps {
+    className?: string;
     onSend: (data, msgType?) => void;
     currentThread?: any;
     currentThreadId?: any;
@@ -41,7 +42,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
     }
     render() {
         return (
-            <div className={`dk-chat-input-wrapper column parent-width`}>
+            <div className={`dk-chat-input-wrapper column parent-width ${this.props.className}`}>
                 <div className="column parent-width border-m border-radius-m">
                     <div
                         placeholder="Type your message here"

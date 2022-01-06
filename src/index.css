@@ -21,3 +21,9 @@ code {
 .pre-wrap{
   white-space: pre-wrap;
 }
+.width-0{
+  width: 0;
+}
+.height-0{
+  height: 0;
+}
