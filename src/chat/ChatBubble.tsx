@@ -19,6 +19,7 @@ import {
 import { FILE_TYPE } from '../Utility/Enum';
 
 export interface IChatBubbleProps {
+	currentUserId: string;
 	messages?: any[];
 	searchText?: String;
 	accentColor?: string;
@@ -34,33 +35,22 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			showActionList: false,
 		};
 	}
-	componentDidMount() {}
-	componentWillReceiveProps(nextProps) {}
 	render() {
 		let fileType;
 		if (this.props.data.body?.attachments[0]) {
 			fileType = this.getFileTypeByFile(this.props.data.body?.attachments[0]?.url);
 		}
-		console.log(this.props.data?.sentAt);
 
 		return (
 			<div
 				className="row display-flex parent-width"
-				style={{ flexDirection: 'column' }}
 			>
 				{this.state.showImagePopup && this.imagePopup()}
-				<>
 					<div
 						className={`justify-content-start align-items-end ${
 							!this.props.data.sender ? 'row' : 'row-reverse'
 						}`}
 					>
-						<DKContactIcon
-							title={`${!this.props.data.sender ? 'R' : 'S'}`}
-							className={`flex-shrink-0 border-m display-only-web bg-gray3 ${
-								!this.props.data.sender ? 'ml-s' : 'mr-s'
-							}`}
-						/>
 						<div
 							className={`m-v-s p-s fs-m position-relative ${
 								!this.props.data.sender
@@ -70,15 +60,13 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 							style={{
 								backgroundColor:this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && fileType === FILE_TYPE.IMAGE ? '': !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
 								display: 'inline',
-								maxWidth: '50%',
+								maxWidth: '80%',
 								minWidth: '15%',
 							}}
 						>
 							{this.props.data.sender &&
-								this.props.data.updatedBy ==
-									'UserManager.getUserIamID()' && (
+								this.props.data.updatedBy == this.props.currentUserId && (
 									<div
-										className="p-s"
 										onClick={() =>
 											this.setState({
 												showActionList:
@@ -109,8 +97,8 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 								className={`position-absolute`}
 								style={{
 									bottom: 4,
-									fontSize: '11px',
-									right: '10px',
+									fontSize: 11,
+									right: 10,
 								}}
 							>
 								{getFormattedTime(
@@ -119,7 +107,6 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 							</div>
 						</div>
 					</div>
-				</>
 			</div>
 		);
 	}
@@ -168,7 +155,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				return (
 					<DKLabel
 						text={this.findSearchContent(body.text)}
-						className="fs-r text-align-left mb-m"
+						className="fs-r text-align-left mb-m fs-m"
 					/>
 				);
 			case MESSAGE_TYPE.MULTIMEDIA:

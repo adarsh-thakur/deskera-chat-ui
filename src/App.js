@@ -7,6 +7,11 @@ import { getRandomHexString } from './Utility/Utility';
 const TENANT_ID_KEY = 'tenantid';
 
 const App = (props) => {
+    if (props.shutDown) {
+        const webSocketService = WebSocketService.getInstance();
+        webSocketService.stopWebSocketPing();
+        return null;
+    }
     const initChat = ({tenantId}) => {
         const tenantService = TenantService.getInstance();
         tenantService.setTenantId(tenantId);

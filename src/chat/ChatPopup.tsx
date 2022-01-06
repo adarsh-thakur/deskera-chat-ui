@@ -126,8 +126,12 @@ export default function ChatPopup(props: any) {
                 console.log('intersecting bottom');
             }
         }, options);
-        observer.observe(messageTopRef.current);
-        observer.observe(messageBottomRef.current);
+        if (messageTopRef.current) {
+            observer.observe(messageTopRef.current);
+        }
+        if (messageBottomRef.current) {
+            observer.observe(messageBottomRef.current);
+        }
     }
 
     const clearSession = () => {
@@ -159,7 +163,6 @@ export default function ChatPopup(props: any) {
             }, props.sessionDuration);
         }
         scrollToBottom();
-        createObserver();
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
         return () => {
             customEvent.remove(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
@@ -169,6 +172,14 @@ export default function ChatPopup(props: any) {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    useEffect(() => {
+        createObserver();
+    }, [showChatHistory]);
+
+    useEffect(() => {
+        setShowPopup(!props.hidePopup);
+    }, [props.hidePopup]);
     /* helper renderer goes here */
     const renderHeader = () => {
         return <div className="row p-v-l p-h-s"
@@ -187,17 +198,18 @@ export default function ChatPopup(props: any) {
     const renderChatHistory = () => {
         return <div
             id="chat-wrapper"
+            className={`display-flex column parent-width border-box scroll-y-only-web hide-scroll-bar`}
             style={{
                 overflowX: 'auto'
             }}
-            className={`scroll-y-only-web hide-scroll-bar parent-size border-box flex-wrap justify-content-start p-v-l`}
         >
-            <div ref={messageTopRef} id="message-top-ref" className="width-0 height-0"></div>
-            {showChatHistory && <div className="dk-chat-screen parent-size border-radius-m">
+            {showChatHistory && <div className="dk-chat-screen parent-size border-radius-m parent-width" style={{ height: '98%' }}>
+            <div ref={messageTopRef} id="message-top-ref" className='parent-width'></div>
                 {messages?.map((message, index) => {
                     const updatedMessage = { ...message, sender: message.from?.id == cookies?.id };
                     return (
                         <ChatBubble
+                            currentUserId={tenantServiceInstance.getUserId()}
                             accentColor={props.accentColor}
                             avatar={props.avatar}
                             data={updatedMessage}
@@ -205,8 +217,8 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
+                <div ref={messageBottomRef} id="message-bottom-ref" className='parent-width'/>
             </div>}
-            <div ref={messageBottomRef} id="message-bottom-ref" className="width-0 height-0" />
         </div>
     }
 
