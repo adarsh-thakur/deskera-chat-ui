@@ -34,3 +34,11 @@ border-top-right-radius: 15px;
 .dk-chat-input:focus-visible {
   outline: none !important;
 }
+.document-container:hover > .download-button{
+    display: flex !important;
+}
+.dk-chat-input[contenteditable="true"] {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+}
