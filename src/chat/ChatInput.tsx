@@ -63,7 +63,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             : null
                     }
                     dir="ltr"
-                    className={`row dk-chat-input p-s align-items-start pre-wrap display-flex`}
+                    className={`row dk-chat-input p-s align-items-start pre-wrap display-flex hide-scroll-bar`}
                     onPaste={(e) => {
                         e.preventDefault();
                         const text = e.clipboardData.getData('text/plain');
