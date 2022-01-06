@@ -43,86 +43,67 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
     render() {
         return (
             <div className={`dk-chat-input-wrapper column parent-width ${this.props.className}`}>
-                <div className="column parent-width border-m border-radius-m">
-                    <div
-                        placeholder="Type your message here"
-                        style={{
-                            maxHeight: 60,
-                            minHeight: 50,
-                            overflow: 'auto',
-                        }}
-                        ref={this.messageBox}
-                        contentEditable
-                        role="textbox"
-                        onInput={this.onInput}
-                        onFocus={() =>
-                            this.state.showEmojiPicker
-                                ? this.hideShowEmojiPicker()
-                                : null
-                        }
-                        dir="ltr"
-                        className={`row dk-chat-input p-s align-items-start pre-wrap`}
-                        onPaste={(e) => {
-                            e.preventDefault();
-                            const text = e.clipboardData.getData('text/plain');
-                            document.execCommand('insertHTML', false, text);
-                        }}
-                        onKeyDown={this.onKeyDown}
-                    ></div>
-                    <div className="row justify-content-between p-v-xs p-h-s">
-                        {this.state.showEmojiPicker && (
-                            <div
-                                className="position-absolute"
-                                style={{
-                                    bottom: 110,
-                                    right:50
-                                }}
-                            >
-                                <Picker
-                                    showSkinTones={false}
-                                    onSelect={this.onEmojiSelect}
-                                />
-                            </div>
-                        )}
-                        <div className="row">
-                            <div
-                                onClick={this.hideShowEmojiPicker}
-                                className="mr-s fs-xxl unselectable cursor-hand emoji-button"
-                            >
-                                😀
-                            </div>
-                            <DKIcon
-                                src={DKIcons.ic_attachment}
-                                className="unselectable cursor-hand p-s border-radius-m"
-                                onClick={() => {
-                                    this.openDocumentPicker();
-                                }}
-                                style={{ height: '15px' }}
-                            />
-                            {this.getDocumentPicker()}
-                            <DKIcon
-                                src={DKIcons.ic_document}
-                                className="unselectable cursor-hand p-s border-radius-m"
-                                onClick={() => {
-                                    this.openImagePicker();
-                                }}
-                                style={{ height: '15px' }}
-                            />
-                            {this.getImagePicker()}
-                        </div>
-                        <DKButton
-                            title="Send"
-                            className="fs-m dk-chat-input-send-btn text-white p-h-l ml-s"
+            <div className="row parent-width border-m border-radius-m">
+                <div
+                    placeholder="Type your message here"
+                    style={{
+                        maxHeight: 60,
+                        minHeight: 50,
+                        overflow: 'auto',
+                        minWidth: '75%'
+                    }}
+                    ref={this.messageBox}
+                    contentEditable
+                    role="textbox"
+                    onInput={this.onInput}
+                    onFocus={() =>
+                        this.state.showEmojiPicker
+                            ? this.hideShowEmojiPicker()
+                            : null
+                    }
+                    dir="ltr"
+                    className={`row dk-chat-input p-s align-items-start pre-wrap`}
+                    onPaste={(e) => {
+                        e.preventDefault();
+                        const text = e.clipboardData.getData('text/plain');
+                        document.execCommand('insertHTML', false, text);
+                    }}
+                    onKeyDown={this.onKeyDown}
+                ></div>
+                <div className="row justify-content-end p-v-xs p-h-s">
+                    {this.state.showEmojiPicker && (
+                        <div
+                            className="position-absolute"
                             style={{
-                                height: '36px',
-                                backgroundColor: this.props.accentColor ? this.props.accentColor : '#1c73e8',
+                                bottom: 110,
+                                right: 50,
                             }}
-                            onClick={this.onSend}
-                        />
+                        >
+                            <Picker
+                                showSkinTones={false}
+                                onSelect={this.onEmojiSelect}
+                            />
+                        </div>
+                    )}
+                    <div
+                        onClick={this.hideShowEmojiPicker}
+                        className="mr-s fs-xl unselectable cursor-hand emoji-button"
+                    >
+                        😀
                     </div>
+                    <DKIcon
+                        src={DKIcons.ic_add}
+                        className="ic-s cursor-hand p-s border-radius-m"
+                        onClick={() => {
+                            this.openDocumentPicker();
+                        }}
+                    />
+                    {this.getDocumentPicker()}
                 </div>
-            </div>
-        );
+                </div>
+                <div className="fs-s row justify-content-center p-s">Powered by <a target="_blank" href="https://www.deskera.com" className="link fw-b" style={{color:'black',marginLeft:2,textDecoration:'none'}}> Deskera</a></div>
+        </div>
+		);
     }
     onInput = (e) => {
         this.setState({
@@ -170,44 +151,9 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
         }
     };
 
-    openImagePicker = () => {
-        this.imagePickerExists = true;
-        this.inputOpenFileRef.current.click();
-    };
-
     openDocumentPicker = () => {
         this.documentPickerExists = true;
         this.documentInputOpenFileRef.current.click();
-    };
-
-    getImagePicker = () => {
-        return (
-            <input
-                id="inputImage"
-                type="file"
-                accept="image/*"
-                ref={this.inputOpenFileRef}
-                style={{ display: 'none' }}
-                onClick={(e) => {
-                    this.initializeImageSelect();
-                    e.stopPropagation();
-                }}
-                onChange={(e) => {
-                    let formData = new FormData();
-                    if (e.target.files.length > 0) {
-                        for (
-                            let index = 0;
-                            index < e.target.files.length;
-                            ++index
-                        ) {
-                            let file = e.target.files.item(index);
-                            formData.append('attachment', file);
-                        }
-                        this.props.onAttachment(formData);
-                    }
-                }}
-            />
-        );
     };
 
     getDocumentPicker = () => {
@@ -215,7 +161,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
             <input
                 id="inputDocument"
                 type="file"
-                accept="application/pdf, .txt, .doc, .xls , .ppt, .docx, .xlsx, .pptx"
+                accept="application/pdf, .txt, .doc, .xls , .ppt, .docx, .xlsx, .pptx, image/*"
                 ref={this.documentInputOpenFileRef}
                 style={{ display: 'none' }}
                 onClick={(e) => {
