@@ -45,7 +45,7 @@ window.deskeraChat = deskeraChat;
  * @todo enable following lines to render the chat for a specific tenant in dev mode
  */
 
-deskeraChat('init', { tenantId: 70223, accentColor: 'green', });
+// deskeraChat('init', { tenantId: 70223, accentColor: 'green', });
 /**
  * @description: These are the configuration parameters for the chat
  */
