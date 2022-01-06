@@ -14,6 +14,7 @@ import {
 	highlightString,
 	isEmptyObject,
 	triggerDownload,
+	getFormattedTime
 } from '../Utility/Utility';
 import { FILE_TYPE } from '../Utility/Enum';
 
@@ -36,6 +37,12 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 	componentDidMount() {}
 	componentWillReceiveProps(nextProps) {}
 	render() {
+		let fileType;
+		if (this.props.data.body?.attachments[0]) {
+			fileType = this.getFileTypeByFile(this.props.data.body?.attachments[0]?.url);
+		}
+		console.log(this.props.data?.sentAt);
+
 		return (
 			<div
 				className="row display-flex parent-width"
@@ -61,7 +68,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 									: 'mr-m text-white chat-bubble-sender'
 							}`}
 							style={{
-								backgroundColor: !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
+								backgroundColor:this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && fileType === FILE_TYPE.IMAGE ? '': !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
 								display: 'inline',
 								maxWidth: '50%',
 								minWidth: '15%',
@@ -106,7 +113,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 									right: '10px',
 								}}
 							>
-								{getFormattedTimeFromDate(
+								{getFormattedTime(
 									new Date(this.props.data?.sentAt)
 								)}
 							</div>
@@ -209,13 +216,38 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			);
 		} else {
 			return (
-				<DKIcon
-					src={this.getFileIconByFileType(fileType)}
-					className="ic-m unselectable cursor-hand border-radius-m"
-				/>
+				<>
+					<DKIcon
+						src={this.getFileIconByFileType(fileType)}
+						className="ic-m unselectable cursor-hand border-radius-m"
+					/>
+					<div className="mb-m justify-content-center border-radius-m position-absolute transparent-background display-none download-button">
+						<DKIcon
+							src={DKIcons.white.ic_download}
+							className="ic-l unselectable cursor-hand border-radius-m d-flex align-self-center"
+							style={{
+								width: 22,
+							}}
+							onClick={() => this.downloadDocuemnt(fileLink)}
+						/>
+					</div>
+				</>
 			);
 		}
 	};
+	downloadDocuemnt(dataUrl) {
+		let fileName = dataUrl.split('/').pop();
+		var req = new XMLHttpRequest();
+		req.open('GET', dataUrl, true);
+		req.responseType = 'blob';
+		req.onload = function () {
+			var blob = new Blob([req.response], {
+				type: 'application/octetstream',
+			});
+			triggerDownload(blob, fileName);
+		};
+		req.send();
+	}
 	getFileIconByFileType = (type) => {
 		switch (type) {
 			case FILE_TYPE.PDF:
