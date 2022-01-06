@@ -43,14 +43,15 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
     render() {
         return (
             <div className={`dk-chat-input-wrapper column parent-width ${this.props.className}`}>
-            <div className="row parent-width border-m border-radius-m">
+            <div className="row parent-width border-m border-radius-m align-items-center">
                 <div
                     placeholder="Type your message here"
                     style={{
                         maxHeight: 60,
                         minHeight: 50,
                         overflow: 'auto',
-                        minWidth: '75%'
+                        minWidth: '75%',
+                        alignItems:'center'
                     }}
                     ref={this.messageBox}
                     contentEditable
@@ -62,7 +63,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             : null
                     }
                     dir="ltr"
-                    className={`row dk-chat-input p-s align-items-start pre-wrap`}
+                    className={`row dk-chat-input p-s align-items-start pre-wrap display-flex`}
                     onPaste={(e) => {
                         e.preventDefault();
                         const text = e.clipboardData.getData('text/plain');
