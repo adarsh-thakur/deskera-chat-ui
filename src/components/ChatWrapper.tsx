@@ -17,7 +17,9 @@ export default function ChatWrapper(props) {
 
     const getMessagesByThreadId = (threadId) => {
         ChatService.getMessagesByThreadId(threadId).then((res: { data: any[] }) => {
-            setMessages(res.data.reverse());
+            let messages = res.data.reverse();
+            messages = messages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId()}));
+            setMessages(messages);
         });
     }
     const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT) => {

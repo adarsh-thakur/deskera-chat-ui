@@ -98,13 +98,12 @@ export default function ChatPopup(props: any) {
             {props.showChat && <div className="dk-chat-screen parent-size border-radius-m parent-width" style={{ height: '98%' }}>
                 <div ref={messageTopRef} id="message-top-ref" className='parent-width'></div>
                 {props.messages?.map((message, index) => {
-                    const updatedMessage = { ...message, sender: message.from?.id == props.cookies?.id };
                     return (
                         <ChatBubble
                             currentUserId={props.userId}
                             accentColor={props.accentColor}
                             avatar={props.avatar}
-                            data={updatedMessage}
+                            data={message}
                             onActionButtonClick={(messageId, threadId, attachemntId) => { }}
                         />
                     );
