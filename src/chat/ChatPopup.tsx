@@ -56,11 +56,7 @@ export default function ChatPopup(props: any) {
     }
     /* effects goes here */
     useEffect(() => {
-        scrollToBottom();
-    }, []);
-
-    useEffect(() => {
-        scrollToBottom();
+        setTimeout(() => scrollToBottom(), 500);
     }, [props.messages]);
 
     useEffect(() => {
@@ -90,12 +86,12 @@ export default function ChatPopup(props: any) {
     const renderChatHistory = () => {
         return <div
             id="chat-wrapper"
-            className={`display-flex column parent-width border-box scroll-y-only-web hide-scroll-bar`}
+            className={`display-flex column parent-size border-box scroll-y-only-web hide-scroll-bar`}
             style={{
                 overflowX: 'auto'
             }}
         >
-            {props.showChat && <div className="dk-chat-screen parent-size border-radius-m parent-width" style={{ height: '98%' }}>
+            {props.showChat && <div className="dk-chat-screen parent-size border-radius-m" style={{ height: '98%' }}>
                 <div ref={messageTopRef} id="message-top-ref" className='parent-width'></div>
                 {props.messages?.map((message, index) => {
                     return (
