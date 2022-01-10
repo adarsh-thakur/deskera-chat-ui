@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ChatPopup from '../chat/ChatPopup';
 import { MessagePayload, SignUpPayload } from '../model/ChatModel';
 import { ChatService } from '../services/chat';
@@ -8,18 +8,23 @@ import { GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
 import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
 import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from 'deskera-ui-library';
+import ChatManager from '../manager/ChatManager';
 export default function ChatWrapper(props) {
     const tenantService = TenantService.getInstance();
     const [cookies, setCookieData] = React.useState(props.cookies);
     const [messages, setMessages] = React.useState<any[]>([]);
     const [showPopup, setShowPopup] = useState(false);
     const [showChat, setShowChat] = useState(false);
+    const chatFeedWrapperRef = useRef(null);
 
-    const getMessagesByThreadId = (threadId) => {
-        ChatService.getMessagesByThreadId(threadId).then((res: { data: any[] }) => {
-            let messages = res.data.reverse();
-            messages = messages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId()}));
-            setMessages(messages);
+
+    const getMessagesByThreadId = (threadId, params = null) => {
+        ChatService.getMessagesByThreadId(threadId, params).then((res: any) => {
+            let messages = res.data;
+            messages = messages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId() }));
+            ChatManager.setMessages(messages);
+            ChatManager.setTotalCount(res.totalCount);
+            setMessages(ChatManager.getMessages().reverse());
         });
     }
     const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT) => {
@@ -39,6 +44,13 @@ export default function ChatWrapper(props) {
                 type: 'USER'
             }
         };
+        let lastMessages = ChatManager.getMessages();
+        lastMessages.push(payload);
+        lastMessages = lastMessages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId() }));
+        ChatManager.setMessages(lastMessages);
+        ChatManager.setTotalCount(ChatManager.getTotalCount() + 1);
+        setMessages(lastMessages);
+
         ChatService.sendMessages(payload).then(res => {
             getMessagesByThreadId(cookies.threadId);
         });
@@ -46,7 +58,7 @@ export default function ChatWrapper(props) {
     const onMessageReceived = (data) => {
         const newMessage = JSON.parse(data.message);
         const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
-        if (newMessage.from.id !== props.user && cookie) {
+        if (newMessage.from.id !== props.userId && cookie) {
             getMessagesByThreadId(cookie.threadId);
         }
     }
@@ -87,6 +99,13 @@ export default function ChatWrapper(props) {
     const sendUserInfoAsMessage = () => {
         let message = `Name: ${props.name}\nPhone: ${props.phone}\nEmail: ${props.email}`;
         props.onSendMessage(message)
+    }
+    const onReachedTop = () => {
+        if (ChatManager.getMessages()?.length < ChatManager.getTotalCount()) {
+            ChatManager.scrollToBottom = false;
+            let params = { pageNo: 1, pageSize: ChatManager.getMessages().length + 10 };
+            getMessagesByThreadId(cookies.threadId, params);
+        }
     }
     const renderBubble = () => {
         return <div
@@ -133,19 +152,45 @@ export default function ChatWrapper(props) {
         }
     }, []);
 
+    React.useEffect(() => {
+        if (ChatManager.scrollToBottom) {
+            document.getElementById('message-bottom-ref')?.scrollIntoView({ behavior: 'smooth' });
+        }
+        ChatManager.scrollToBottom = true;
+    }, [messages, showPopup]);
+
+    /* renderer will go here */
     return <>
         {renderBubble()}
         {showPopup &&
-            <ChatPopup
-                {...props}
-                messages={messages}
-                cookies={cookies}
-                showChat={showChat}
-                tenantId={tenantService.getTenantId()}
-                userId={tenantService.getUserId()}
-                onSignUp={(email) => signUp(email)}
-                onSendMessage={(data, type) => sendMessage(data, type)}
-                onAttachmentAdd={onAttachmentAdd}
-            />}
+            <>
+                <div
+                    className="column position-absolute justify-content-between shadow-m border-radius-m bg-white"
+                    style={{
+                        opacity: showPopup ? 1 : 0,
+                        visibility: showPopup ? 'visible' : 'hidden',
+                        width: 350,
+                        height: '80vh',
+                        bottom: 80,
+                        right: 20,
+                        transition: 'visibility 0s, opacity 0.5s ease-in',
+                    }}
+                >
+                    <ChatPopup
+                        {...props}
+                        messages={messages}
+                        chatFeedWrapperRef={chatFeedWrapperRef}
+                        cookies={cookies}
+                        showChat={showChat}
+                        tenantId={tenantService.getTenantId()}
+                        userId={tenantService.getUserId()}
+                        onSignUp={(email) => signUp(email)}
+                        onSendMessage={(data, type) => sendMessage(data, type)}
+                        onAttachmentAdd={onAttachmentAdd}
+                        reachedTop={onReachedTop}
+                    />
+                </div>
+            </>
+        }
     </>
 }

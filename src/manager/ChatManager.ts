@@ -1,9 +1,17 @@
 class ChatManager {
-    private _messages: Array<any>;
-    public getMessages(): Array<any> {
+    static _messages: any[];
+    static _totalCount: number;
+    static scrollToBottom = true;
+    static getTotalCount(): number {
+        return this._totalCount;
+    }
+    static setTotalCount(value: number) {
+        this._totalCount = value;
+    }
+    static getMessages(): any[] {
         return this._messages;
     }
-    public setMessages(value: Array<any>) {
+    static setMessages(value: any[]) {
         this._messages = value;
     }
 

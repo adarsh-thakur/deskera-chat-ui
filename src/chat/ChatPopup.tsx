@@ -14,9 +14,6 @@ export default function ChatPopup(props: any) {
     const messageBottomRef: any = useRef();
 
     /* business logic goes here */
-    const scrollToBottom = () => {
-        messageBottomRef.current && messageBottomRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
 
     const validateEmail = () => {
         const validEmail = isValidEmail(email);
@@ -35,16 +32,16 @@ export default function ChatPopup(props: any) {
 
     const createObserver = () => {
         const options = {
-            root: document.querySelector('#chat-wrapper'),
+            root: document.querySelector('#chat-feed-wrapper'),
             rootMargin: '1px',
             threshold: 1,
         }
         const observer = new IntersectionObserver((entries, observer) => {
             const entry = entries[0];
             if (entry.target === messageTopRef.current && entry.isIntersecting) {
-                console.log('intersecting top');
+                props?.reachedTop?.();
             } else if (entry.target === messageBottomRef.current && entry.isIntersecting) {
-                console.log('intersecting bottom');
+                props?.reachedBottom?.();
             }
         }, options);
         if (messageTopRef.current) {
@@ -56,11 +53,7 @@ export default function ChatPopup(props: any) {
     }
     /* effects goes here */
     useEffect(() => {
-        setTimeout(() => scrollToBottom(), 500);
-    }, [props.messages]);
-
-    useEffect(() => {
-        createObserver();
+        setTimeout(() => createObserver(), 1000);
         setEmail('');
     }, [props.showChat]);
 
@@ -85,11 +78,12 @@ export default function ChatPopup(props: any) {
 
     const renderChatHistory = () => {
         return <div
-            id="chat-wrapper"
+            id="chat-feed-wrapper"
             className={`display-flex column parent-size border-box scroll-y-only-web hide-scroll-bar`}
             style={{
                 overflowX: 'auto'
             }}
+            ref={props?.chatFeedWrapperRef}
         >
             {props.showChat && <div className="dk-chat-screen parent-size border-radius-m" style={{ height: '98%' }}>
                 <div ref={messageTopRef} id="message-top-ref" className='parent-width'></div>
@@ -151,34 +145,15 @@ export default function ChatPopup(props: any) {
         />
     }
 
-    const renderPopup = () => {
-        return (
-            <div
-                className="column position-absolute justify-content-between shadow-m border-radius-m bg-white"
-                style={{
-                    opacity: showPopup ? 1 : 0,
-                    visibility: showPopup ? 'visible' : 'hidden',
-                    width: 350,
-                    height: '80vh',
-                    bottom: 80,
-                    right: 20,
-                    transition: 'visibility 0s, opacity 0.5s ease-in',
-                }}
-            >
-                {renderHeader()}
-                {renderChatHistory()}
-                <div className="parent-width">
-                    {!props.showChat && renderEmailInput()}
-                    {props.showChat && renderChatInput()}
-                </div>
-            </div>
-        );
-    }
-
     /* Main renderer goes here */
     return (
         <>
-            {renderPopup()}
+            {renderHeader()}
+            {renderChatHistory()}
+            <div className="parent-width">
+                {!props.showChat && renderEmailInput()}
+                {props.showChat && renderChatInput()}
+            </div>
         </>
     )
 }
