@@ -10,7 +10,6 @@ import {
 } from 'deskera-ui-library';
 import { MESSAGE_TYPE } from '../Utility/Constants';
 import {
-	getFormattedTimeFromDate,
 	highlightString,
 	isEmptyObject,
 	triggerDownload,
@@ -50,9 +49,15 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 						className={`justify-content-start align-items-end ${
 							!this.props.data.sender ? 'row' : 'row-reverse'
 						}`}
-					>
+				>
+					<DKContactIcon
+							title={`${!this.props.data.sender ? 'R' : 'S'}`}
+							className={`flex-shrink-0 border-m display-only-web bg-gray3 ${
+								!this.props.data.sender ? 'ml-s' : 'mr-s'
+							}`}
+						/>
 						<div
-							className={`m-v-s p-s fs-m position-relative ${
+							className={`m-v-s p-s fs-m position-relative shadow-m ${
 								!this.props.data.sender
 									? 'ml-m chat-bubble-receiver'
 									: 'mr-m text-white chat-bubble-sender'
@@ -60,7 +65,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 							style={{
 								backgroundColor:this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && fileType === FILE_TYPE.IMAGE ? '': !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
 								display: 'inline',
-								maxWidth: '80%',
+								maxWidth: '60%',
 								minWidth: '15%',
 							}}
 						>
