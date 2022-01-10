@@ -6,6 +6,7 @@ export const API_CONSTANT = {
         CREATE_THREAD: `message/thread`,
         SEND_MESSAGE: `message`,
         GET_MESSAGES_BY_ID: (threadId: string) => `message/thread/${threadId}`,
+        GET_THREAD: `thread`,
         UPLOAD_ATTACHMENT: `attachment`,
         GET_ATTACHMENT: (attachmentId: string) => `attachment/${attachmentId}`,
         DELETE_ATTACHMENT: (attachmentId: string) => `attachment/${attachmentId}`,

@@ -9,19 +9,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.user-select-none{
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.pre-wrap{
-  white-space: pre-wrap;
-}
-.width-0{
-  width: 0;
-}
-.height-0{
-  height: 0;
-}

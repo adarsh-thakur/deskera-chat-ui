@@ -42,3 +42,39 @@ border-top-right-radius: 15px;
   align-items: center;
   padding: 15px;
 }
+.notification{
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  color: white;
+  width: 20px;
+  height: 20px;
+  background: #f00;
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+
+.user-select-none{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.pre-wrap{
+  white-space: pre-wrap;
+}
+.width-0{
+  width: 0;
+}
+.height-0{
+  height: 0;
+}
+.bubble-shadow{
+  box-shadow: 0 3px 5px rgba(0,0,0,0.22);
+}

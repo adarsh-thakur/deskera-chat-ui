@@ -15,7 +15,8 @@ export default function ChatWrapper(props) {
     const [messages, setMessages] = React.useState<any[]>([]);
     const [showPopup, setShowPopup] = useState(false);
     const [showChat, setShowChat] = useState(false);
-    const chatFeedWrapperRef = useRef(null);
+    const [showNotification, setShowNotification] = useState(false);
+    const _unreadCount= useRef(0);
 
 
     const getMessagesByThreadId = (threadId, params = null) => {
@@ -45,7 +46,7 @@ export default function ChatWrapper(props) {
             }
         };
         let lastMessages = ChatManager.getMessages();
-        lastMessages.push(payload);
+        lastMessages.push({ ...payload, sentAt: new Date().toISOString() });
         lastMessages = lastMessages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId() }));
         ChatManager.setMessages(lastMessages);
         ChatManager.setTotalCount(ChatManager.getTotalCount() + 1);
@@ -59,6 +60,10 @@ export default function ChatWrapper(props) {
         const newMessage = JSON.parse(data.message);
         const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
         if (newMessage.from.id !== props.userId && cookie) {
+            if (!showPopup) {
+                _unreadCount.current = _unreadCount.current + 1;
+                setShowNotification(true);
+            }
             getMessagesByThreadId(cookie.threadId);
         }
     }
@@ -107,6 +112,11 @@ export default function ChatWrapper(props) {
             getMessagesByThreadId(cookies.threadId, params);
         }
     }
+    const onBubbleClick = () => {
+        _unreadCount.current = 0;
+        setShowNotification(false);
+        setShowPopup(!showPopup);
+    }
     const renderBubble = () => {
         return <div
             className="position-absolute d-flex align-items-center justify-content-center user-select-none"
@@ -118,7 +128,7 @@ export default function ChatWrapper(props) {
                 borderRadius: 25,
                 backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
             }}
-            onClick={() => setShowPopup(!showPopup)}
+            onClick={() => onBubbleClick()}
         >
             <DKIcon
                 src={showPopup ? DKIcons.white.ic_add : DKIcons.white.ic_comment}
@@ -129,13 +139,27 @@ export default function ChatWrapper(props) {
             ></DKIcon>
         </div >
     }
+    const validateThread = (threadId) => {
+        ChatService.getThread().then((res: any) => {
+            if (res?.data?.length) {
+                const thread = res.data.find(thread => thread._id === threadId);
+                if (thread && !thread.closed) {
+                    getMessagesByThreadId(threadId);
+                    setShowChat(true);
+                } else {
+                    clearSession();
+                }
+            } else {
+                clearSession();
+            }
+        });
+    }
     /* effect will go here */
     React.useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
             const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
             setCookiesValue(cookie);
-            getMessagesByThreadId(cookie.threadId);
-            setShowChat(true);
+            validateThread(cookie.threadId);
         } else if (props.email && isValidEmail(props.email)) {
             // if deskeraChat initialized with email, then sign up user
             signUp(props.email);
@@ -161,6 +185,7 @@ export default function ChatWrapper(props) {
 
     /* renderer will go here */
     return <>
+        {(!showPopup && showNotification) && <div className="notification">{_unreadCount.current}</div>}
         {renderBubble()}
         {showPopup &&
             <>
@@ -179,7 +204,6 @@ export default function ChatWrapper(props) {
                     <ChatPopup
                         {...props}
                         messages={messages}
-                        chatFeedWrapperRef={chatFeedWrapperRef}
                         cookies={cookies}
                         showChat={showChat}
                         tenantId={tenantService.getTenantId()}

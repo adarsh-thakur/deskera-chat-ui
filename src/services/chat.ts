@@ -19,5 +19,6 @@ export const ChatService = {
             }
         }
         )
-    }
+    },
+    getThread: () => httpClient.get(`${API_CONSTANT.getOpenEndPoint(API_CONSTANT.CHAT.GET_THREAD)}`),
 }

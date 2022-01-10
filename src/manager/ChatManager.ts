@@ -1,5 +1,5 @@
 class ChatManager {
-    static _messages: any[];
+    static _messages: any[] = [];
     static _totalCount: number;
     static scrollToBottom = true;
     static getTotalCount(): number {

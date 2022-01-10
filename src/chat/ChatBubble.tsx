@@ -57,7 +57,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 							}`}
 						/>
 						<div
-							className={`m-v-s p-s fs-m position-relative shadow-m ${
+							className={`m-v-s p-s fs-m position-relative bubble-shadow ${
 								!this.props.data.sender
 									? 'ml-m chat-bubble-receiver'
 									: 'mr-m text-white chat-bubble-sender'
