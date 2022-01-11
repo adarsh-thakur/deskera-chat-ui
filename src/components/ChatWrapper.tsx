@@ -6,7 +6,7 @@ import { customEvent } from '../services/customEvents';
 import { TenantService } from '../services/tenant';
 import { GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
 import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
-import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
+import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, getRandomHexString, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from 'deskera-ui-library';
 import ChatManager from '../manager/ChatManager';
 export default function ChatWrapper(props) {
@@ -16,7 +16,9 @@ export default function ChatWrapper(props) {
     const [showPopup, setShowPopup] = useState(false);
     const [showChat, setShowChat] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
-    const _unreadCount= useRef(0);
+    const [currentThread, setCurrenThread] = useState(null);
+    const _unreadCount = useRef(0);
+    const [settings, setSettings] = useState(null);
 
 
     const getMessagesByThreadId = (threadId, params = null) => {
@@ -38,7 +40,7 @@ export default function ChatWrapper(props) {
             },
             to: {
                 users: [cookies.id],
-                tenants: [props.tenantId]
+                tenants: [tenantService.getTenantId()]
             },
             from: {
                 id: cookies.userId,
@@ -59,7 +61,7 @@ export default function ChatWrapper(props) {
     const onMessageReceived = (data) => {
         const newMessage = JSON.parse(data.message);
         const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
-        if (newMessage.from.id !== props.userId && cookie) {
+        if (newMessage.from.id !== tenantService.getUserId() && cookie) {
             if (!showPopup) {
                 _unreadCount.current = _unreadCount.current + 1;
                 setShowNotification(true);
@@ -88,18 +90,22 @@ export default function ChatWrapper(props) {
         eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
         const payload: SignUpPayload = {
             email,
-            userId: props.userId,
-            tenantId: String(props.tenantId),
+            userId: tenantService.getUserId(),
+            tenantId: String(tenantService.getTenantId()),
         };
         return ChatService.signUp(payload).then((res: any) => {
             setCookiesValue({ ...res, ...payload, id: res.userId });
             setShowChat(true);
+            getMessagesByThreadId(res.threadId);
+            getSettings();
             return res;
         });
     }
     const clearSession = () => {
-        eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
+        tenantService.setUserId(getRandomHexString());
         setMessages([]);
+        setCurrenThread(null);
+        eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
     }
     const sendUserInfoAsMessage = () => {
         let message = `Name: ${props.name}\nPhone: ${props.phone}\nEmail: ${props.email}`;
@@ -143,15 +149,25 @@ export default function ChatWrapper(props) {
         ChatService.getThread().then((res: any) => {
             if (res?.data?.length) {
                 const thread = res.data.find(thread => thread._id === threadId);
-                if (thread && !thread.closed) {
+                    setCurrenThread(thread);
                     getMessagesByThreadId(threadId);
-                    setShowChat(true);
-                } else {
-                    clearSession();
-                }
+                    getSettings();
             } else {
                 clearSession();
             }
+        });
+    }
+    const onThreadClose = (data) => {
+        const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
+        const eventData = JSON.parse(data.message);
+        if (eventData?.closed && eventData._id === cookie?.threadId) {
+            console.log({ ...currentThread, closed: true });
+            setCurrenThread({ ...currentThread, closed: true });
+        }
+    }
+    const getSettings = () => {
+        ChatService.getSettings().then((res: any) => {
+            setSettings(res);
         });
     }
     /* effect will go here */
@@ -171,8 +187,10 @@ export default function ChatWrapper(props) {
             }, props.sessionDuration);
         }
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
+        customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.THREAD_CLOSED, (data) => onThreadClose(data));
         return () => {
             customEvent.remove(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
+            customEvent.remove(LOCAL_MESSAGE_EVENT_TYPE.THREAD_CLOSED, (data) => onThreadClose(data));
         }
     }, []);
 
@@ -183,6 +201,9 @@ export default function ChatWrapper(props) {
         ChatManager.scrollToBottom = true;
     }, [messages, showPopup]);
 
+    React.useEffect(() => {
+        setShowChat(!isEmptyObject(currentThread));
+    },[currentThread])
     /* renderer will go here */
     return <>
         {(!showPopup && showNotification) && <div className="notification">{_unreadCount.current}</div>}
@@ -203,8 +224,9 @@ export default function ChatWrapper(props) {
                 >
                     <ChatPopup
                         {...props}
+                        settings={settings}
                         messages={messages}
-                        cookies={cookies}
+                        currentThread={currentThread}
                         showChat={showChat}
                         tenantId={tenantService.getTenantId()}
                         userId={tenantService.getUserId()}
@@ -212,6 +234,7 @@ export default function ChatWrapper(props) {
                         onSendMessage={(data, type) => sendMessage(data, type)}
                         onAttachmentAdd={onAttachmentAdd}
                         reachedTop={onReachedTop}
+                        startNewChat={() => clearSession()}
                     />
                 </div>
             </>

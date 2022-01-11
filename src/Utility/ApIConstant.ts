@@ -11,6 +11,7 @@ export const API_CONSTANT = {
         GET_ATTACHMENT: (attachmentId: string) => `attachment/${attachmentId}`,
         DELETE_ATTACHMENT: (attachmentId: string) => `attachment/${attachmentId}`,
         GET_BULK_ATTACHMENT: `attachment/bulk-get`,
+        GET_SETTINGS:`settings`,
         DELETE_MESSAGE: (messageId: string) => `message/${messageId}`
     }
 }

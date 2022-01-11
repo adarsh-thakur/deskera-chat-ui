@@ -104,6 +104,9 @@ export default class WebSocketService {
                 case WS_EVENT_TYPE.NEW_CHAT_MESSAGE:
                     customEvent.dispatch(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, eventData);
                     break;
+                case WS_EVENT_TYPE.CHAT_THREAD_CLOSED:
+                    customEvent.dispatch(LOCAL_MESSAGE_EVENT_TYPE.THREAD_CLOSED, eventData);
+                    break;
                 default:
                     break;
             }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DKLabel, INPUT_TYPE, INPUT_VIEW_DIRECTION, DKButton } from 'deskera-ui-library';
+import { DKLabel, INPUT_TYPE, INPUT_VIEW_DIRECTION, DKButton, DKIcon, DKIcons } from 'deskera-ui-library';
 import ControlledInput from '../components/ControlledInput';
 import ChatInputBox from './ChatInput';
 import { isValidEmail } from '../Utility/Utility';
@@ -51,6 +51,10 @@ export default function ChatPopup(props: any) {
             observer.observe(messageBottomRef.current);
         }
     }
+    const onNewChat = (e) => {
+        e.preventDefault();
+        props.startNewChat?.(e);
+    }
     /* effects goes here */
     useEffect(() => {
         setTimeout(() => createObserver(), 1000);
@@ -63,15 +67,22 @@ export default function ChatPopup(props: any) {
 
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="row p-v-l p-h-s"
+        return <div className="row p-v-l p-h-s parent-width"
             style={{
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
                 backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
             }}>
+            {props.settings?.profilePicUrl &&
+                <img
+                    src={props.settings?.profilePicUrl}
+                    alt={props.settings.name}
+                    className='border-radius-l mr-s'
+                    style={{ width: 25 }} />
+            }
             <DKLabel
-                className="text-white fw-b fs-m"
-                text={'Hey there 👋🏻'}
+                className="text-white fs-l"
+                text={props.settings ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
             />
         </div>;
     }
@@ -140,7 +151,7 @@ export default function ChatPopup(props: any) {
             guest={true}
             accentColor={props.accentColor}
             onSend={props.onSendMessage}
-            currentThreadId={props.cookies?.threadId}
+            currentThreadId={props?.currentThread?._id}
             onAttachment={props.onAttachmentAdd}
         />
     }
@@ -152,7 +163,15 @@ export default function ChatPopup(props: any) {
             {renderChatHistory()}
             <div className="parent-width">
                 {!props.showChat && renderEmailInput()}
-                {props.showChat && renderChatInput()}
+                {props.showChat && !props.currentThread?.closed && renderChatInput()}
+                {props.showChat && props.currentThread?.closed && <div className="row p-l bg-deskera-secondary align-items-center">
+                    <DKIcon src={DKIcons.ic_warning} className="ic-r mr-r" />
+                    <div>Looks like this chat is no longer available.&nbsp;
+                        <span
+                            className='text-blue cursor-hand text-underline'
+                            onClick={(e) => onNewChat(e)}
+                        >Click Here</span> to start new chat.</div>
+                </div>}
             </div>
         </>
     )

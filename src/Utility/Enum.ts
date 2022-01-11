@@ -4,6 +4,7 @@ export enum WS_EVENT_TYPE {
     NEW_CHAT_THREAD = 'new-chat-thread',
     NEW_CHAT_MESSAGE = 'new-chat-message',
     CHAT_MESSAGE_UPDATE = 'chat-message-updated',
+    CHAT_THREAD_CLOSED = 'chat-thread-closed',
     NEW_CONNECTION = 'new-connection',
 }
 export enum WEBSOCKET_READY_STATE {
@@ -14,6 +15,7 @@ export enum WEBSOCKET_READY_STATE {
 }
 export enum LOCAL_MESSAGE_EVENT_TYPE {
     NEW_MSG = 'new-message',
+    THREAD_CLOSED = 'thread-closed',
     NEW_THREAD = 'new-thread'
 }
 export enum FILE_TYPE {
