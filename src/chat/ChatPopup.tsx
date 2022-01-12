@@ -20,14 +20,17 @@ export default function ChatPopup(props: any) {
         setEmailValid(validEmail);
         if (!validEmail) {
             return;
+        } else {
+            props.onSignUp(email);
         }
     }
 
     const signUpUser = (skip = false) => {
-        if (!skip) {
+        if (skip) {
+            props.onSignUp();
+        } else {
             validateEmail();
         }
-        props.onSignUp(!skip ? email : undefined);
     }
 
     const createObserver = () => {
