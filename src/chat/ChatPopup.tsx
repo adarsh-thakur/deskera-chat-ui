@@ -96,7 +96,7 @@ export default function ChatPopup(props: any) {
             }}
             ref={props?.chatFeedWrapperRef}
         >
-            {props.showChat && <div className="dk-chat-screen parent-size border-radius-m" style={{ height: '98%' }}>
+            {props.showChat && <div className="dk-chat-screen parent-size border-radius-m pt-m" style={{ height: '98%' }}>
                 <div ref={messageTopRef} id="message-top-ref" className='parent-width'></div>
                 {props.messages?.map((message, index) => {
                     return (
