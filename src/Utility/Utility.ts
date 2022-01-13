@@ -120,6 +120,6 @@ export const getFormattedTime =(date) => {
     hours = hours % 12;
     hours = hours ? hours : 12;
     minutes = minutes < 10 ? "0" + minutes : minutes;
-    let time = hours + ":" + minutes + "" + x;
+    let time = hours + ":" + minutes + " " + x;
     return time;
   }
