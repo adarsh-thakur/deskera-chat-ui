@@ -51,7 +51,8 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                         minHeight: 50,
                         overflow: 'auto',
                         minWidth: '75%',
-                        alignItems:'center'
+                        alignItems: 'center',
+                        wordBreak: 'break-word'
                     }}
                     ref={this.messageBox}
                     contentEditable
