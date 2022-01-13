@@ -9,8 +9,10 @@ import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
 import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, getRandomHexString, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from 'deskera-ui-library';
 import ChatManager from '../manager/ChatManager';
+import WebSocketService from '../services/webScoket';
 export default function ChatWrapper(props) {
     const tenantService = TenantService.getInstance();
+    const _webDocketService: any = WebSocketService.getInstance();
     const [cookies, setCookieData] = React.useState(props.cookies);
     const [messages, setMessages] = React.useState<any[]>([]);
     const [showPopup, setShowPopup] = useState(false);
@@ -106,6 +108,7 @@ export default function ChatWrapper(props) {
         setMessages([]);
         setCurrenThread(null);
         eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
+        _webDocketService.openConnection();
     }
     const sendUserInfoAsMessage = () => {
         let message = `Name: ${props.name}\nPhone: ${props.phone}\nEmail: ${props.email}`;
