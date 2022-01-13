@@ -154,7 +154,6 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
     };
 
     openDocumentPicker = () => {
-        this.documentPickerExists = true;
         this.documentInputOpenFileRef.current.click();
     };
 
@@ -182,6 +181,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             formData.append('attachment', file);
                         }
                         this.props.onAttachment(formData);
+                        e.target.value = null;
                     }
                 }}
             />
@@ -193,23 +193,10 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
     };
 
     checkIt = () => {
-        if (document.querySelector('#inputImage')) {
-            const fileElement = document.querySelector(
-                '#inputImage'
-            ) as HTMLInputElement;
-            if (fileElement.files && fileElement.files.length === 0) {
-                this.imagePickerExists = false;
-                // return;
-            }
-        }
         if (document.querySelector('#inputDocument')) {
             const fileElement = document.querySelector(
                 '#inputDocument'
-            ) as HTMLInputElement;
-            if (fileElement.files && fileElement.files.length === 0) {
-                this.documentPickerExists = false;
-                // return;
-            }
+                ) as HTMLInputElement;
         }
     };
 }
