@@ -5,16 +5,16 @@ import App from './App';
 
 const deskeraChat = (type, data) => {
   const init = (props) => {
-    if (!document.getElementById('root')) {
+    if (!document.getElementById('deskera-chat-root')) {
       const mountEl = document.createElement('div');
-      mountEl.setAttribute('id', 'root');
+      mountEl.setAttribute('id', 'deskera-chat-root');
       document.body.appendChild(mountEl);
     }
     ReactDOM.render(
       <React.StrictMode>
         <App data={props} />
       </React.StrictMode>,
-      document.getElementById('root')
+      document.getElementById('deskera-chat-root')
     );
   };
   const umount = () => {
