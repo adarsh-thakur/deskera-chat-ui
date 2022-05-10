@@ -202,7 +202,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 					<img
 						src={fileLink}
 						className="parent-width"
-						alt="chat-image"
+						alt="chat-attachment"
 					/>
 				</div>
 			);
@@ -220,26 +220,13 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 							style={{
 								width: 22,
 							}}
-							onClick={() => this.downloadDocuemnt(fileLink)}
+							onClick={() => this.downloadDocument(fileLink)}
 						/>
 					</div>
 				</>
 			);
 		}
 	};
-	downloadDocuemnt(dataUrl) {
-		let fileName = dataUrl.split('/').pop();
-		var req = new XMLHttpRequest();
-		req.open('GET', dataUrl, true);
-		req.responseType = 'blob';
-		req.onload = function () {
-			var blob = new Blob([req.response], {
-				type: 'application/octetstream',
-			});
-			triggerDownload(blob, fileName);
-		};
-		req.send();
-	}
 	getFileIconByFileType = (type) => {
 		switch (type) {
 			case FILE_TYPE.PDF:

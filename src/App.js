@@ -29,7 +29,11 @@ const App = (props) => {
         tenantService.setTenantId(tenantId);
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
             const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
-            tenantService.setUserId(cookie.userId);
+            if (cookie) {
+                tenantService.setUserId(cookie.userId);
+            } else {
+                tenantService.setUserId(getRandomHexString());
+            }
         } else {
             tenantService.setUserId(getRandomHexString());
         }

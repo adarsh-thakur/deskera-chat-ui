@@ -128,7 +128,7 @@ export default function ChatWrapper(props) {
     }
     const renderBubble = () => {
         return <div
-            className="position-absolute d-flex align-items-center justify-content-center user-select-none"
+            className="position-fixed d-flex align-items-center justify-content-center user-select-none"
             style={{
                 bottom: 15,
                 right: 20,
@@ -164,21 +164,25 @@ export default function ChatWrapper(props) {
         const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
         const eventData = JSON.parse(data.message);
         if (eventData?.closed && eventData._id === cookie?.threadId) {
-            console.log({ ...currentThread, closed: true });
             setCurrenThread({ ...currentThread, closed: true });
         }
     }
     const getSettings = () => {
         ChatService.getSettings().then((res: any) => {
             setSettings(res);
-        });
+        }).catch((error) => {
+            console.log(error);
+            console.error('Error while getting settings');
+         });
     }
     /* effect will go here */
     React.useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
             const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
-            setCookiesValue(cookie);
-            validateThread(cookie.threadId);
+            if (cookies) {
+                setCookiesValue(cookie);
+                validateThread(cookie.threadId);
+            }
         } else if (props.email && isValidEmail(props.email)) {
             // if deskeraChat initialized with email, then sign up user
             signUp(props.email);
@@ -202,8 +206,7 @@ export default function ChatWrapper(props) {
             document.getElementById('message-bottom-ref')?.scrollIntoView({ behavior: 'smooth' });
         }
         ChatManager.scrollToBottom = true;
-    }, [messages, showPopup]);
-
+    }, [messages]);
     React.useEffect(() => {
         setShowChat(!isEmptyObject(currentThread));
     },[currentThread])
@@ -214,7 +217,7 @@ export default function ChatWrapper(props) {
         {showPopup &&
             <>
                 <div
-                    className="column position-absolute justify-content-between shadow-m border-radius-m bg-white"
+                    className="column position-fixed justify-content-between shadow-m border-radius-m bg-white"
                     style={{
                         opacity: showPopup ? 1 : 0,
                         visibility: showPopup ? 'visible' : 'hidden',

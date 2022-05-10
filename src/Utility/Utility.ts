@@ -94,7 +94,11 @@ export const encodeJSON = (json) => {
     return btoa(temp);
 }
 export const decodeJSON = (base64String) => {
-    return JSON.parse(decodeURI(atob(base64String)));
+    try {
+        return JSON.parse(decodeURI(atob(base64String)))
+    } catch (error) {
+        return null;
+    }
 }
 /**
  *
