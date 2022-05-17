@@ -240,6 +240,7 @@ export default function ChatWrapper(props) {
                         onSendMessage={(data, type) => sendMessage(data, type)}
                         onAttachmentAdd={onAttachmentAdd}
                         reachedTop={onReachedTop}
+                        onPopupClose={() => onBubbleClick()}
                         startNewChat={() => clearSession()}
                     />
                 </div>

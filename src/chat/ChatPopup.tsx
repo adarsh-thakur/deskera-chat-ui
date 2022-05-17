@@ -70,12 +70,13 @@ export default function ChatPopup(props: any) {
 
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="row p-v-l p-h-s parent-width"
+        return <div className="row p-v-l p-h-s parent-width d-flex justify-content-between"
             style={{
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
                 backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
             }}>
+            <div className='d-flex align-items-center'>
             {props.settings?.profilePicUrl &&
                 <img
                     src={props.settings?.profilePicUrl}
@@ -87,6 +88,15 @@ export default function ChatPopup(props: any) {
                 className="text-white fs-l"
                 text={props.settings ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
             />
+            </div>
+            <div className='pr-s'>
+                <DKIcon src={DKIcons.white.ic_add}
+                    onClick={() => { props?.onPopupClose?.(); }}
+                    className="ic-r cursor-hand"
+                    style={{
+                    transform: `rotate(138deg)`,
+                }}/>
+            </div>
         </div>;
     }
 

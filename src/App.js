@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import ChatPopup from './chat/ChatPopup';
+import './css/override.css';
 import ChatWrapper from './components/ChatWrapper';
 import { TenantService } from './services/tenant';
 import WebSocketService from './services/webScoket';

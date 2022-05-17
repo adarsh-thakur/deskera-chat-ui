@@ -1,8 +1,8 @@
 import React, { Component, RefObject } from 'react';
-import { DKButton, DKIcon, DKIcons } from 'deskera-ui-library';
+import { DKIcon, DKIcons, showAlert } from 'deskera-ui-library';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
-import { MESSAGE_TYPE } from '../Utility/Constants';
+import {MAX_FILE_SIZE, MESSAGE_TYPE } from '../Utility/Constants';
 
 export interface IChatInputBoxProps {
     className?: string;
@@ -178,6 +178,10 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             ++index
                         ) {
                             let file = e.target.files.item(index);
+                            if (file.size > MAX_FILE_SIZE) {
+                                showAlert('Limit Exceed', 'File size should be less than 5MB');
+                                return;
+                            }
                             formData.append('attachment', file);
                         }
                         this.props.onAttachment(formData);
