@@ -4,12 +4,12 @@ import { MessagePayload, SignUpPayload } from '../model/ChatModel';
 import { ChatService } from '../services/chat';
 import { customEvent } from '../services/customEvents';
 import { TenantService } from '../services/tenant';
-import { GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
+import { CHAT_BUBBLE_POSITION, CHAT_POPUP_POSITION, DEFAULT_POSITION, GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
 import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
 import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, getRandomHexString, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from 'deskera-ui-library';
 import ChatManager from '../manager/ChatManager';
-import WebSocketService from '../services/webScoket';
+import WebSocketService from '../services/webSocket';
 export default function ChatWrapper(props) {
     const tenantService = TenantService.getInstance();
     const _webDocketService: any = WebSocketService.getInstance();
@@ -20,7 +20,6 @@ export default function ChatWrapper(props) {
     const [showNotification, setShowNotification] = useState(false);
     const [currentThread, setCurrenThread] = useState(null);
     const _unreadCount = useRef(0);
-    const [settings, setSettings] = useState(null);
 
 
     const getMessagesByThreadId = (threadId, params = null) => {
@@ -99,7 +98,6 @@ export default function ChatWrapper(props) {
             setCookiesValue({ ...res, ...payload, id: res.userId });
             setShowChat(true);
             getMessagesByThreadId(res.threadId);
-            getSettings();
             return res;
         });
     }
@@ -109,10 +107,6 @@ export default function ChatWrapper(props) {
         setCurrenThread(null);
         eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
         _webDocketService.openConnection();
-    }
-    const sendUserInfoAsMessage = () => {
-        let message = `Name: ${props.name}\nPhone: ${props.phone}\nEmail: ${props.email}`;
-        props.onSendMessage(message)
     }
     const onReachedTop = () => {
         if (ChatManager.getMessages()?.length < ChatManager.getTotalCount()) {
@@ -130,12 +124,11 @@ export default function ChatWrapper(props) {
         return <div
             className="position-fixed d-flex align-items-center justify-content-center user-select-none"
             style={{
-                bottom: 15,
-                right: 20,
                 height: 50,
                 width: 50,
                 borderRadius: 25,
-                backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                backgroundColor: props?.settings?.bubbleColor,
+                ...CHAT_BUBBLE_POSITION[props?.settings?.bubblePosition || DEFAULT_POSITION]
             }}
             onClick={() => onBubbleClick()}
         >
@@ -154,7 +147,6 @@ export default function ChatWrapper(props) {
                 const thread = res.data.find(thread => thread._id === threadId);
                     setCurrenThread(thread);
                     getMessagesByThreadId(threadId);
-                    getSettings();
             } else {
                 clearSession();
             }
@@ -166,14 +158,6 @@ export default function ChatWrapper(props) {
         if (eventData?.closed && eventData._id === cookie?.threadId) {
             setCurrenThread({ ...currentThread, closed: true });
         }
-    }
-    const getSettings = () => {
-        ChatService.getSettings().then((res: any) => {
-            setSettings(res);
-        }).catch((error) => {
-            console.log(error);
-            console.error('Error while getting settings');
-         });
     }
     /* effect will go here */
     React.useEffect(() => {
@@ -223,14 +207,13 @@ export default function ChatWrapper(props) {
                         visibility: showPopup ? 'visible' : 'hidden',
                         width: 350,
                         height: '80vh',
-                        bottom: 80,
-                        right: 20,
                         transition: 'visibility 0s, opacity 0.5s ease-in',
+                        ...CHAT_POPUP_POSITION[props?.settings?.bubblePosition || DEFAULT_POSITION]
                     }}
                 >
                     <ChatPopup
                         {...props}
-                        settings={settings}
+                        settings={props.settings}
                         messages={messages}
                         currentThread={currentThread}
                         showChat={showChat}

@@ -74,7 +74,7 @@ export default function ChatPopup(props: any) {
             style={{
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
-                backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                backgroundColor: props?.settings?.bubbleColor ? props?.settings?.bubbleColor : '#1c73e8',
             }}>
             <div className='d-flex align-items-center'>
             {props.settings?.profilePicUrl &&
@@ -115,7 +115,7 @@ export default function ChatPopup(props: any) {
                     return (
                         <ChatBubble
                             currentUserId={props.userId}
-                            accentColor={props.accentColor}
+                            accentColor={props?.settings?.bubbleColor}
                             avatar={props.avatar}
                             data={message}
                             onActionButtonClick={(messageId, threadId, attachemntId) => { }}
@@ -145,7 +145,7 @@ export default function ChatPopup(props: any) {
                     title="Submit"
                     className="fs-m border-m text-white mt-m"
                     style={{
-                        backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                        backgroundColor: props?.settings?.bubbleColor,
                     }}
                     onClick={() => signUpUser()}
                 />
@@ -162,7 +162,7 @@ export default function ChatPopup(props: any) {
         return <ChatInputBox
             className='p-s'
             guest={true}
-            accentColor={props.accentColor}
+            accentColor={props?.settings?.bubbleColor}
             onSend={props.onSendMessage}
             currentThreadId={props?.currentThread?._id}
             onAttachment={props.onAttachmentAdd}
