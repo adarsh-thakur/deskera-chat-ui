@@ -86,7 +86,7 @@ export default function ChatPopup(props: any) {
             }
             <DKLabel
                 className="text-white fs-l"
-                text={props.settings ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
+                text={props?.settings?.name ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
             />
             </div>
             <div className='pr-s'>
