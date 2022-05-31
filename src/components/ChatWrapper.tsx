@@ -99,7 +99,11 @@ export default function ChatWrapper(props) {
             setShowChat(true);
             getMessagesByThreadId(res.threadId);
             return res;
-        });
+        })
+            .catch(error => {
+                console.log(error);
+                tenantService.setUserId(getRandomHexString())
+            });
     }
     const clearSession = () => {
         tenantService.setUserId(getRandomHexString());
@@ -145,8 +149,8 @@ export default function ChatWrapper(props) {
         ChatService.getThread().then((res: any) => {
             if (res?.data?.length) {
                 const thread = res.data.find(thread => thread._id === threadId);
-                    setCurrenThread(thread);
-                    getMessagesByThreadId(threadId);
+                setCurrenThread(thread);
+                getMessagesByThreadId(threadId);
             } else {
                 clearSession();
             }
@@ -163,7 +167,7 @@ export default function ChatWrapper(props) {
     React.useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
             const cookie = decodeJSON(getCookie(GUEST_USER_COOKIE));
-            if (cookies) {
+            if (cookie) {
                 setCookiesValue(cookie);
                 validateThread(cookie.threadId);
             }
@@ -172,11 +176,11 @@ export default function ChatWrapper(props) {
             signUp(props.email);
         }
         // clear the chat after sessionDuration
-        if (props?.sessionDuration > 0) {
-            setTimeout(() => {
-                clearSession();
-            }, props.sessionDuration);
-        }
+        // if (props?.sessionDuration > 0) {
+        //     setTimeout(() => {
+        //         clearSession();
+        //     }, props.sessionDuration);
+        // }
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.THREAD_CLOSED, (data) => onThreadClose(data));
         return () => {
@@ -193,7 +197,7 @@ export default function ChatWrapper(props) {
     }, [messages]);
     React.useEffect(() => {
         setShowChat(!isEmptyObject(currentThread));
-    },[currentThread])
+    }, [currentThread])
     /* renderer will go here */
     return <>
         {(!showPopup && showNotification) && <div className="notification">{_unreadCount.current}</div>}
