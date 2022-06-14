@@ -70,12 +70,13 @@ export default function ChatPopup(props: any) {
 
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="row p-v-l p-h-s parent-width"
+        return <div className="row p-v-l p-h-s parent-width d-flex justify-content-between"
             style={{
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
-                backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                backgroundColor: props?.settings?.bubbleColor ? props?.settings?.bubbleColor : '#1c73e8',
             }}>
+            <div className='d-flex align-items-center'>
             {props.settings?.profilePicUrl &&
                 <img
                     src={props.settings?.profilePicUrl}
@@ -85,8 +86,17 @@ export default function ChatPopup(props: any) {
             }
             <DKLabel
                 className="text-white fs-l"
-                text={props.settings ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
+                text={props?.settings?.name ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
             />
+            </div>
+            <div className='pr-s'>
+                <DKIcon src={DKIcons.white.ic_add}
+                    onClick={() => { props?.onPopupClose?.(); }}
+                    className="ic-r cursor-hand"
+                    style={{
+                    transform: `rotate(138deg)`,
+                }}/>
+            </div>
         </div>;
     }
 
@@ -105,7 +115,7 @@ export default function ChatPopup(props: any) {
                     return (
                         <ChatBubble
                             currentUserId={props.userId}
-                            accentColor={props.accentColor}
+                            accentColor={props?.settings?.bubbleColor}
                             avatar={props.avatar}
                             data={message}
                             onActionButtonClick={(messageId, threadId, attachemntId) => { }}
@@ -135,7 +145,7 @@ export default function ChatPopup(props: any) {
                     title="Submit"
                     className="fs-m border-m text-white mt-m"
                     style={{
-                        backgroundColor: props.accentColor ? props.accentColor : '#1c73e8',
+                        backgroundColor: props?.settings?.bubbleColor,
                     }}
                     onClick={() => signUpUser()}
                 />
@@ -152,7 +162,7 @@ export default function ChatPopup(props: any) {
         return <ChatInputBox
             className='p-s'
             guest={true}
-            accentColor={props.accentColor}
+            accentColor={props?.settings?.bubbleColor}
             onSend={props.onSendMessage}
             currentThreadId={props?.currentThread?._id}
             onAttachment={props.onAttachmentAdd}
