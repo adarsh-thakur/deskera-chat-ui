@@ -1,0 +1,204 @@
+/* PADDING - r */
+.dk-chat-p-r {
+    padding: 15px;
+  }
+  .dk-chat-p-h-r {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .dk-chat-p-v-r {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .dk-chat-pl-r {
+    padding-left: 15px;
+  }
+  .dk-chat-pr-r {
+    padding-right: 15px;
+  }
+  .dk-chat-pt-r {
+    padding-top: 15px;
+  }
+  .dk-chat-pb-r {
+    padding-bottom: 15px;
+  }
+  
+  /* PADDING - xs */
+  .dk-chat-p-xs {
+    padding: 4px;
+  }
+  .dk-chat-p-h-xs {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .dk-chat-p-v-xs {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .dk-chat-pl-xs {
+    padding-left: 4px;
+  }
+  .dk-chat-pr-xs {
+    padding-right: 4px;
+  }
+  .dk-chat-pt-xs {
+    padding-top: 4px;
+  }
+  .dk-chat-pb-xs {
+    padding-bottom: 4px;
+  }
+  
+  /* PADDING - s */
+  .dk-chat-p-s {
+    padding: 8px;
+  }
+  .dk-chat-p-h-s {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .dk-chat-p-v-s {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .dk-chat-pl-s {
+    padding-left: 8px;
+  }
+  .dk-chat-pr-s {
+    padding-right: 8px;
+  }
+  .dk-chat-pt-s {
+    padding-top: 8px;
+  }
+  .dk-chat-pb-s {
+    padding-bottom: 8px;
+  }
+  
+  /* PADDING - m */
+  .dk-chat-p-m {
+    padding: 12px;
+  }
+  .dk-chat-p-h-m {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .dk-chat-p-v-m {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .dk-chat-pl-m {
+    padding-left: 12px;
+  }
+  .dk-chat-pr-m {
+    padding-right: 12px;
+  }
+  .dk-chat-pt-m {
+    padding-top: 12px;
+  }
+  .dk-chat-pb-m {
+    padding-bottom: 12px;
+  }
+  
+  /* PADDING - l */
+  .dk-chat-p-l {
+    padding: 18px;
+  }
+  .dk-chat-p-h-l {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .dk-chat-p-v-l {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+  .dk-chat-pl-l {
+    padding-left: 18px;
+  }
+  .dk-chat-pr-l {
+    padding-right: 18px;
+  }
+  .dk-chat-pt-l {
+    padding-top: 18px;
+  }
+  .dk-chat-pb-l {
+    padding-bottom: 18px;
+  }
+  
+  /* PADDING - xl */
+  .dk-chat-p-xl {
+    padding: 24px;
+  }
+  .dk-chat-p-h-xl {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .dk-chat-p-v-xl {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  .dk-chat-pl-xl {
+    padding-left: 24px;
+  }
+  .dk-chat-pr-xl {
+    padding-right: 24px;
+  }
+  .dk-chat-pt-xl {
+    padding-top: 24px;
+  }
+  .dk-chat-pb-xl {
+    padding-bottom: 24px;
+  }
+  
+  /* PADDING - xxl */
+  .dk-chat-p-xxl {
+    padding: 32px;
+  }
+  .dk-chat-p-h-xxl {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .dk-chat-p-v-xxl {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+  .dk-chat-pl-xxl {
+    padding-left: 32px;
+  }
+  .dk-chat-pr-xxl {
+    padding-right: 32px;
+  }
+  .dk-chat-pt-xxl {
+    padding-top: 32px;
+  }
+  .dk-chat-pb-xxl {
+    padding-bottom: 32px;
+  }
+  
+  /* PADDING - No */
+  .dk-chat-p-0 {
+    padding: 0px;
+  }
+  .dk-chat-p-h-0 {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .dk-chat-p-v-0 {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  
+  .dk-chat-main-holder-padding {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  
+  @media only screen and (max-width: 800px) {
+    .dk-chat-main-holder-padding {
+      padding-left: 4%;
+      padding-right: 4%;
+      padding-top: 4%;
+      padding-bottom: 4%;
+    }
+  }
+  

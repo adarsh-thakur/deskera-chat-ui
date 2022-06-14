@@ -1,0 +1,20 @@
+/* SHADOW */
+.dk-chat-shadow-s {
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.05);
+  }
+  .dk-chat-shadow-s-2 {
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  }
+  .dk-chat-shadow-fb {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  .dk-chat-shadow-m {
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
+  }
+  .dk-chat-shadow-l {
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+  }
+  .dk-chat-shadow-red-m {
+    box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.7);
+  }
+  

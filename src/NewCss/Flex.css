@@ -1,0 +1,136 @@
+.dk-chat-row {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .dk-chat-row-auto-width {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+  .dk-chat-row-reverse {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .dk-chat-column {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+  .dk-chat-row-responsive {
+    flex-wrap: nowrap;
+  }
+  
+  .dk-chat-flex-wrap {
+    flex-wrap: wrap;
+  }
+  
+  .dk-chat-flex-1 {
+    flex: 1;
+  }
+  
+  .dk-chat-flex-shrink-0 {
+    flex-shrink: 0;
+  }
+  
+  .dk-chat-justify-content-around {
+    justify-content: space-around;
+  }
+  .dk-chat-justify-content-center {
+    justify-content: center;
+  }
+  .dk-chat-justify-content-start {
+    justify-content: flex-start;
+  }
+  .dk-chat-justify-content-end {
+    justify-content: flex-end;
+  }
+  .dk-chat-justify-content-between {
+    justify-content: space-between;
+  }
+  .dk-chat-justify-content-evenly {
+    justify-content: space-evenly;
+  }
+  
+  .dk-chat-align-items-center {
+    align-items: center;
+  }
+  .dk-chat-align-items-baseline {
+    align-items: baseline;
+  }
+  .dk-chat-align-items-start {
+    align-items: flex-start;
+  }
+  .dk-chat-align-items-end {
+    align-items: flex-end;
+  }
+  .dk-chat-align-items-stretch {
+    align-items: stretch;
+  }
+  
+  .dk-chat-align-self-center {
+    align-self: center;
+  }
+  .dk-chat-align-self-start {
+    align-self: flex-start;
+  }
+  .dk-chat-align-self-end {
+    align-self: flex-end;
+  }
+  
+  .dk-chat-justify-self-center {
+    justify-self: center;
+  }
+  .dk-chat-justify-self-start {
+    justify-self: flex-start;
+  }
+  .dk-chat-justify-self-end {
+    justify-self: flex-end;
+  }
+  
+  .dk-chat-border-box {
+    box-sizing: border-box;
+  }
+  .dk-chat-display-block {
+    display: inline-block;
+  }
+  .dk-chat-display-none {
+    display: none;
+  }
+  
+  .dk-chat-d-flex {
+    display: flex;
+  }
+  .dk-chat-display-flex {
+    display: flex;
+  }
+  
+  .dk-chat-display-only-web {
+    display: flex;
+  }
+  .dk-chat-display-only-mobile {
+    display: none;
+  }
+  
+  @media only screen and (max-width: 800px) {
+    .dk-chat-row-responsive {
+      flex-wrap: wrap;
+    }
+    .dk-chat-display-only-web {
+      display: none;
+    }
+    .dk-chat-display-only-mobile {
+      display: flex;
+    }
+  }
+  

@@ -1,0 +1,21 @@
+/* CURSORS */
+.dk-chat-cursor-hand {
+    cursor: pointer;
+  }
+  .dk-chat-cursor-move {
+    cursor: move;
+  }
+  .dk-chat-cursor-col-resize {
+    cursor: col-resize;
+  }
+  .dk-chat-cursor-auto {
+    cursor: auto;
+  }
+  
+  .dk-chat-pointer-events-none {
+    pointer-events: none;
+  }
+  .dk-chat-pointer-events-auto {
+    pointer-events: auto;
+  }
+  

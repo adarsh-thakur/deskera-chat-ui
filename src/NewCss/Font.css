@@ -1,0 +1,86 @@
+.dk-chat-fs-r {
+    font-size: 13px;
+  }
+  .dk-chat-fs-xs {
+    font-size: 8px;
+  }
+  .dk-chat-fs-s {
+    font-size: 10px;
+  }
+  .dk-chat-fs-m {
+    font-size: 14px;
+  }
+  .dk-chat-fs-l {
+    font-size: 16px;
+  }
+  .dk-chat-fs-xl {
+    font-size: 20px;
+  }
+  .dk-chat-fs-xl-2 {
+    font-size: 22px;
+  }
+  .dk-chat-fs-xxl {
+    font-size: 24px;
+  }
+  .dk-chat-fs-xxxl {
+    font-size: 30px;
+  }
+  
+  /* FONT WEIGHT */
+  
+  .dk-chat-fw-l {
+    font-weight: lighter;
+  }
+  .dk-chat-fw-r {
+    font-weight: normal;
+  }
+  .dk-chat-fw-m {
+    font-weight: 600;
+  }
+  .dk-chat-fw-b {
+    font-weight: bold;
+  }
+  .dk-chat-fw-h {
+    font-weight: bolder;
+  }
+  
+  /* TEXT ALIGNMENT */
+  
+  .dk-chat-text-wrap-none {
+    white-space: nowrap;
+  }
+  .dk-chat-text-wrap {
+    word-wrap: break-word;
+  }
+  .dk-chat-text-trailing {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .dk-chat-word-wrap {
+    word-wrap: break-word;
+  }
+  .dk-chat-word-wrap-all {
+    word-break: break-all;
+  }
+  .dk-chat-word-break-normal {
+    word-break: normal;
+  }
+  .dk-chat-word-break-all {
+    word-break: break-all;
+  }
+  
+  .dk-chat-text-align-left {
+    text-align: left;
+  }
+  .dk-chat-text-align-center {
+    text-align: center;
+  }
+  .dk-chat-text-align-right {
+    text-align: right;
+  }
+  .dk-chat-text-align-justify {
+    text-align: justify;
+  }
+  

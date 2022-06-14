@@ -1,0 +1,70 @@
+/* TEXTFIELD */
+.dk-chat-textField {
+    padding: 10px;
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(220, 220, 220);
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    width: 100%;
+    background-color: #f4f4f6;
+    box-sizing: border-box;
+  }
+  .dk-chat-textField:focus {
+    /* border-width: 0px; */
+    border-color: orange;
+    outline: none !important;
+    /* box-shadow: 0 0 3px orange; */
+  }
+  .dk-chat-textField-warning {
+    border-color: red;
+    border-width: 1px;
+    background-color: rgba(255, 0, 0, 0.05);
+  }
+  .dk-chat-textField-invalid-text {
+    color: red;
+    margin-left: 4px;
+    /* position: absolute;
+    top: 45px;
+    left: 4px; */
+    font-size: 12px;
+  }
+  
+  .dk-chat-TextFieldFilter {
+    width: 100%;
+    outline-width: 0;
+    padding: 6px;
+    outline-style: solid;
+    border: 1px solid #e9ebed;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent;
+    font-size: 13px;
+  }
+  
+  .dk-chat-TextFieldFilterError {
+    width: 100%;
+    outline-width: 0;
+    padding: 6px;
+    outline-style: solid;
+    border: 1px solid red;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent;
+    font-size: 13px;
+  }
+  
+  .dk-chat-textarea-resize-none {
+    resize: none;
+  }
+  
+  .dk-chat-textarea-resize-outline {
+    overflow: auto;
+    outline: none;
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+  
