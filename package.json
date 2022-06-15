@@ -148,7 +148,6 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.24.0",
-    "deskera-ui-library": "^0.1.307"
+    "axios": "^0.24.0"
   }
 }

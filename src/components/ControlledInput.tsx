@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { DKLabel, INPUT_VIEW_DIRECTION } from "deskera-ui-library";
+import { INPUT_VIEW_DIRECTION } from "../Utility/Enum";
+import { DKLabel } from "./common";
 export interface IControlledInputProps {
   name?: string;
   placeHolder?: string;
@@ -37,8 +38,8 @@ class ControlledInput extends Component<
   render() {
     const dirClassName =
       this.props.direction === INPUT_VIEW_DIRECTION.HORIZONTAL
-        ? "row justify-content-between align-items-start position-relative "
-        : "column parent-width ";
+        ? "dk-chat-row dk-chat-justify-content-between dk-chat-align-items-start dk-chat-position-relative "
+        : "dk-chat-column dk-chat-parent-width ";
     return (
       <div className={`${dirClassName} ${this.props.className}`}>
         {this.props.name && this.getIconTitle()}
@@ -49,8 +50,8 @@ class ControlledInput extends Component<
 
   getIconTitle() {
     return (
-      <div className="mr-l">
-        <div className="row mt-r mb-s ">
+      <div className="dk-chat-mr-l">
+        <div className="dk-chat-row dk-chat-mt-r dk-chat-mb-s ">
           <DKLabel
             className="unselectable"
             style={{ whiteSpace: "nowrap" }}
@@ -64,8 +65,8 @@ class ControlledInput extends Component<
   getValueSection() {
     return (
       <div
-        className={`parent-width  ${
-          this.props.direction === INPUT_VIEW_DIRECTION.VERTICAL ? "mt-ss" : ""
+        className={`dk-chat-parent-width  ${
+          this.props.direction === INPUT_VIEW_DIRECTION.VERTICAL ? "dk-chat-mt-ss" : ""
         }`}
         style={
           this.props.direction === INPUT_VIEW_DIRECTION.HORIZONTAL
@@ -81,7 +82,7 @@ class ControlledInput extends Component<
                 ? this.props.invalidMessage
                 : `Enter a valid ${this.props?.name?.toLowerCase() || `value`}`
             }
-            className="text-red mt-s ml-xs"
+            className="dk-chat-text-red dk-chat-mt-s dk-chat-ml-xs"
             style={{ fontSize: 11 }}
           />
         )}
@@ -103,13 +104,13 @@ class ControlledInput extends Component<
     return (
       <div
         className={
-          "parent-width border-box bg-gray1 border-radius-s p-s position-relative " +
-          (this.props.invalid ? " border-red" : "")
+          "dk-chat-parent-width dk-chat-border-box dk-chat-bg-gray1 dk-chat-border-radius-s dk-chat-p-s dk-chat-position-relative " +
+          (this.props.invalid ? " dk-chat-border-red" : "")
         }
         style={style.parentWrapper}
       >
         <div
-          className={"position-absolute parent-width"}
+          className={"dk-chat-position-absolute dk-chat-parent-width"}
           style={style.inputWrapper}
         >
           <input
@@ -121,7 +122,7 @@ class ControlledInput extends Component<
             type={this.props.type ? this.props.type : "text"}
             disabled={this.props.readOnly}
             readOnly={this.props.readOnly}
-            className={`position-absolute border-none app-font parent-width p-s border-box`}
+            className={`dk-chat-position-absolute dk-chat-border-none dk-chat-app-font dk-chat-parent-width dk-chat-p-s dk-chat-border-box`}
             onChange={(e) =>
               this.props.onChange ? this.props.onChange(e) : null
             }

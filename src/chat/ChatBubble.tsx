@@ -1,4 +1,4 @@
-import React, { Component, RefObject } from 'react';
+import React, { Component } from 'react';
 import {
 	DKIcons,
 	DKIcon,
@@ -6,8 +6,7 @@ import {
 	DKLabel,
 	DKButton,
 	DKListPicker,
-	DKSpinner,
-} from 'deskera-ui-library';
+} from '../components/common';
 import { MESSAGE_TYPE } from '../Utility/Constants';
 import {
 	highlightString,
@@ -16,21 +15,6 @@ import {
 	getFormattedTime
 } from '../Utility/Utility';
 import { FILE_TYPE } from '../Utility/Enum';
-import "../NewCss/Border.css"
-import "../NewCss/Flex.css"
-import "../NewCss/Margin.css"
-import "../NewCss/Icon.css"
-import "../NewCss/Padding.css"
-import "../NewCss/Font.css"
-import "../NewCss/Sizes.css"
-import "../NewCss/Colors.css"
-import "../NewCss/Charts.css"
-import "../NewCss/Common.css"
-import "../NewCss/Cursor.css"
-import "../NewCss/Shadow.css"
-import "../NewCss/Zindex.css"
-import "../NewCss/TextField.css"
-import "../NewCss/DataGrid.css"
 
 export interface IChatBubbleProps {
 	currentUserId: string;
@@ -68,14 +52,14 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 					<DKContactIcon
 							title={`${!this.props.data.sender ? 'R' : 'S'}`}
 							className={`dk-chat-flex-shrink-0 dk-chat-border-m dk-chat-display-only-web dk-chat-bg-gray1 ${
-								!this.props.data.sender ? 'ml-s' : 'mr-s'
+								!this.props.data.sender ? 'dk-chat-ml-s' : 'dk-chat-mr-s'
 							}`}
 						/>
 						<div
 							className={`dk-chat-mt-s dk-chat-p-s dk-chat-fs-m dk-chat-position-relative ${
 								!this.props.data.sender
-									? 'dk-chat-ml-m chat-bubble-receiver'
-									: 'dk-chat-mr-m dk-chat-text-white chat-bubble-sender'
+									? 'dk-chat-ml-m dk-chat-chat-bubble-receiver'
+									: 'dk-chat-mr-m dk-chat-text-white dk-chat-chat-bubble-sender'
 							}`}
 							style={{
 								backgroundColor:this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && fileType === FILE_TYPE.IMAGE ? '': !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
@@ -216,7 +200,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				>
 					<img
 						src={fileLink}
-						className="parent-width"
+						className="dk-chat-parent-width"
 						alt="chat-attachment"
 					/>
 				</div>
@@ -230,7 +214,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 					/>
 					<div className="dk-chat-mb-m dk-chat-justify-content-center dk-chat-border-radius-m dk-chat-position-absolute dk-chat-transparent-background dk-chat-display-none dk-chat-download-button">
 						<DKIcon
-							src={DKIcons.white.ic_download}
+							src={DKIcons.ic_download}
 							className="dk-chat-ic-l dk-chat-unselectable dk-chat-cursor-hand dk-chat-border-radius-m dk-chat-d-flex dk-chat-align-self-center"
 							style={{
 								width: 22,
@@ -263,14 +247,17 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				<div className="dk-chat-popup-window">
 					<div className="dk-chat-row" style={{ justifyContent: 'flex-end' }}>
 						<DKButton
-							icon={DKIcons.ic_close}
+							icon={DKIcons.ic_add}
 							onClick={() => this.showImage()}
+							style={{
+								transform:`rotate(138deg)`
+							}}
 						/>
 					</div>
 					<div className="dk-chat-row dk-chat-justify-content-between dk-chat-flex-wrap">
 						<img
 							src={this.state.image}
-							className="parent-width"
+							className="dk-chat-parent-width"
 							alt="chat-image"
 						/>
 					</div>
@@ -295,7 +282,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 		return (
 			<DKListPicker
 				data={['Delete message']}
-				className="position-absolute border-m shadow-m z-index-3 text-gray"
+				className="dk-chat-position-absolute dk-chat-border-m dk-chat-shadow-m dk-chat-z-index-3 dk-chat-text-gray"
 				style={{ top: 15, width: 130, right: 0 }}
 				onSelect={(index, value) => {
 					this.props.onActionButtonClick(

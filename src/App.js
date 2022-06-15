@@ -11,7 +11,6 @@ import { ChatService } from './services/chat';
 const TENANT_ID_KEY = 'tenantid';
 
 const App = (props) => {
-    console.log(props)
     const [mount, setMount] = useState(false);
     const [settings, setSettings] = useState({
         bubblePosition: DEFAULT_POSITION,
