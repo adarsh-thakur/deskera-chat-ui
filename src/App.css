@@ -1,26 +1,26 @@
 
-.chat-bubble-sender,.chat-bubble-receiver{
+.dk-chat-chat-bubble-sender,.dk-chat-chat-bubble-receiver{
   max-width: 80%;
   background-attachment: fixed;
   position: relative;
 }
-.chat-bubble-sender {
+.dk-chat-chat-bubble-sender {
 border-bottom-left-radius: 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
 }
-.chat-bubble-receiver {
+.dk-chat-chat-bubble-receiver {
 border-bottom-right-radius: 15px;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
 }
-.chat-float-icon{
+.dk-chat-chat-float-icon{
   transition: transform .5s ease;
 }
-.bubble-arrow {
+.dk-chat-bubble-arrow {
   display: none;
 }
-.chat-bubble-sender:hover, .chat-bubble-receiver:hover > .bubble-arrow{
+.dk-chat-chat-bubble-sender:hover, .dk-chat-chat-bubble-receiver:hover > .dk-chat-bubble-arrow{
     display: block;
 }
 .dk-chat-input[placeholder]:empty:before {
@@ -37,7 +37,7 @@ border-top-right-radius: 15px;
 .dk-chat-input:focus {
   outline: none !important;
 }
-.document-container:hover .download-button{
+.dk-chat-document-container:hover .dk-chat-download-button{
     display: flex !important;
 }
 .dk-chat-input[contenteditable="true"] {
@@ -45,7 +45,7 @@ border-top-right-radius: 15px;
   align-items: center;
   padding: 15px;
 }
-.notification{
+.dk-chat-notification{
   font-size: 12px;
   font-weight: bold;
   display: flex;
@@ -63,21 +63,21 @@ border-top-right-radius: 15px;
 }
 
 
-.user-select-none{
+.dk-chat-user-select-none{
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
-.pre-wrap{
+.dk-chat-pre-wrap{
   white-space: pre-wrap;
 }
-.width-0{
+.dk-chat-width-0{
   width: 0;
 }
-.height-0{
+.dk-chat-height-0{
   height: 0;
 }
-.bubble-shadow{
+.dk-chat-bubble-shadow{
   box-shadow: 0 3px 5px rgba(0,0,0,0.22);
 }
