@@ -164,7 +164,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				);
 			case MESSAGE_TYPE.MULTIMEDIA:
 				return (
-					<div className="document-container">
+					<div className="dk-chat-document-container">
 						<div className="dk-chat-display-flex dk-chat-mb-m dk-chat-justify-content-center dk-chat-position-relative dk-chat-p-m">
 							{this.getFilePlaceholder(
 								body.attachments[0].url
