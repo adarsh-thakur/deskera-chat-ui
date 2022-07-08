@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Apple Color Emoji,Arial,sans-serif,Segoe UI Emoji,Segoe UI Symbol;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -9,3 +9,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@import './css/Alert.css';
+@import './css/Border.css';
+@import './css/Charts.css';
+@import './css/Colors.css';
+@import './css/Common.css';
+@import './css/Cursor.css';
+@import './css/DataGrid.css';
+@import './css/Flex.css';
+@import './css/Font.css';
+@import './css/Icon.css';
+@import './css/Icon.css';
+@import './css/Padding.css';
+@import './css/Margin.css';
+@import './css/Shadow.css';
+@import './css/Sizes.css';
+@import './css/TextField.css';
+@import './css/Zindex.css';

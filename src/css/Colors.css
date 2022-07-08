@@ -1,0 +1,172 @@
+/* BG COLOR */
+.dk-chat-bg-menu {
+    background-color: rgb(20, 112, 193);
+  }
+  .dk-chat-bg-line {
+    background-color: rgb(242, 242, 242);
+  }
+  .dk-chat-bg-line-2 {
+    background-color: rgb(222, 222, 222);
+  }
+  
+  .dk-chat-bg-dark-gray {
+    background-color: rgb(30, 30, 30);
+  }
+  .dk-chat-bg-gray {
+    background-color: gray;
+  }
+  .dk-chat-bg-gray1 {
+    background-color: #f4f4f6;
+  }
+  .dk-chat-bg-gray2 {
+    background-color: #e9ebed;
+  }
+  .dk-chat-bg-gray3 {
+    background-color: #dfe1e2;
+  }
+  .dk-chat-bg-gray4 {
+    background-color: #cccfd1;
+  }
+  .dk-chat-bg-gray5 {
+    background-color: #b7bfc6;
+  }
+  
+  .dk-chat-bg-red {
+    background-color: rgb(203, 26, 38);
+  }
+  .dk-chat-bg-yellow {
+    background-color: rgb(255, 198, 74);
+  }
+  .dk-chat-bg-green {
+    /* background-color: green; */
+    background-color: rgb(0, 160, 20);
+  }
+  .dk-chat-bg-white {
+    background-color: white;
+  }
+  .dk-chat-bg-blue {
+    background-color: rgb(28, 115, 232);
+  }
+  .dk-chat-bg-orange {
+    /* background-color: rgb(215, 70, 30); */
+    background-color: rgb(230, 126, 37);
+  }
+  
+  .dk-chat-dk-bg-button {
+    background-color: rgb(28, 115, 232);
+  }
+  
+  .dk-chat-bg-transparent {
+    background-color: transparent;
+  }
+  
+  .dk-chat-bg-whats-app {
+    background-color: rgb(37, 211, 102);
+  }
+  .dk-chat-bg-telegram {
+    background-color: rgb(10, 150, 180);
+  }
+  
+  .dk-chat-bg-india-shield {
+    background-color: rgb(20, 112, 193);
+  }
+  .dk-chat-bg-deskera {
+    background-color: rgb(255, 198, 74);
+  }
+  .dk-chat-bg-erp {
+    background-color: rgb(57, 87, 213);
+  }
+  .dk-chat-bg-crm {
+    background-color: rgb(26, 175, 93);
+  }
+  .dk-chat-bg-people {
+    background-color: rgb(240, 126, 37);
+  }
+  .dk-chat-bg-aio {
+    background-color: rgb(8, 18, 90);
+  }
+  
+  .dk-chat-bg-deskera-secondary {
+    background-color: rgb(254, 246, 225);
+  }
+  .dk-chat-bg-erp-secondary {
+    background-color: rgba(241, 243, 255, 0.5);
+  }
+  .dk-chat-bg-crm-secondary {
+    background-color: rgb(230, 247, 238);
+  }
+  .dk-chat-bg-people-secondary {
+    background-color: rgb(254, 247, 242);
+  }
+  .dk-chat-bg-aio-secondary {
+    background-color: rgb(232, 235, 255);
+  }
+  
+  .dk-chat-bg-chip-gray {
+    background-color: rgb(240, 240, 240);
+  }
+  .dk-chat-bg-chip-green {
+    background-color: rgb(213, 232, 226);
+  }
+  .dk-chat-bg-chip-blue {
+    background-color: rgb(210, 228, 249);
+  }
+  .dk-chat-bg-chip-red {
+    background-color: rgb(255, 212, 212);
+  }
+  .dk-chat-bg-chip-orange {
+    background-color: rgb(254, 240, 225);
+  }
+  .dk-chat-bg-chip-red {
+    background-color: rgb(255, 212, 212);
+  }
+  
+  /* TEXT COLORS*/
+  
+  .dk-chat-text-gray {
+    color: gray;
+  }
+  .dk-chat-text-dark-gray {
+    color: rgb(55, 53, 47);
+  }
+  
+  .dk-chat-text-white {
+    color: white;
+  }
+  
+  .dk-chat-text-royalblue {
+    color: royalblue;
+  }
+  .dk-chat-text-green {
+    color: rgb(0, 121, 91);
+  }
+  .dk-chat-text-orange {
+    color: rgb(215, 70, 30);
+  }
+  .dk-chat-text-blue {
+    color: rgb(22, 100, 215);
+  }
+  .dk-chat-text-red {
+    color: rgb(203, 26, 38);
+  }
+  .dk-chat-text-yellow {
+    color: rgb(255, 198, 74);
+  }
+  .dk-chat-text-orange {
+    color: rgb(230, 126, 37);
+  }
+  
+  .dk-chat-text-transparent {
+    color: transparent;
+  }
+  
+  .dk-chat-text-cut {
+    text-decoration: line-through;
+  }
+  .dk-chat-text-line-through {
+    text-decoration: line-through;
+  }
+  .dk-chat-text-underline {
+    text-decoration: underline;
+  }
+  

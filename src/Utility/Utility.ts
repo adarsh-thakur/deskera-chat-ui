@@ -117,7 +117,7 @@ export const getDomain = (url, subdomain = false) => {
     }
     return url;
 }
-export const getFormattedTime =(date) => {
+export const getFormattedTime = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
     let x = hours >= 12 ? "pm" : "am";
@@ -126,4 +126,5 @@ export const getFormattedTime =(date) => {
     minutes = minutes < 10 ? "0" + minutes : minutes;
     let time = hours + ":" + minutes + " " + x;
     return time;
-  }
+}
+export const getCapitalized = (str: string) => !isEmptyObject(str) ? (str?.charAt(0).toUpperCase() + str?.slice(1)) : str;

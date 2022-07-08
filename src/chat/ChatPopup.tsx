@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DKLabel, INPUT_TYPE, INPUT_VIEW_DIRECTION, DKButton, DKIcon, DKIcons } from 'deskera-ui-library';
+import { DKLabel,DKButton, DKIcon, DKIcons } from '../components/common';
 import ControlledInput from '../components/ControlledInput';
 import ChatInputBox from './ChatInput';
 import { isValidEmail } from '../Utility/Utility';
 import ChatBubble from './ChatBubble';
+import { INPUT_TYPE, INPUT_VIEW_DIRECTION } from '../Utility/Enum';
 
 export default function ChatPopup(props: any) {
     /* state definitions goes here*/
@@ -70,29 +71,29 @@ export default function ChatPopup(props: any) {
 
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="row p-v-l p-h-s parent-width d-flex justify-content-between"
+        return <div className="dk-chat-row dk-chat-p-v-l dk-chat-p-h-s dk-chat-parent-width dk-chat-d-flex dk-chat-justify-content-between"
             style={{
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
                 backgroundColor: props?.settings?.bubbleColor ? props?.settings?.bubbleColor : '#1c73e8',
             }}>
-            <div className='d-flex align-items-center'>
+            <div className='dk-chat-d-flex dk-chat-align-items-center'>
             {props.settings?.profilePicUrl &&
                 <img
                     src={props.settings?.profilePicUrl}
                     alt={props.settings.name}
-                    className='border-radius-l mr-s'
+                    className='dk-chat-border-radius-l dk-chat-mr-s'
                     style={{ width: 25 }} />
             }
             <DKLabel
-                className="text-white fs-l"
+                className="dk-chat-text-white dk-chat-fs-l"
                 text={props?.settings?.name ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
             />
             </div>
-            <div className='pr-s'>
-                <DKIcon src={DKIcons.white.ic_add}
+            <div className='dk-chat-pr-s'>
+                <DKIcon src={DKIcons.ic_add_white}
                     onClick={() => { props?.onPopupClose?.(); }}
-                    className="ic-r cursor-hand"
+                    className="dk-chat-ic-r dk-chat-cursor-hand"
                     style={{
                     transform: `rotate(138deg)`,
                 }}/>
@@ -103,14 +104,14 @@ export default function ChatPopup(props: any) {
     const renderChatHistory = () => {
         return <div
             id="chat-feed-wrapper"
-            className={`display-flex column parent-size border-box scroll-y-only-web hide-scroll-bar`}
+            className={`dk-chat-display-flex dk-chat-column dk-chat-parent-size dk-chat-border-box dk-chat-scroll-y-only-web dk-chat-hide-scroll-bar`}
             style={{
                 overflowX: 'auto'
             }}
             ref={props?.chatFeedWrapperRef}
         >
-            {props.showChat && <div className="dk-chat-screen parent-size border-radius-m pt-m" style={{ height: '98%' }}>
-                <div ref={messageTopRef} id="message-top-ref" className='parent-width'></div>
+            {props.showChat && <div className="dk-chat-screen dk-chat-parent-size dk-chat-border-radius-m dk-chat-pt-m" style={{ height: '98%' }}>
+                <div ref={messageTopRef} id="message-top-ref" className='dk-chat-parent-width'></div>
                 {props.messages?.map((message, index) => {
                     return (
                         <ChatBubble
@@ -122,7 +123,7 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
-                <div ref={messageBottomRef} id="message-bottom-ref" className='parent-width' />
+                <div ref={messageBottomRef} id="message-bottom-ref" className='dk-chat-parent-width' />
             </div>}
         </div>
     }
@@ -130,7 +131,7 @@ export default function ChatPopup(props: any) {
     const renderEmailInput = () => {
         return <>
             <ControlledInput
-                className="p-h-s"
+                className="dk-chat-p-h-s"
                 value={email}
                 placeHolder="Enter your email or skip to chat"
                 type={INPUT_TYPE.EMAIL}
@@ -140,10 +141,10 @@ export default function ChatPopup(props: any) {
                 invalid={!isEmailValid}
                 autoFocus
             />
-            <div className="row p-h-s pb-s">
+            <div className="dk-chat-row dk-chat-p-h-s dk-chat-pb-s">
                 <DKButton
                     title="Submit"
-                    className="fs-m border-m text-white mt-m"
+                    className="dk-chat-fs-m dk-chat-border-m dk-chat-text-white dk-chat-mt-m"
                     style={{
                         backgroundColor: props?.settings?.bubbleColor,
                     }}
@@ -151,7 +152,7 @@ export default function ChatPopup(props: any) {
                 />
                 <DKButton
                     title="Skip"
-                    className="fs-m border-m bg-gray1 mt-m ml-s"
+                    className="dk-chat-fs-m dk-chat-border-m dk-chat-bg-gray1 dk-chat-mt-m dk-chat-ml-s"
                     onClick={() => signUpUser(true)}
                 />
             </div>
@@ -160,7 +161,7 @@ export default function ChatPopup(props: any) {
 
     const renderChatInput = () => {
         return <ChatInputBox
-            className='p-s'
+            className='dk-chat-p-s'
             guest={true}
             accentColor={props?.settings?.bubbleColor}
             onSend={props.onSendMessage}
@@ -174,14 +175,14 @@ export default function ChatPopup(props: any) {
         <>
             {renderHeader()}
             {renderChatHistory()}
-            <div className="parent-width">
+            <div className="dk-chat-parent-width">
                 {!props.showChat && renderEmailInput()}
                 {props.showChat && !props.currentThread?.closed && renderChatInput()}
-                {props.showChat && props.currentThread?.closed && <div className="row p-l bg-deskera-secondary align-items-center">
-                    <DKIcon src={DKIcons.ic_warning} className="ic-r mr-r" />
+                {props.showChat && props.currentThread?.closed && <div className="dk-chat-row dk-chat-p-l dk-chat-bg-deskera-secondary dk-chat-align-items-center">
+                    <DKIcon src={DKIcons.ic_warning} className="dk-chat-ic-r dk-chat-mr-r" />
                     <div>Looks like this chat is no longer available.&nbsp;
                         <span
-                            className='text-blue cursor-hand text-underline'
+                            className='dk-chat-text-blue dk-chat-cursor-hand dk-chat-text-underline'
                             onClick={(e) => onNewChat(e)}
                         >Click Here</span> to start new chat.</div>
                 </div>}

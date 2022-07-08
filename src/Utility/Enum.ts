@@ -19,10 +19,38 @@ export enum LOCAL_MESSAGE_EVENT_TYPE {
     NEW_THREAD = 'new-thread'
 }
 export enum FILE_TYPE {
-	IMAGE = 'img',
-	PDF = 'pdf',
-	DOC = 'doc',
-	EXCEL = 'excel',
-	POWERPOINT = 'powerpoint',
-	FILE = 'file',
+    IMAGE = 'img',
+    PDF = 'pdf',
+    DOC = 'doc',
+    EXCEL = 'excel',
+    POWERPOINT = 'powerpoint',
+    FILE = 'file',
 }
+export const KEY_CODES = {
+    ARROW_UP: "ArrowUp",
+    ARROW_DOWN: "ArrowDown",
+    ARROW_LEFT: "ArrowLeft",
+    ARROW_RIGHT: "ArrowRight",
+    ENTER: "Enter",
+    ESCAPE: "Escape",
+};
+export const INPUT_VIEW_DIRECTION = {
+    HORIZONTAL: "HORIZONTAL",
+    VERTICAL: "VERTICAL",
+};
+export const INPUT_TYPE = {
+    TEXT: "text",
+    PASSWORD: "password",
+    NUMBER: "number",
+    EMAIL: "email",
+    DATE: "date",
+    URL: "url",
+    PHONE: "phone",
+    SELECT: "select",
+    MULTI_SELECT: "multi-select",
+    CHECKBOX: "checkbox",
+    BUTTON: "button",
+    MORE: "more",
+    LONG_TEXT: "long text",
+    DROPDOWN: "dropdown",
+};

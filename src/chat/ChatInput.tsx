@@ -1,9 +1,8 @@
 import React, { Component, RefObject } from 'react';
-import { DKIcon, DKIcons, showAlert } from 'deskera-ui-library';
+import { DKIcon, DKIcons, showAlert } from '../components/common';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import {MAX_FILE_SIZE, MESSAGE_TYPE } from '../Utility/Constants';
-
 export interface IChatInputBoxProps {
     className?: string;
     onSend: (data, msgType?) => void;
@@ -42,8 +41,8 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
     }
     render() {
         return (
-            <div className={`dk-chat-input-wrapper column parent-width ${this.props.className}`}>
-            <div className="row parent-width border-m border-radius-m align-items-center">
+            <div className={`dk-chat-input-wrapper dk-chat-column dk-chat-parent-width ${this.props.className}`}>
+            <div className="dk-chat-row dk-chat-parent-width dk-chat-border-m dk-chat-border-radius-m dk-chat-align-items-center">
                 <div
                     placeholder="Type your message here"
                     style={{
@@ -64,7 +63,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             : null
                     }
                     dir="ltr"
-                    className={`row dk-chat-input fs-m p-s align-items-start pre-wrap display-flex hide-scroll-bar`}
+                    className={`dk-chat-row dk-chat-input dk-chat-fs-m dk-chat-p-s dk-chat-align-items-start dk-chat-pre-wrap dk-chat-display-flex dk-chat-hide-scroll-bar`}
                     onPaste={(e) => {
                         e.preventDefault();
                         const text = e.clipboardData.getData('text/plain');
@@ -72,10 +71,10 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                     }}
                     onKeyDown={this.onKeyDown}
                 ></div>
-                <div className="row justify-content-end p-v-xs p-h-s">
+                <div className="dk-chat-row dk-chat-justify-content-end dk-chat-p-v-xs dk-chat-p-h-s">
                     {this.state.showEmojiPicker && (
                         <div
-                            className="position-absolute"
+                            className="dk-chat-position-absolute"
                             style={{
                                 bottom: 110,
                                 right: 50,
@@ -89,13 +88,13 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                     )}
                     <div
                         onClick={this.hideShowEmojiPicker}
-                        className="mr-s fs-xl unselectable cursor-hand emoji-button"
+                        className="dk-chat-mr-s dk-chat-fs-xl dk-chat-unselectable dk-chat-cursor-hand dk-chat-emoji-button"
                     >
                         😀
                     </div>
                     <DKIcon
                         src={DKIcons.ic_add}
-                        className="ic-s cursor-hand p-s border-radius-m"
+                        className="dk-chat-ic-s dk-chat-cursor-hand dk-chat-p-s dk-chat-border-radius-m"
                         onClick={() => {
                             this.openDocumentPicker();
                         }}
@@ -103,7 +102,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                     {this.getDocumentPicker()}
                 </div>
                 </div>
-                <div className="fs-s row justify-content-center p-s">Powered by <a target="_blank" href="https://www.deskera.com" className="link fw-b" style={{color:'black',marginLeft:2,textDecoration:'none'}}> Deskera</a></div>
+                <div className="dk-chat-fs-s dk-chat-row dk-chat-justify-content-center dk-chat-p-s">Powered by <a target="_blank" href="https://www.deskera.com" className="link fw-b" style={{color:'black',marginLeft:2,textDecoration:'none'}}> Deskera</a></div>
         </div>
 		);
     }

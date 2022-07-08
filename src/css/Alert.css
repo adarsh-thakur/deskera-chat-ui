@@ -1,0 +1,75 @@
+.dk-chat-alert {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    left: 50%;
+    top: 45%;
+    font-size: 14px;
+    width: 350px;
+    z-index: 9998;
+    text-align: left;
+    box-shadow: 0px 0px 12px rgba(0, 0, 20, 0.14);
+  }
+
+  .dk-chat-alert-background {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9998;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .dk-chat-alert-title {
+    font-weight: 600;
+    font-size: 17px;
+    text-align: center;
+    width: 100%;
+  }
+  .dk-chat-alert-message {
+    margin-top: 15px;
+    font-weight: normal;
+    word-wrap: break-word;
+    text-align: center;
+    width: 100%;
+    color: rgb(77, 77, 77);
+  }
+
+  .dk-chat-alert-textField {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    border: 2px solid lightgrey;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+  }
+  .dk-chat-alert-button-row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 18px;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .dk-chat-alert-button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    outline: none;
+    /* border: none; */
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Segoe UI",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
