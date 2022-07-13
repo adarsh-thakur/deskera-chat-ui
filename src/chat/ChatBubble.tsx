@@ -219,7 +219,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 							style={{
 								width: 22,
 							}}
-							onClick={() => this.downloadDocument(fileLink)}
+							onClick={() => this.openFileInNewWindow(fileLink)}
 						/>
 					</div>
 				</>
@@ -265,18 +265,8 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			</div>
 		);
 	};
-	downloadDocument(dataUrl) {
-		let fileName = dataUrl.split('/').pop();
-		var req = new XMLHttpRequest();
-		req.open('GET', dataUrl, true);
-		req.responseType = 'blob';
-		req.onload = function () {
-			var blob = new Blob([req.response], {
-				type: 'application/octetstream',
-			});
-			triggerDownload(blob, fileName);
-		};
-		req.send();
+	openFileInNewWindow(dataUrl) {
+		window.open(dataUrl, '_blank');
 	}
 	getActionListPicker(messageId, threadId, attachmentId) {
 		return (
