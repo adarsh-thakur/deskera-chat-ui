@@ -65,7 +65,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 								backgroundColor:this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && fileType === FILE_TYPE.IMAGE ? '': !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
 								display: 'inline',
 								maxWidth: '60%',
-								minWidth: '15%',
+								minWidth: '20%',
 							}}
 						>
 							{this.props.data.sender &&
