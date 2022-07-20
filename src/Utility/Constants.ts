@@ -7,6 +7,7 @@ export const GUEST_USER_COOKIE = 'x-guest-chat-user';
 
 export const REGEX = {
     EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    HEX_COLOR:/^#([0-9a-f]{3}){1,2}$/i,
 }
 
 export const KB_TO_BYTES = 1024;

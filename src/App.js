@@ -4,7 +4,7 @@ import './css/override.css';
 import ChatWrapper from './components/ChatWrapper';
 import { TenantService } from './services/tenant';
 import WebSocketService from './services/webSocket';
-import { DEFAULT_COLOR, DEFAULT_POSITION, GUEST_USER_COOKIE } from './Utility/Constants';
+import { CHAT_BUBBLE_POSITION, DEFAULT_COLOR, DEFAULT_POSITION, GUEST_USER_COOKIE, REGEX } from './Utility/Constants';
 import { decodeJSON, getCookie, getRandomHexString, isEmptyObject } from './Utility/Utility';
 import { ChatService } from './services/chat';
 
@@ -32,7 +32,15 @@ const App = (props) => {
 
     const getSettings = (tenantId) => {
         ChatService.getSettings(tenantId).then((res) => {
-            setSettings({ ...settings, ...res });
+            let tempBubblePosition = res?.bubblePosition && Object.keys(CHAT_BUBBLE_POSITION).includes(res?.bubblePosition) ? res?.bubblePosition : DEFAULT_POSITION;
+            let tempBubbleColor = res?.bubbleColor && REGEX.HEX_COLOR.test(res?.bubbleColor) ? res?.bubbleColor : DEFAULT_COLOR;
+            if (!isEmptyObject(props?.data?.accentColor)) {
+                tempBubbleColor = props?.data?.accentColor;
+            }
+            if (!isEmptyObject(props?.data?.bubblePosition) && Object.keys(CHAT_BUBBLE_POSITION).includes(props?.data?.bubblePosition)) {
+                tempBubblePosition = props?.data?.bubblePosition;
+            }
+            setSettings({ ...settings, bubbleColor: tempBubbleColor, bubblePosition: tempBubblePosition });
         }).catch((error) => {
             console.log(error);
             console.error('Error while getting settings');
