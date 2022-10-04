@@ -97,8 +97,10 @@
   .dk-chat-justify-self-end {
     justify-self: flex-end;
   }
-  
-  .dk-chat-border-box {
+  .dk-chat-content-box.dk-chat-content-box {
+    box-sizing: content-box;
+  }
+  .dk-chat-border-box.dk-chat-border-box {
     box-sizing: border-box;
   }
   .dk-chat-display-block {
