@@ -126,7 +126,7 @@ export default function ChatWrapper(props) {
     }
     const renderBubble = () => {
         return <div
-            className="dk-chat-position-fixed dk-chat-d-flex dk-chat-align-items-center dk-chat-justify-content-center dk-chat-user-select-none"
+            className="dk-chat-position-fixed dk-chat-z-index-inf dk-chat-d-flex dk-chat-align-items-center dk-chat-justify-content-center dk-chat-user-select-none"
             style={{
                 height: 50,
                 width: 50,
@@ -200,12 +200,12 @@ export default function ChatWrapper(props) {
     }, [currentThread])
     /* renderer will go here */
     return <>
-        {(!showPopup && showNotification) && <div className="dk-chat-notification">{_unreadCount.current}</div>}
+        {(!showPopup && showNotification) && <div className="dk-chat-z-index-inf dk-chat-notification">{_unreadCount.current}</div>}
         {renderBubble()}
         {showPopup &&
             <>
                 <div
-                    className="dk-chat-column dk-chat-position-fixed dk-chat-justify-content-between dk-chat-shadow-m dk-chat-border-radius-m dk-chat-bg-white"
+                    className="dk-chat-column dk-chat-position-fixed dk-chat-z-index-inf dk-chat-justify-content-between dk-chat-shadow-m dk-chat-border-radius-m dk-chat-bg-white"
                     style={{
                         opacity: showPopup ? 1 : 0,
                         visibility: showPopup ? 'visible' : 'hidden',
