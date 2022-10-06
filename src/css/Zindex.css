@@ -17,6 +17,6 @@
     z-index: 6;
   }
   
-.dk-chat-z-index-inf {
+.dk-chat-z-index-max {
   z-index: 999999;
 }
