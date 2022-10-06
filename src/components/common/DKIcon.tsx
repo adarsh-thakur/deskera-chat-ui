@@ -10,7 +10,7 @@ export interface IDKIconProps {
 export default class DKIcon extends Component<IDKIconProps, any> {
   render() {
     const className =
-      "dk-chat-ic-r " + (this.props.className ? this.props.className : "");
+      "dk-chat-ic-r dk-chat-content-box " + (this.props.className ? this.props.className : "");
 
     return (
       <img

@@ -1,38 +1,46 @@
-.dk-chat-ic-r {
-    height: 24px;
-  }
-  .dk-chat-ic-xs {
-    height: 11px;
-  }
-  .dk-chat-ic-xs-2 {
-    height: 14px;
-  }
-  .dk-chat-ic-s {
-    height: 16px;
-  }
-  .dk-chat-ic-s-2 {
-    height: 20px;
-  }
-  .dk-chat-ic-m {
-    height: 35px;
-  }
-  .dk-chat-ic-r-2 {
-    width: 27px;
-    height: 27px;
-  }
-  .dk-chat-ic-r-3 {
-    width: 30px;
-    height: 30px;
-  }
-  .dk-chat-ic-l {
-    height: 48px;
-  }
-  .dk-chat-ic-xl {
-    height: 70px;
-  }
-  
-  .dk-chat-ic-contact-r {
-    width: 30px;
-    height: 30px;
-  }
-  
+.dk-chat-ic-r.dk-chat-ic-r {
+  height: 24px;
+}
+
+.dk-chat-ic-xs.dk-chat-ic-xs {
+  height: 11px;
+}
+
+.dk-chat-ic-xs-2.dk-chat-ic-xs-2 {
+  height: 14px;
+}
+
+.dk-chat-ic-s.dk-chat-ic-s {
+  height: 16px;
+}
+
+.dk-chat-ic-s-2.dk-chat-ic-s-2 {
+  height: 20px;
+}
+
+.dk-chat-ic-m.dk-chat-ic-m {
+  height: 35px;
+}
+
+.dk-chat-ic-r-2.dk-chat-ic-r-2 {
+  width: 27px;
+  height: 27px;
+}
+
+.dk-chat-ic-r-3.dk-chat-ic-r-3 {
+  width: 30px;
+  height: 30px;
+}
+
+.dk-chat-ic-l.dk-chat-ic-l {
+  height: 48px;
+}
+
+.dk-chat-ic-xl.dk-chat-ic-xl {
+  height: 70px;
+}
+
+.dk-chat-ic-contact-r.dk-chat-ic-contact-r {
+  width: 30px;
+  height: 30px;
+}

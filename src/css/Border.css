@@ -1,61 +1,70 @@
 /* BORDER */
-.dk-chat-border-none {
-    border: none;
-  }
-  .dk-chat-border-s {
-    border: solid;
-    border-width: 1px;
-    border-color: rgb(240, 240, 240);
-  }
-  .dk-chat-border-m {
-    border: solid;
-    border-width: 1px;
-    border-color: rgb(220, 220, 220);
-  }
-  
-  .dk-chat-border-red {
-    border: solid;
-    border-width: 1px;
-    border-color: rgba(201, 34, 45, 0.527);
-  }
-  
-  .dk-chat-border-green {
-    border: solid;
-    border-width: 1px;
-    border-color: rgb(0, 121, 91);
-  }
-  .dk-chat-border-orange {
-    border: solid;
-    border-width: 1px;
-    border-color: rgb(230, 126, 37);
-  }
-  .dk-chat-border-blue {
-    border: solid;
-    border-width: 1px;
-    border-color: rgb(22, 100, 215);
-  }
-  
-  /* BORDER RADIUS */
-  
-  .dk-chat-border-radius-s {
-    border-radius: 4px;
-  }
-  .dk-chat-border-radius-s-2 {
-    border-radius: 6px;
-  }
-  .dk-chat-border-radius-m {
-    border-radius: 8px;
-  }
-  .dk-chat-border-radius-r {
-    border-radius: 12px;
-  }
-  .dk-chat-border-radius-l {
-    border-radius: 20px;
-  }
-  .dk-chat-border-radius-xxl {
-    border-radius: 35px;
-  }
-  .dk-chat-border-radius-none {
-    border-radius: 0px;
-  }
-  
+.dk-chat-border-none.dk-chat-border-none {
+  border: none;
+}
+
+.dk-chat-border-s.dk-chat-border-s {
+  border: solid;
+  border-width: 1px;
+  border-color: rgb(240, 240, 240);
+}
+
+.dk-chat-border-m.dk-chat-border-m {
+  border: solid;
+  border-width: 1px;
+  border-color: rgb(220, 220, 220);
+}
+
+.dk-chat-border-red.dk-chat-border-red {
+  border: solid;
+  border-width: 1px;
+  border-color: rgba(201, 34, 45, 0.527);
+}
+
+.dk-chat-border-green.dk-chat-border-green {
+  border: solid;
+  border-width: 1px;
+  border-color: rgb(0, 121, 91);
+}
+
+.dk-chat-border-orange.dk-chat-border-orange {
+  border: solid;
+  border-width: 1px;
+  border-color: rgb(230, 126, 37);
+}
+
+.dk-chat-border-blue.dk-chat-border-blue {
+  border: solid;
+  border-width: 1px;
+  border-color: rgb(22, 100, 215);
+}
+
+/* BORDER RADIUS */
+
+.dk-chat-border-radius-s {
+  border-radius: 4px;
+}
+
+.dk-chat-border-radius-s-2 {
+  border-radius: 6px;
+}
+
+.dk-chat-border-radius-m {
+  border-radius: 8px;
+}
+
+.dk-chat-border-radius-r {
+  border-radius: 12px;
+}
+
+.dk-chat-border-radius-l {
+  border-radius: 20px;
+}
+
+.dk-chat-border-radius-xxl {
+  border-radius: 35px;
+}
+
+.dk-chat-border-radius-none {
+  border-radius: 0px;
+}
