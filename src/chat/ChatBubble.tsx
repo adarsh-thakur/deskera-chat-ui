@@ -33,6 +33,64 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			showActionList: false,
 		};
 	}
+	renderMessage = (attachment = null) => {
+		return (
+			<div
+				className={`dk-chat-mt-s dk-chat-p-s dk-chat-fs-m dk-chat-position-relative ${!this.props.data.sender
+						? 'dk-chat-ml-m dk-chat-chat-bubble-receiver'
+						: 'dk-chat-mr-m dk-chat-text-white dk-chat-chat-bubble-sender'
+					}`}
+				style={{
+					backgroundColor: this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && this.getFileTypeByFile(attachment?.url) === FILE_TYPE.IMAGE ? '' : !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
+					display: 'inline',
+					maxWidth: '60%',
+					minWidth: '20%',
+				}}
+			>
+				{this.props.data.sender &&
+					this.props.data.updatedBy == this.props.currentUserId && (
+						<div
+							onClick={() =>
+								this.setState({
+									showActionList:
+										!this.state.showActionList,
+								})
+							}
+						>
+							<DKIcon
+								className="dk-chat-bubble-arrow dk-chat-position-absolute"
+								style={{
+									height: 14,
+									top: 5,
+									right: 8,
+									opacity: 0.5,
+								}}
+								src={DKIcons.ic_arrow_down2}
+							/>
+						</div>
+					)}
+				{this.state.showActionList &&
+					this.getActionListPicker(
+						this.props.data._id,
+						this.props.data.threadId,
+						attachment
+					)}
+				{this.getDisplayContent(attachment)}
+				<div
+					className={`position-absolute`}
+					style={{
+						bottom: 4,
+						fontSize: 11,
+						right: 10,
+					}}
+				>
+					{getFormattedTime(
+						new Date(this.props.data?.sentAt)
+					)}
+				</div>
+			</div>
+		)
+	}
 	render() {
 		let fileType;
 		if (this.props.data.body?.attachments[0]) {
@@ -44,73 +102,19 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				className="dk-chat-row dk-chat-display-flex parent-width"
 			>
 				{this.state.showImagePopup && this.imagePopup()}
-					<div
-						className={`dk-chat-justify-content-start dk-chat-align-items-end ${
-							!this.props.data.sender ? 'dk-chat-row' : 'dk-chat-row-reverse'
+				<div
+					className={`dk-chat-justify-content-start dk-chat-align-items-end ${!this.props.data.sender ? 'dk-chat-row' : 'dk-chat-row-reverse'
 						}`}
 				>
 					<DKContactIcon
-							title={`${!this.props.data.sender ? 'R' : 'S'}`}
-							className={`dk-chat-flex-shrink-0 dk-chat-border-m dk-chat-display-only-web dk-chat-bg-gray1 ${
-								!this.props.data.sender ? 'dk-chat-ml-s' : 'dk-chat-mr-s'
+						title={`${!this.props.data.sender ? 'R' : 'S'}`}
+						className={`dk-chat-flex-shrink-0 dk-chat-border-m dk-chat-display-only-web dk-chat-bg-gray1 ${!this.props.data.sender ? 'dk-chat-ml-s' : 'dk-chat-mr-s'
 							}`}
-						/>
-						<div
-							className={`dk-chat-mt-s dk-chat-p-s dk-chat-fs-m dk-chat-position-relative ${
-								!this.props.data.sender
-									? 'dk-chat-ml-m dk-chat-chat-bubble-receiver'
-									: 'dk-chat-mr-m dk-chat-text-white dk-chat-chat-bubble-sender'
-							}`}
-							style={{
-								backgroundColor:this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && fileType === FILE_TYPE.IMAGE ? '': !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
-								display: 'inline',
-								maxWidth: '60%',
-								minWidth: '20%',
-							}}
-						>
-							{this.props.data.sender &&
-								this.props.data.updatedBy == this.props.currentUserId && (
-									<div
-										onClick={() =>
-											this.setState({
-												showActionList:
-													!this.state.showActionList,
-											})
-										}
-									>
-										<DKIcon
-											className="dk-chat-bubble-arrow dk-chat-position-absolute"
-											style={{
-												height: 14,
-												top: 5,
-												right: 8,
-												opacity: 0.5,
-											}}
-											src={DKIcons.ic_arrow_down2}
-										/>
-									</div>
-								)}
-							{this.state.showActionList &&
-								this.getActionListPicker(
-									this.props.data._id,
-									this.props.data.threadId,
-									this.props.data.body?.attachments[0]
-								)}
-							{this.getDisplayContent()}
-							<div
-								className={`position-absolute`}
-								style={{
-									bottom: 4,
-									fontSize: 11,
-									right: 10,
-								}}
-							>
-								{getFormattedTime(
-									new Date(this.props.data?.sentAt)
-								)}
-							</div>
+					/>
+						<div className={`dk-chat-row parent-width dk-chat-align-items-${!this.props.data.sender ? 'start' : 'end'}`} style={{flexDirection:'column'}}>
+						{this.props.data.body?.attachments?.length > 0 ? this.props.data.body?.attachments.map(this.renderMessage) : this.renderMessage()}
 						</div>
-					</div>
+				</div>
 			</div>
 		);
 	}
@@ -152,7 +156,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 			return messageText;
 		}
 	};
-	getDisplayContent = () => {
+	getDisplayContent = (attachment = null) => {
 		const { type, body } = this.props.data;
 		switch (type) {
 			case MESSAGE_TYPE.TEXT:
@@ -166,9 +170,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				return (
 					<div className="dk-chat-document-container">
 						<div className="dk-chat-display-flex dk-chat-mb-m dk-chat-justify-content-center dk-chat-position-relative dk-chat-p-m">
-							{this.getFilePlaceholder(
-								body.attachments[0].url
-							)}
+							{this.getFilePlaceholder(attachment?.url)}
 						</div>
 					</div>
 				);
