@@ -80,7 +80,7 @@ export default function BookAMeet({
         ...invitee,
         owner_id: host.userId
       };
-      await BookMeetService.getInstance().createMeetingInvitee(
+      const contactResponse: any = await BookMeetService.getInstance().createMeetingInvitee(
         tenantId,
         contactPayload
       );
@@ -95,6 +95,11 @@ export default function BookAMeet({
         tzName: Intl.DateTimeFormat().resolvedOptions().timeZone,
         ownerId: host.userId
       };
+
+      if (contactResponse?.body?.id) {
+        payload["crmContactId"] = contactResponse.body.id;
+      }
+
       await BookMeetService.getInstance().createMeetingEvent(tenantId, payload);
 
       // to avoid showing further step from this instance, as it will show up based on saved thread message
