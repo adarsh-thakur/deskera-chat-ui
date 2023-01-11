@@ -47,8 +47,6 @@ export default function ChatUserInfoInput({
   useEffect(() => {
     const initialData = STEP_INPUT_DATA[stepId];
 
-    console.log(initialData);
-
     if (!initialData) return;
 
     setInputData({ ...initialData, value: defaultValue || initialData.value });
