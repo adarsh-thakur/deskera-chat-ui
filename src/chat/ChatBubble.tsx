@@ -41,7 +41,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 						: 'dk-chat-mr-m dk-chat-text-white dk-chat-chat-bubble-sender'
 					}`}
 				style={{
-					backgroundColor: this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && this.getFileTypeByFile(attachment?.url) === FILE_TYPE.IMAGE ? '' : !this.props.data.sender ? '#dcdcdc' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
+					backgroundColor: this.props.data.type == MESSAGE_TYPE.MULTIMEDIA && this.getFileTypeByFile(attachment?.url) === FILE_TYPE.IMAGE ? '' : !this.props.data.sender ? 'rgb(243, 243, 243)' : this.props.accentColor ? this.props.accentColor : '#1c73e8',
 					display: 'inline',
 					maxWidth: '60%',
 					minWidth: '20%',

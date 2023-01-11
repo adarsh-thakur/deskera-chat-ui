@@ -84,13 +84,13 @@ export default function BookAMeet({
       );
 
       const payload: IEventPayload = {
-        meetLink: host.meetLink,
+        meetingLink: host.meetLink,
         startDate: selectedSlot.startDate,
         endDate: selectedSlot.endDate,
         requestorName: invitee.name,
         requestorEmail: invitee.email,
         questions: "Book a demo",
-        tzName: `${new Date().getTimezoneOffset() * -1}`,
+        tzName: Intl.DateTimeFormat().resolvedOptions().timeZone,
         ownerId: host.userId
       };
       await BookMeetService.getInstance().createMeetingEvent(tenantId, payload);

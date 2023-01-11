@@ -177,7 +177,7 @@ export default function ChatWrapper(props) {
         setShowPopup(!showPopup);
     }
     const renderBubble = () => {
-        return <div
+        return showPopup ? null : <div
             className="dk-chat-position-fixed dk-chat-z-index-max dk-chat-d-flex dk-chat-align-items-center dk-chat-justify-content-center dk-chat-user-select-none"
             style={{
                 height: 50,
@@ -189,7 +189,7 @@ export default function ChatWrapper(props) {
             onClick={() => onBubbleClick()}
         >
             <DKIcon
-                src={showPopup ? DKIcons.ic_add_white : DKIcons.ic_comment}
+                src={showPopup ? DKIcons.ic_add_white : DKIcons.ic_chat_white}
                 className={`dk-chat-chat-float-icon`}
                 style={{
                     transform: showPopup ? `rotate(138deg)` : `rotate(0deg)`,

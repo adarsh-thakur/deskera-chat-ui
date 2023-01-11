@@ -6,6 +6,8 @@ import ic_arrow_left2 from "../../assets/icons/ic_arrow_left2.png";
 import ic_arrow_right2 from "../../assets/icons/ic_arrow_right2.png";
 
 import ic_comment from "../../assets/icons/ic_comment.png";
+import ic_chat_white from "../../assets/icons/ic_chat_white.png";
+
 import ic_delete from "../../assets/icons/ic_delete.png";
 import ic_download from "../../assets/icons/ic_download.png";
 import ic_edit from "../../assets/icons/ic_edit.png";
@@ -17,6 +19,7 @@ export const DKIcons = {
     ic_close: ic_close,
     ic_arrow_down2: ic_arrow_down2,
     ic_comment: ic_comment,
+    ic_chat_white: ic_chat_white,
     ic_delete: ic_delete,
     ic_download: ic_download,
     ic_edit: ic_edit,
