@@ -53,6 +53,13 @@ export default function ChatUserInfoInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (stepId) {
+      setInputData({ ...STEP_INPUT_DATA[stepId] });
+      setSaveTapped(null);
+    }
+  }, [stepId]);
+
   const isInputInvalid = () => !inputData.validator(inputData.value);
 
   const onTriggerSend = () => {

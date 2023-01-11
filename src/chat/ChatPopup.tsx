@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DKLabel,DKButton, DKIcon, DKIcons } from '../components/common';
+import { DKLabel, DKButton, DKIcon, DKIcons } from '../components/common';
 import ControlledInput from '../components/ControlledInput';
 import ChatInputBox from './ChatInput';
 import { isValidEmail } from '../Utility/Utility';
@@ -9,6 +9,7 @@ import BookAMeet from '../components/book-meet';
 import { IBDRPayload } from '../model/MeetModel';
 import ChatUserInfoInput from './ChatUserInfoInput';
 import BDRInfo from './BDRInfo';
+import { AUTO_RESPONSE } from '../Utility/Constants';
 
 export default function ChatPopup(props: any) {
     /* state definitions goes here*/
@@ -81,25 +82,25 @@ export default function ChatPopup(props: any) {
                 backgroundColor: props?.settings?.bubbleColor ? props?.settings?.bubbleColor : '#1c73e8',
             }}>
             <div className='dk-chat-d-flex dk-chat-align-items-center'>
-            {props.settings?.profilePicUrl &&
-                <img
-                    src={props.settings?.profilePicUrl}
-                    alt={props.settings.name}
-                    className='dk-chat-border-radius-l dk-chat-mr-s'
-                    style={{ width: 25 }} />
-            }
-            <DKLabel
-                className="dk-chat-text-white dk-chat-fs-l"
-                text={props?.settings?.name ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
-            />
+                {props.settings?.profilePicUrl &&
+                    <img
+                        src={props.settings?.profilePicUrl}
+                        alt={props.settings.name}
+                        className='dk-chat-border-radius-l dk-chat-mr-s'
+                        style={{ width: 25 }} />
+                }
+                <DKLabel
+                    className="dk-chat-text-white dk-chat-fs-l"
+                    text={props?.settings?.name ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
+                />
             </div>
             <div className='dk-chat-pr-s'>
                 <DKIcon src={DKIcons.ic_add_white}
                     onClick={() => { props?.onPopupClose?.(); }}
                     className="dk-chat-ic-r dk-chat-cursor-hand"
                     style={{
-                    transform: `rotate(138deg)`,
-                }}/>
+                        transform: `rotate(138deg)`,
+                    }} />
             </div>
         </div>;
     }
@@ -110,7 +111,7 @@ export default function ChatPopup(props: any) {
             className={`dk-chat-display-flex dk-chat-column dk-chat-parent-size dk-chat-border-box dk-chat-scroll-y-only-web dk-chat-hide-scroll-bar`}
             style={{
                 overflowX: 'auto',
-                padding:10
+                padding: 10
             }}
             ref={props?.chatFeedWrapperRef}
         >
@@ -133,24 +134,8 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
-                {/* <ChatUserInfoInput 
-                    stepId={"EMAIL_STEP"}
-                    onSend={(value) => alert(value)}
-                />
-                <ChatUserInfoInput 
-                    stepId={"NAME_STEP"}
-                    onSend={(value) => alert(value)}
-                />
-                <ChatUserInfoInput 
-                    stepId={"COMPANY_STEP"}
-                    onSend={(value) => alert(value)}
-                />
-                <ChatUserInfoInput 
-                    stepId={"PHONE_STEP"}
-                    onSend={(value) => alert(value)}
-                />
-                <BookAMeet 
-                    tenantId={props.tenantId} 
+                {props?.stepId === 'MEET_SLOT_STEP' && <BookAMeet
+                    tenantId={props.tenantId}
                     invitee={{
                         name: "Pranshu Guest",
                         email: "pranshu@getnada.com",
@@ -168,7 +153,7 @@ export default function ChatPopup(props: any) {
                     slot={localStorage.getItem("meetSlot") || null}
                     // onBookMeeting={props.onSendMessage}
                     onBookMeeting={(meetStartDate) => localStorage.setItem("meetSlot", meetStartDate)}
-                /> */}
+                />}
                 <div ref={messageBottomRef} id="message-bottom-ref" className='dk-chat-parent-width' />
             </div>}
         </div>
@@ -222,6 +207,10 @@ export default function ChatPopup(props: any) {
             {renderHeader()}
             {renderChatHistory()}
             <div className="dk-chat-parent-width">
+                {props?.stepId && AUTO_RESPONSE[props?.stepId]?.userInfoRequired &&<ChatUserInfoInput
+                    stepId={props.stepId}
+                    onSend={(value) => props.onUserInfoSend(value, props.stepId)}
+                />}
                 {!props.showChat && !props.bdrInfo && renderEmailInput()}
                 {props.showChat && !props.currentThread?.closed && !props.bdrInfo && renderChatInput()}
                 {props.showChat && props.currentThread?.closed && <div className="dk-chat-row dk-chat-p-l dk-chat-bg-deskera-secondary dk-chat-align-items-center">

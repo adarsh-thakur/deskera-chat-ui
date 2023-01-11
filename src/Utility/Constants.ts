@@ -80,18 +80,22 @@ export const AUTO_RESPONSE = {
     },
     "EMAIL_STEP": {
         "message": "In case we get disconnected, can we have your email?",
-        "nextStep": "NAME_STEP"
+        "nextStep": "NAME_STEP",
+        "userInfoRequired": true
     },
     "NAME_STEP": {
         "message": "Thanks! And can we get your name?",
-        "nextStep": "COMPANY_STEP"
+        "nextStep": "COMPANY_STEP",
+        "userInfoRequired": true
     },
     "COMPANY_STEP": {
         "message": "And the company you work for?",
-        "nextStep": "PHONE_STEP"
+        "nextStep": "PHONE_STEP",
+        "userInfoRequired": true
     },
     "PHONE_STEP": {
         "message": "Last Questions? <br/> What is the best number to reach you at?",
-        "nextStep": "SCHEDULE_STEP"
+        "nextStep": "MEET_SLOT_STEP",
+        "userInfoRequired": true
     },
 }
