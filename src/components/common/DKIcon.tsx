@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 export interface IDKIconProps {
   id?: string;
   className?: string;
@@ -6,26 +6,30 @@ export interface IDKIconProps {
   onClick?: () => void;
   style?: React.CSSProperties;
   alt?: string;
+  defaultSrc?: string;
 }
 
-export default class DKIcon extends Component<IDKIconProps, any> {
-  render() {
-    const className =
+const DKIcon = (props: IDKIconProps) => {
+  const [hasError, setHasError] = useState(false);
+  const className =
       "dk-chat-ic-r dk-chat-content-box " +
-      (this.props.className ? this.props.className : "");
+      (props.className ? props.className : "")
+      + (hasError ? " dk-chat-p-xs " : "");
 
-    return (
-      <img
-        id={this.props.id}
-        className={className}
-        src={this.props.src}
-        alt={this.props.alt || ""}
-        style={{
-          ...{ objectFit: "scale-down" },
-          ...this.props.style
-        }}
-        onClick={this.props.onClick ? this.props.onClick : null}
-      />
-    );
-  }
+  return (
+    <img
+      id={props.id}
+      className={className}
+      src={hasError ? props.defaultSrc : props.src}
+      alt={props.alt || ""}
+      style={{
+        ...{ objectFit: "scale-down" },
+        ...props.style
+      }}
+      onClick={props.onClick ? props.onClick : null}
+      onError={(e) => props.defaultSrc ? setHasError(true) : {}}
+    />
+  );
 }
+
+export default DKIcon;

@@ -9,12 +9,21 @@ export interface IMeetMember {
   name: string;
   email: string;
   phone: string;
+  organization?: string;
   profilePic?: string;
 }
 
 export interface IMeetHost extends IMeetMember {
   userId: number;
   meetLink: string;
+}
+
+export interface IChatUserContactPayload {
+  name: string;
+  email: string;
+  phone: string;
+  organization?: string;
+  owner_id: number;
 }
 
 export interface IEventPayload {

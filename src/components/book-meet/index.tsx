@@ -8,7 +8,8 @@ import {
   IMeetSlot,
   IEventPayload,
   IMeetHost,
-  IMeetMember
+  IMeetMember,
+  IChatUserContactPayload
 } from "../../model/MeetModel";
 import { BookMeetService } from "../../services/bookMeet";
 
@@ -17,7 +18,7 @@ interface IBookAMeetProps {
   invitee: IMeetMember;
   host: IMeetHost;
   slot?: string;
-  onBookMeeting: (meetStartDate: string) => void;
+  onBookMeeting: (meetStartDate: string) => Promise<any>;
 }
 
 function getSlotDataFromDateString(meetStartDate: string | null): IMeetSlot {
@@ -38,6 +39,8 @@ function getSlotDataFromDateString(meetStartDate: string | null): IMeetSlot {
   };
 }
 
+const MAX_STEPS = 3;
+
 export default function BookAMeet({
   tenantId,
   host,
@@ -57,8 +60,6 @@ export default function BookAMeet({
   }, [slot]);
 
   const onSkipToStep = (stepIndex: number) => {
-    if (stepIndex > 3 || stepIndex < 1) return;
-
     setCurrentStep(stepIndex);
   };
 
@@ -73,7 +74,15 @@ export default function BookAMeet({
     if (!selectedSlot) return;
 
     try {
-      /* call api to book meet */
+      const contactPayload: IChatUserContactPayload = {
+        ...invitee,
+        owner_id: host.userId
+      };
+      await BookMeetService.getInstance().createMeetingInvitee(
+        tenantId,
+        contactPayload
+      );
+
       const payload: IEventPayload = {
         meetLink: host.meetLink,
         startDate: selectedSlot.startDate,
@@ -84,13 +93,15 @@ export default function BookAMeet({
         tzName: `${new Date().getTimezoneOffset() * -1}`,
         ownerId: host.userId
       };
-
       await BookMeetService.getInstance().createMeetingEvent(tenantId, payload);
 
-      onBookMeeting(selectedSlot.startDate);
+      // to avoid showing further step from this instance, as it will show up based on saved thread message
+      onSkipToStep(MAX_STEPS + 1);
 
-      onSkipToStep(currentStep + 1);
+      await onBookMeeting(selectedSlot.startDate);
     } catch (err) {
+      onSkipToStep(1);
+
       showAlert(
         "Error occured!",
         "Something went wrong while setting up event, please try again!"
@@ -126,11 +137,13 @@ export default function BookAMeet({
             invitee={invitee}
           />
         );
+      default:
+        return null;
     }
   }
 
   function stepHeader() {
-    return currentStep < 3 ? (
+    return currentStep < MAX_STEPS ? (
       <DKLabel
         className={`dk-chat-text-gray dk-chat-parent-width dk-chat-text-align-center`}
         text={`Schedule a 15 minute meeting.<span class="dk-chat-fw-m"> All times are GMT+5:30</span>`}
@@ -138,11 +151,11 @@ export default function BookAMeet({
     ) : null;
   }
 
-  return (
+  return currentStep <= MAX_STEPS ? (
     <div
       style={{
         maxWidth: 340,
-        marginTop: 20,
+        marginTop: 24,
         marginLeft: "auto"
       }}
     >
@@ -154,5 +167,5 @@ export default function BookAMeet({
         {stepRenderer()}
       </div>
     </div>
-  );
+  ) : null;
 }

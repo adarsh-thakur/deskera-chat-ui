@@ -1,9 +1,10 @@
-import { IMeetMember, IMeetSlot } from "../../model/MeetModel";
+import { IMeetHost, IMeetMember, IMeetSlot } from "../../model/MeetModel";
 import { DKContactIcon, DKIcon, DKLabel } from "../common";
 import { MONTHS, WEEK_DAYS } from "../../Utility/Constants";
+import HostAvatar from "./HostAvatar";
 
 interface IBookMeetStatusProps {
-  host: IMeetMember;
+  host: IMeetHost;
   invitee: IMeetMember;
   selectedSlot: IMeetSlot;
 }
@@ -49,7 +50,7 @@ export default function BookMeetStatus(props: IBookMeetStatusProps) {
           className="dk-chat-mt-r"
         />
         <DKLabel
-          text={`Confirmation mail sent to ${props.invitee.email}`}
+          text={`Confirmation mail sent to ${props.invitee?.email}`}
           className="dk-chat-mt-s"
         />
       </div>
@@ -58,7 +59,7 @@ export default function BookMeetStatus(props: IBookMeetStatusProps) {
 
   return (
     <div className="dk-chat-row dk-chat-align-items-start">
-      {getAvatar()}
+      <HostAvatar host={props.host} className={"dk-chat-mt-0"} />
       {getMeetDetails()}
     </div>
   );

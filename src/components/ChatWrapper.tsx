@@ -5,7 +5,7 @@ import { ChatService } from '../services/chat';
 import { customEvent } from '../services/customEvents';
 import { TenantService } from '../services/tenant';
 import { AUTO_RESPONSE, CHAT_BUBBLE_POSITION, CHAT_POPUP_POSITION, DEFAULT_POSITION, GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
-import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
+import { LOCAL_MESSAGE_EVENT_TYPE, LOCAL_STORAGE_KEYS } from '../Utility/Enum';
 import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, getRandomHexString, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from './common';
 import ChatManager from '../manager/ChatManager';
@@ -22,8 +22,12 @@ export default function ChatWrapper(props) {
     const [currentThread, setCurrenThread] = useState(null);
     const _unreadCount = useRef(0);
     const [bdrInfo, setBDRInfo] = useState(null);
-    const lastAutoChatStep = useRef(false);
+    const lastAutoChatStep = useRef(getLastActiveChatStep());
 
+    function getLastActiveChatStep() {
+        const lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY);
+        return AUTO_RESPONSE[lastInputStep]?.nextStep || null;
+    }
 
     const onBDRInfoFetched = (info) => {
         setBDRInfo(info);
@@ -37,21 +41,56 @@ export default function ChatWrapper(props) {
             setMessages(ChatManager.getMessages().reverse());
         });
     }
-    const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT, cookieData = null) => {
+    const onAutoResponseMessage = (stepId, message, cookieData) => {
         let body = {
-            text: messageType === MESSAGE_TYPE.TEXT ? data : '',
-            attachments: messageType === MESSAGE_TYPE.MULTIMEDIA ? data : []
-        }
-        if (messageType === MESSAGE_TYPE.AUTO_RESPONSE) {
-            lastAutoChatStep.current = data;
-            body['stepId'] = data;
-            body['nextStepId'] = AUTO_RESPONSE[data].nextStep;
-            body['text'] = AUTO_RESPONSE[data].message;
+            stepId,
+            text: message,
+            nextStepId: AUTO_RESPONSE[stepId]?.nextStep,
+            attachments: [],
         }
         const payload: MessagePayload = {
-            threadId: cookieData ? cookieData.threadId : cookies.threadId,
-            type: messageType === MESSAGE_TYPE.AUTO_RESPONSE ? MESSAGE_TYPE.TEXT : messageType,
+            threadId: cookieData.threadId,
+            type: MESSAGE_TYPE.TEXT,
             body,
+            to: {
+                users: [cookieData.id],
+                tenants: [tenantService.getTenantId()]
+            },
+            from: {
+                id: cookieData.userId,
+                type: 'USER'
+            }
+        };
+        let lastMessages = ChatManager.getMessages();
+        lastMessages.push({ ...payload, sentAt: new Date().toISOString() });
+        lastMessages = lastMessages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId() }));
+        ChatManager.setMessages(lastMessages);
+        ChatManager.setTotalCount(ChatManager.getTotalCount() + 1);
+        setMessages(lastMessages);
+
+        return ChatService.sendMessages(payload).then(res => {
+            const stepData = AUTO_RESPONSE[stepId];
+            localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY, stepId);
+
+            if (stepData?.key) {
+                const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA)) : {};
+                userData[stepData.key] = message;
+                localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+            }
+
+            lastAutoChatStep.current = AUTO_RESPONSE[stepId]?.nextStep;
+            getMessagesByThreadId(cookies.threadId);
+        });
+
+    }
+    const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT, cookieData = null) => {
+        const payload: MessagePayload = {
+            threadId: cookies.threadId,
+            type: messageType as any,
+            body: {
+                text: messageType === MESSAGE_TYPE.TEXT ? data : '',
+                attachments: messageType === MESSAGE_TYPE.MULTIMEDIA ? data : []
+            },
             to: {
                 users: [cookieData ? cookieData.id : cookies.id],
                 tenants: [tenantService.getTenantId()]
@@ -186,7 +225,7 @@ export default function ChatWrapper(props) {
             .then((res: any) => {
                 setCookiesValue({ ...res, ...payload, id: res.userId });
                 setShowChat(true);
-                sendMessage(item, MESSAGE_TYPE.AUTO_RESPONSE, { ...res, ...payload, id: res.userId });
+                onAutoResponseMessage(item, AUTO_RESPONSE[item].message, { ...res, ...payload, id: res.userId });
             })
             .catch(err => {
                 console.log(err);
@@ -263,7 +302,10 @@ export default function ChatWrapper(props) {
                         onPopupClose={() => onBubbleClick()}
                         startNewChat={() => clearSession()}
                         bdrInfo={bdrInfo}
+                        activeUserInfo={localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA)) : null}
+                        stepId={lastAutoChatStep.current}
                         onBDRItemClicked={onBDRItemClicked}
+                        onUserInfoSend={(value) => onAutoResponseMessage(lastAutoChatStep.current, value, cookies)}
                     />
                 </div>
             </>
