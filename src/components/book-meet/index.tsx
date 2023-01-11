@@ -32,7 +32,9 @@ function getSlotDataFromDateString(meetStartDate: string | null): IMeetSlot {
   const slotMinutes = startDate.getMinutes();
 
   return {
-    title: `${slotHours % 12 || 12}:${slotMinutes} ${slotHours < 12 ? "AM" : "PM"}`,
+    title: `${slotHours % 12 || 12}:${slotMinutes === 0 ? "00" : slotMinutes} ${
+      slotHours < 12 ? "AM" : "PM"
+    }`,
     format: `${slotHours}:${slotMinutes}`,
     startDate: meetStartDate,
     endDate: endDate.toISOString()
