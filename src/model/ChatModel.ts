@@ -27,6 +27,7 @@ export interface MessagePayload {
     type: messageType;
     body: {
         text?: string;
+        stepId?: string;
         attachments?: { id: string, url: string }[];
     },
     threadId: string;

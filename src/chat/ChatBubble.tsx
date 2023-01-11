@@ -76,7 +76,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 						attachment
 					)}
 				{this.getDisplayContent(attachment)}
-				<div
+				{/* <div
 					className={`position-absolute`}
 					style={{
 						bottom: 4,
@@ -87,7 +87,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 					{getFormattedTime(
 						new Date(this.props.data?.sentAt)
 					)}
-				</div>
+				</div> */}
 			</div>
 		)
 	}
@@ -106,11 +106,11 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 					className={`dk-chat-justify-content-start dk-chat-align-items-end ${!this.props.data.sender ? 'dk-chat-row' : 'dk-chat-row-reverse'
 						}`}
 				>
-					<DKContactIcon
+					{/* <DKContactIcon
 						title={`${!this.props.data.sender ? 'R' : 'S'}`}
 						className={`dk-chat-flex-shrink-0 dk-chat-border-m dk-chat-display-only-web dk-chat-bg-gray1 ${!this.props.data.sender ? 'dk-chat-ml-s' : 'dk-chat-mr-s'
 							}`}
-					/>
+					/> */}
 						<div className={`dk-chat-row parent-width dk-chat-align-items-${!this.props.data.sender ? 'start' : 'end'}`} style={{flexDirection:'column'}}>
 						{this.props.data.body?.attachments?.length > 0 ? this.props.data.body?.attachments.map(this.renderMessage) : this.renderMessage()}
 						</div>
@@ -163,7 +163,7 @@ export default class ChatBubble extends Component<IChatBubbleProps, any> {
 				return (
 					<DKLabel
 						text={this.findSearchContent(body.text)}
-						className="dk-chat-fs-r dk-chat-text-align-left dk-chat-mb-m dk-chat-fs-m"
+						className="dk-chat-fs-r dk-chat-text-align-left dk-chat-fs-m"
 					/>
 				);
 			case MESSAGE_TYPE.MULTIMEDIA:

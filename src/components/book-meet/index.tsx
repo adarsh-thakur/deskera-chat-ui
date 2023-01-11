@@ -142,6 +142,7 @@ export default function BookAMeet({
     <div
       style={{
         maxWidth: 340,
+        marginTop: 20,
         marginLeft: "auto"
       }}
     >

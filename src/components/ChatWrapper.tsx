@@ -4,12 +4,13 @@ import { MessagePayload, SignUpPayload } from '../model/ChatModel';
 import { ChatService } from '../services/chat';
 import { customEvent } from '../services/customEvents';
 import { TenantService } from '../services/tenant';
-import { CHAT_BUBBLE_POSITION, CHAT_POPUP_POSITION, DEFAULT_POSITION, GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
+import { AUTO_RESPONSE, CHAT_BUBBLE_POSITION, CHAT_POPUP_POSITION, DEFAULT_POSITION, GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
 import { LOCAL_MESSAGE_EVENT_TYPE } from '../Utility/Enum';
 import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, getRandomHexString, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from './common';
 import ChatManager from '../manager/ChatManager';
 import WebSocketService from '../services/webSocket';
+import { BDR } from '../services/meeting';
 export default function ChatWrapper(props) {
     const tenantService = TenantService.getInstance();
     const _webDocketService: any = WebSocketService.getInstance();
@@ -20,8 +21,13 @@ export default function ChatWrapper(props) {
     const [showNotification, setShowNotification] = useState(false);
     const [currentThread, setCurrenThread] = useState(null);
     const _unreadCount = useRef(0);
+    const [bdrInfo, setBDRInfo] = useState(null);
+    const lastAutoChatStep = useRef(false);
 
 
+    const onBDRInfoFetched = (info) => {
+        setBDRInfo(info);
+    }
     const getMessagesByThreadId = (threadId, params = null) => {
         ChatService.getMessagesByThreadId(threadId, params).then((res: any) => {
             let messages = res.data;
@@ -31,20 +37,27 @@ export default function ChatWrapper(props) {
             setMessages(ChatManager.getMessages().reverse());
         });
     }
-    const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT) => {
+    const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT, cookieData = null) => {
+        let body = {
+            text: messageType === MESSAGE_TYPE.TEXT ? data : '',
+            attachments: messageType === MESSAGE_TYPE.MULTIMEDIA ? data : []
+        }
+        if (messageType === MESSAGE_TYPE.AUTO_RESPONSE) {
+            lastAutoChatStep.current = data;
+            body['stepId'] = data;
+            body['nextStepId'] = AUTO_RESPONSE[data].nextStep;
+            body['text'] = AUTO_RESPONSE[data].message;
+        }
         const payload: MessagePayload = {
-            threadId: cookies.threadId,
-            type: messageType,
-            body: {
-                text: messageType === MESSAGE_TYPE.TEXT ? data : '',
-                attachments: messageType === MESSAGE_TYPE.MULTIMEDIA ? data : []
-            },
+            threadId: cookieData ? cookieData.threadId : cookies.threadId,
+            type: messageType === MESSAGE_TYPE.AUTO_RESPONSE ? MESSAGE_TYPE.TEXT : messageType,
+            body,
             to: {
-                users: [cookies.id],
+                users: [cookieData ? cookieData.id : cookies.id],
                 tenants: [tenantService.getTenantId()]
             },
             from: {
-                id: cookies.userId,
+                id: cookieData ? cookieData.userId : cookies.userId,
                 type: 'USER'
             }
         };
@@ -163,6 +176,23 @@ export default function ChatWrapper(props) {
             setCurrenThread({ ...currentThread, closed: true });
         }
     }
+    const onBDRItemClicked = (item) => {
+        eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
+        const payload: SignUpPayload = {
+            userId: tenantService.getUserId(),
+            tenantId: String(tenantService.getTenantId()),
+        };
+        ChatService.signUp(payload)
+            .then((res: any) => {
+                setCookiesValue({ ...res, ...payload, id: res.userId });
+                setShowChat(true);
+                sendMessage(item, MESSAGE_TYPE.AUTO_RESPONSE, { ...res, ...payload, id: res.userId });
+            })
+            .catch(err => {
+                console.log(err);
+                tenantService.setUserId(getRandomHexString())
+            })
+    }
     /* effect will go here */
     React.useEffect(() => {
         if (!isEmptyObject(getCookie(GUEST_USER_COOKIE))) {
@@ -181,6 +211,9 @@ export default function ChatWrapper(props) {
         //         clearSession();
         //     }, props.sessionDuration);
         // }
+        customEvent.on('bdfInfoFetched', onBDRInfoFetched);
+        onBDRInfoFetched(BDR.getBDRInfo());
+
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.NEW_MSG, (data) => onMessageReceived(data));
         customEvent.on(LOCAL_MESSAGE_EVENT_TYPE.THREAD_CLOSED, (data) => onThreadClose(data));
         return () => {
@@ -229,6 +262,8 @@ export default function ChatWrapper(props) {
                         reachedTop={onReachedTop}
                         onPopupClose={() => onBubbleClick()}
                         startNewChat={() => clearSession()}
+                        bdrInfo={bdrInfo}
+                        onBDRItemClicked={onBDRItemClicked}
                     />
                 </div>
             </>
