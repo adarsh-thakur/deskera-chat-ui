@@ -77,15 +77,6 @@ export default function SlotSelector(props: ISlotSelectorProps) {
             }}
           />
         )}
-        <DKContactIcon
-          title={props.invitee.name}
-          className="dk-chat-position-relative dk-chat-z-index-2 dk-chat-bg-chip-orange dk-chat-border-orange"
-          style={{
-            left: -4,
-            height: 35,
-            width: 35
-          }}
-        />
       </div>
     );
   }
