@@ -5,22 +5,24 @@ export interface IDKIconProps {
   src: string;
   onClick?: () => void;
   style?: React.CSSProperties;
+  alt?: string;
 }
 
 export default class DKIcon extends Component<IDKIconProps, any> {
   render() {
     const className =
-      "dk-chat-ic-r dk-chat-content-box " + (this.props.className ? this.props.className : "");
+      "dk-chat-ic-r dk-chat-content-box " +
+      (this.props.className ? this.props.className : "");
 
     return (
       <img
         id={this.props.id}
         className={className}
         src={this.props.src}
-        alt=""
+        alt={this.props.alt || ""}
         style={{
           ...{ objectFit: "scale-down" },
-          ...this.props.style,
+          ...this.props.style
         }}
         onClick={this.props.onClick ? this.props.onClick : null}
       />

@@ -5,6 +5,8 @@ import ChatInputBox from './ChatInput';
 import { isValidEmail } from '../Utility/Utility';
 import ChatBubble from './ChatBubble';
 import { INPUT_TYPE, INPUT_VIEW_DIRECTION } from '../Utility/Enum';
+import BookAMeet from '../components/book-meet';
+import { IBDRPayload } from '../model/MeetModel';
 
 export default function ChatPopup(props: any) {
     /* state definitions goes here*/
@@ -102,6 +104,16 @@ export default function ChatPopup(props: any) {
     }
 
     const renderChatHistory = () => {
+        const bdrData: IBDRPayload = {
+            _id:"63bd07d637e2840013609900",
+            iamUserId: 46944,
+            displayName:"Pranshu Test 3",
+            meetingLink:"https://meet.us/345345",
+            profilePic: null, //"https://s3.ap-southeast-1.amazonaws.com/cdn-crm-common-env/report/thumbnail/72985/1673332692577_avatar.png",
+            phone:"+91 5464353",
+            email:"pranshu3@getnada.com",
+            active: true
+        };
         return <div
             id="chat-feed-wrapper"
             className={`dk-chat-display-flex dk-chat-column dk-chat-parent-size dk-chat-border-box dk-chat-scroll-y-only-web dk-chat-hide-scroll-bar`}
@@ -123,6 +135,26 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
+                <BookAMeet 
+                    tenantId={props.tenantId} 
+                    invitee={{
+                        name: "Pranshu Guest",
+                        email: "pranshu@getnada.com",
+                        phone: "+9144656345467",
+                        profilePic: null
+                    }} 
+                    host={{
+                        userId: bdrData.iamUserId,
+                        name: bdrData.displayName,
+                        email: bdrData.email,
+                        phone: bdrData.phone,
+                        profilePic: bdrData.profilePic,
+                        meetLink: bdrData.meetingLink
+                    }} 
+                    slot={localStorage.getItem("meetSlot") || null}
+                    // onBookMeeting={props.onSendMessage}
+                    onBookMeeting={(meetStartDate) => localStorage.setItem("meetSlot", meetStartDate)}
+                />
                 <div ref={messageBottomRef} id="message-bottom-ref" className='dk-chat-parent-width' />
             </div>}
         </div>
