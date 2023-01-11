@@ -7,6 +7,7 @@ import ChatBubble from './ChatBubble';
 import { INPUT_TYPE, INPUT_VIEW_DIRECTION } from '../Utility/Enum';
 import BookAMeet from '../components/book-meet';
 import { IBDRPayload } from '../model/MeetModel';
+import ChatUserInfoInput from './ChatUserInfoInput';
 
 export default function ChatPopup(props: any) {
     /* state definitions goes here*/
@@ -135,6 +136,22 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
+                <ChatUserInfoInput 
+                    stepId={"EMAIL_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <ChatUserInfoInput 
+                    stepId={"NAME_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <ChatUserInfoInput 
+                    stepId={"COMPANY_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <ChatUserInfoInput 
+                    stepId={"PHONE_STEP"}
+                    onSend={(value) => alert(value)}
+                />
                 <BookAMeet 
                     tenantId={props.tenantId} 
                     invitee={{

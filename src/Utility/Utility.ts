@@ -63,6 +63,12 @@ export const isValidEmail = (email: string) => {
     }
     return REGEX.EMAIL.test(String(email).toLowerCase());
 }
+export const isValidPhone = (phone: string) => {
+    if (isEmptyObject(phone.trim())) {
+        return false;
+    }
+    return REGEX.MOBILE.test(String(phone).toLowerCase());
+}
 export const setCookie = (name, value, days, domain) => {
     let expires = "";
     if (days) {
