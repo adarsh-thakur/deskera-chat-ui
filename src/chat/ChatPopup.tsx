@@ -7,6 +7,7 @@ import ChatBubble from './ChatBubble';
 import { INPUT_TYPE, INPUT_VIEW_DIRECTION } from '../Utility/Enum';
 import BookAMeet from '../components/book-meet';
 import { IBDRPayload } from '../model/MeetModel';
+import ChatUserInfoInput from './ChatUserInfoInput';
 import BDRInfo from './BDRInfo';
 
 export default function ChatPopup(props: any) {
@@ -132,8 +133,24 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
-                <BookAMeet
-                    tenantId={props.tenantId}
+                {/* <ChatUserInfoInput 
+                    stepId={"EMAIL_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <ChatUserInfoInput 
+                    stepId={"NAME_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <ChatUserInfoInput 
+                    stepId={"COMPANY_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <ChatUserInfoInput 
+                    stepId={"PHONE_STEP"}
+                    onSend={(value) => alert(value)}
+                />
+                <BookAMeet 
+                    tenantId={props.tenantId} 
                     invitee={{
                         name: "Pranshu Guest",
                         email: "pranshu@getnada.com",
@@ -151,7 +168,7 @@ export default function ChatPopup(props: any) {
                     slot={localStorage.getItem("meetSlot") || null}
                     // onBookMeeting={props.onSendMessage}
                     onBookMeeting={(meetStartDate) => localStorage.setItem("meetSlot", meetStartDate)}
-                />
+                /> */}
                 <div ref={messageBottomRef} id="message-bottom-ref" className='dk-chat-parent-width' />
             </div>}
         </div>
