@@ -7,6 +7,7 @@ import WebSocketService from './services/webSocket';
 import { CHAT_BUBBLE_POSITION, DEFAULT_COLOR, DEFAULT_POSITION, GUEST_USER_COOKIE, REGEX } from './Utility/Constants';
 import { decodeJSON, getCookie, getRandomHexString, isEmptyObject } from './Utility/Utility';
 import { ChatService } from './services/chat';
+import { BDR, getBDR } from './services/meeting';
 
 const TENANT_ID_KEY = 'tenantid';
 
@@ -73,7 +74,22 @@ const App = (props) => {
                 initChat(props.data);
             }
         }
-        if (tenantId) getSettings(tenantId);
+        if (tenantId) {
+            getSettings(tenantId);
+            fetchBDRInfo(tenantId);
+        };
+    }
+    const fetchBDRInfo = (tenantId) => {
+        getBDR(tenantId)
+            .then((res) => {
+                if (res) {
+                    BDR.setBDRInfo(res);
+                }
+            })
+            .catch(err => {
+
+            });
+
     }
     return mount ? <ChatWrapper
         {...props.data}

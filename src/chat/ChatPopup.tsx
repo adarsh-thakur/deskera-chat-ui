@@ -8,6 +8,7 @@ import { INPUT_TYPE, INPUT_VIEW_DIRECTION } from '../Utility/Enum';
 import BookAMeet from '../components/book-meet';
 import { IBDRPayload } from '../model/MeetModel';
 import ChatUserInfoInput from './ChatUserInfoInput';
+import BDRInfo from './BDRInfo';
 
 export default function ChatPopup(props: any) {
     /* state definitions goes here*/
@@ -28,7 +29,6 @@ export default function ChatPopup(props: any) {
             props.onSignUp(email);
         }
     }
-
     const signUpUser = (skip = false) => {
         if (skip) {
             props.onSignUp();
@@ -105,24 +105,21 @@ export default function ChatPopup(props: any) {
     }
 
     const renderChatHistory = () => {
-        const bdrData: IBDRPayload = {
-            _id:"63bd07d637e2840013609900",
-            iamUserId: 46944,
-            displayName:"Pranshu Test 3",
-            meetingLink:"https://meet.us/345345",
-            profilePic: null, //"https://s3.ap-southeast-1.amazonaws.com/cdn-crm-common-env/report/thumbnail/72985/1673332692577_avatar.png",
-            phone:"+91 5464353",
-            email:"pranshu3@getnada.com",
-            active: true
-        };
         return <div
             id="chat-feed-wrapper"
             className={`dk-chat-display-flex dk-chat-column dk-chat-parent-size dk-chat-border-box dk-chat-scroll-y-only-web dk-chat-hide-scroll-bar`}
             style={{
-                overflowX: 'auto'
+                overflowX: 'auto',
+                padding:10
             }}
             ref={props?.chatFeedWrapperRef}
         >
+            {props.bdrInfo && <BDRInfo
+                bdrInfo={props.bdrInfo}
+                onItemClick={(item) => {
+                    props.onBDRItemClicked(item)
+                }}
+            />}
             {props.showChat && <div className="dk-chat-screen dk-chat-parent-size dk-chat-border-radius-m dk-chat-pt-m" style={{ height: '98%' }}>
                 <div ref={messageTopRef} id="message-top-ref" className='dk-chat-parent-width'></div>
                 {props.messages?.map((message, index) => {
@@ -136,7 +133,7 @@ export default function ChatPopup(props: any) {
                         />
                     );
                 })}
-                <ChatUserInfoInput 
+                {/* <ChatUserInfoInput 
                     stepId={"EMAIL_STEP"}
                     onSend={(value) => alert(value)}
                 />
@@ -159,19 +156,19 @@ export default function ChatPopup(props: any) {
                         email: "pranshu@getnada.com",
                         phone: "+9144656345467",
                         profilePic: null
-                    }} 
+                    }}
                     host={{
-                        userId: bdrData.iamUserId,
-                        name: bdrData.displayName,
-                        email: bdrData.email,
-                        phone: bdrData.phone,
-                        profilePic: bdrData.profilePic,
-                        meetLink: bdrData.meetingLink
-                    }} 
+                        userId: props.bdrInfo.iamUserId,
+                        name: props.bdrInfo.displayName,
+                        email: props.bdrInfo.email,
+                        phone: props.bdrInfo.phone,
+                        profilePic: props.bdrInfo.profilePic,
+                        meetLink: props.bdrInfo.meetingLink
+                    }}
                     slot={localStorage.getItem("meetSlot") || null}
                     // onBookMeeting={props.onSendMessage}
                     onBookMeeting={(meetStartDate) => localStorage.setItem("meetSlot", meetStartDate)}
-                />
+                /> */}
                 <div ref={messageBottomRef} id="message-bottom-ref" className='dk-chat-parent-width' />
             </div>}
         </div>
@@ -225,8 +222,8 @@ export default function ChatPopup(props: any) {
             {renderHeader()}
             {renderChatHistory()}
             <div className="dk-chat-parent-width">
-                {!props.showChat && renderEmailInput()}
-                {props.showChat && !props.currentThread?.closed && renderChatInput()}
+                {!props.showChat && !props.bdrInfo && renderEmailInput()}
+                {props.showChat && !props.currentThread?.closed && !props.bdrInfo && renderChatInput()}
                 {props.showChat && props.currentThread?.closed && <div className="dk-chat-row dk-chat-p-l dk-chat-bg-deskera-secondary dk-chat-align-items-center">
                     <DKIcon src={DKIcons.ic_warning} className="dk-chat-ic-r dk-chat-mr-r" />
                     <div>Looks like this chat is no longer available.&nbsp;
