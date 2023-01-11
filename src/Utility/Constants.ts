@@ -39,19 +39,19 @@ export const CHAT_BUBBLE_POSITION = {
 }
 export const CHAT_POPUP_POSITION = {
     BOTTOM_RIGHT: {
-        bottom: 80,
+        bottom: 20,
         right: 20,
     },
     TOP_RIGHT: {
-        top: 80,
+        top: 20,
         right: 20,
     },
     TOP_LEFT: {
-        top: 80,
+        top: 20,
         left: 20,
     },
     BOTTOM_LEFT: {
-        bottom: 80,
+        bottom: 20,
         left: 20,
     },
 }

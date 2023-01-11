@@ -102,7 +102,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                     {this.getDocumentPicker()}
                 </div>
                 </div>
-                <div className="dk-chat-fs-s dk-chat-row dk-chat-justify-content-center dk-chat-p-s">Powered by <a target="_blank" href="https://www.deskera.com" className="link fw-b" style={{color:'black',marginLeft:2,textDecoration:'none'}}> Deskera</a></div>
+                <div className="dk-chat-fs-s dk-chat-row dk-chat-justify-content-center dk-chat-p-s dk-chat-text-gray">Powered by <a target="_blank" href="https://www.deskera.com" className="link fw-b dk-chat-text-gray" style={{ marginLeft:2,textDecoration:'none' }}> Deskera</a></div>
         </div>
 		);
     }

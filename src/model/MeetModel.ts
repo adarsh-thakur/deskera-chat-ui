@@ -27,7 +27,7 @@ export interface IChatUserContactPayload {
 }
 
 export interface IEventPayload {
-  meetLink: string;
+  meetingLink: string;
   startDate: string;
   endDate: string;
   requestorName: string;
