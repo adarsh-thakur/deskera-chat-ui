@@ -1,3 +1,5 @@
+import { AUTO_RESPONSE_KEYS } from "./Enum";
+
 export enum MESSAGE_TYPE {
     TEXT = 'text',
     AUTO_RESPONSE = 'auto_response',
@@ -70,32 +72,36 @@ export const MONTHS = [
 ];
 
 export const AUTO_RESPONSE = {
-    "TALK_TO_REP": {
+    [AUTO_RESPONSE_KEYS.TALK_TO_REP]: {
         "message": "I want to talk to a Specialist 🙋‍♂️",
-        "nextStep": "EMAIL_STEP"
+        "nextStep": AUTO_RESPONSE_KEYS.EMAIL_STEP,
     },
-    "BOOK_A_MEET": {
+    [AUTO_RESPONSE_KEYS.BOOK_A_MEET]: {
         "message": "I want to schedule a meeting",
-        "nextStep": "EMAIL_STEP"
+        "nextStep": AUTO_RESPONSE_KEYS.EMAIL_STEP
     },
-    "EMAIL_STEP": {
+    [AUTO_RESPONSE_KEYS.EMAIL_STEP]: {
         "message": "In case we get disconnected, can we have your email?",
-        "nextStep": "NAME_STEP",
-        "userInfoRequired": true
+        "nextStep": AUTO_RESPONSE_KEYS.NAME_STEP,
+        "userInfoRequired": true,
+        "key": "email"
     },
-    "NAME_STEP": {
+    [AUTO_RESPONSE_KEYS.NAME_STEP]: {
         "message": "Thanks! And can we get your name?",
-        "nextStep": "COMPANY_STEP",
-        "userInfoRequired": true
+        "nextStep": AUTO_RESPONSE_KEYS.COMPANY_STEP,
+        "userInfoRequired": true,
+        "key": "name"
     },
-    "COMPANY_STEP": {
+    [AUTO_RESPONSE_KEYS.COMPANY_STEP]: {
         "message": "And the company you work for?",
-        "nextStep": "PHONE_STEP",
-        "userInfoRequired": true
+        "nextStep": AUTO_RESPONSE_KEYS.PHONE_STEP,
+        "userInfoRequired": true,
+        "key": "organization"
     },
-    "PHONE_STEP": {
+    [AUTO_RESPONSE_KEYS.PHONE_STEP]: {
         "message": "Last Questions? <br/> What is the best number to reach you at?",
-        "nextStep": "MEET_SLOT_STEP",
-        "userInfoRequired": true
-    },
+        "nextStep": AUTO_RESPONSE_KEYS.MEET_SLOT_STEP,
+        "userInfoRequired": true,
+        "key": "phone"
+    }
 }

@@ -17,7 +17,8 @@ export const API_CONSTANT = {
     },
     BOOK_MEET : {
         GET_SLOTS: (tenantId: number, userId: number) => `${BOOK_MEET_OPEN_END_BASE}bdr/${tenantId}/slots/${userId}`,
-        CREATE_EVENT: (tenantId: number) => `${BOOK_MEET_OPEN_END_BASE}bdr/${tenantId}/create/activity`
+        CREATE_EVENT: (tenantId: number) => `${BOOK_MEET_OPEN_END_BASE}bdr/${tenantId}/create/activity`,
+        CREATE_CONTACT: (tenantId: number) => `${BOOK_MEET_OPEN_END_BASE}bdr/${tenantId}/create/contact`
     },
     BDR: {
         GET: (tenantId, tzOffset) => `v1/crm/book-meeting/openep/bdr/${tenantId}?tzOffset=${tzOffset}`,

@@ -1,35 +1,37 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { isEmptyObject, isValidEmail, isValidPhone } from "../Utility/Utility";
 import { DKButton } from "../components/common";
+import { AUTO_RESPONSE_KEYS, INPUT_TYPE } from "../Utility/Enum";
 
 interface INPUT_DATA {
-  type: "email" | "text";
+  type: INPUT_TYPE;
   placeholder: string;
   validator: (value: string) => boolean;
   value: string;
 }
 
 const STEP_INPUT_DATA: { [key: string]: INPUT_DATA } = {
-  EMAIL_STEP: {
-    type: "email",
+  [AUTO_RESPONSE_KEYS.EMAIL_STEP]: {
+    type: INPUT_TYPE.EMAIL,
     placeholder: "Enter your business email...",
     validator: isValidEmail,
     value: ""
   },
-  NAME_STEP: {
-    type: "text",
+  [AUTO_RESPONSE_KEYS.NAME_STEP]: {
+    type: INPUT_TYPE.TEXT,
     placeholder: "Enter your name...",
     validator: (name: string) => !isEmptyObject(name),
     value: ""
   },
-  COMPANY_STEP: {
-    type: "text",
+  [AUTO_RESPONSE_KEYS.COMPANY_STEP]: {
+    type: INPUT_TYPE.TEXT,
     placeholder: "Enter your company...",
     validator: (company: string) => !isEmptyObject(company),
     value: ""
   },
-  PHONE_STEP: {
-    type: "text",
+  [AUTO_RESPONSE_KEYS.PHONE_STEP]: {
+    type: INPUT_TYPE.TEXT,
     placeholder: "+91 803 521 6752",
     validator: isValidPhone,
     value: ""
@@ -44,30 +46,40 @@ export default function ChatUserInfoInput({
   const [saveTapped, setSaveTapped] = useState(false);
   const [inputData, setInputData] = useState<INPUT_DATA>(null);
 
-  useEffect(() => {
+  const resetInput = () => {
     const initialData = STEP_INPUT_DATA[stepId];
 
-    if (!initialData) return;
+    if (!stepId || !initialData) return;
 
     setInputData({ ...initialData, value: defaultValue || initialData.value });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setSaveTapped(false);
+  };
+
+  useEffect(() => {
+    resetInput();
   }, []);
 
   useEffect(() => {
-    if (stepId) {
-      setInputData({ ...STEP_INPUT_DATA[stepId] });
-      setSaveTapped(null);
-    }
+    resetInput();
   }, [stepId]);
+
+  const onChangeInput = (value: string) =>
+    setInputData({ ...inputData, value });
 
   const isInputInvalid = () => !inputData.validator(inputData.value);
 
-  const onTriggerSend = () => {
+  const onTriggerSend = async () => {
     setSaveTapped(true);
 
     if (isInputInvalid()) return;
 
-    onSend(inputData.value);
+    try {
+      const value = inputData.value;
+      onChangeInput("");
+      setSaveTapped(false);
+
+      await onSend(value);
+    } catch (err) {}
   };
 
   return inputData ? (
@@ -76,7 +88,7 @@ export default function ChatUserInfoInput({
         value={inputData.value}
         placeholder={inputData.placeholder}
         type={inputData.type}
-        onChange={(e) => setInputData({ ...inputData, value: e.target.value })}
+        onChange={(e) => onChangeInput(e.target.value)}
         className={
           "dk-chat-row dk-chat-parent-height dk-chat-pl-r dk-chat-border-m " +
           (saveTapped && isInputInvalid() ? " dk-chat-text-red" : "")
@@ -90,7 +102,7 @@ export default function ChatUserInfoInput({
       <DKButton
         title={"Send"}
         className={
-          "dk-chat-parent-height dk-chat-text-white dk-chat-fs-s-2 dk-chat-bg-blue"
+          "dk-chat-parent-height dk-chat-text-white dk-chat-fs-s-2 dk-chat-fw-m dk-chat-bg-blue"
         }
         style={{
           borderRadius: "0 4px 4px 0"

@@ -1,5 +1,5 @@
 import { API_CONSTANT } from "../Utility/ApIConstant";
-import { IEventPayload, ISlotResponse } from "../model/MeetModel";
+import { IChatUserContactPayload, IEventPayload, ISlotResponse } from "../model/MeetModel";
 import axiosInstance from "./http";
 
 export class BookMeetService {
@@ -31,6 +31,12 @@ export class BookMeetService {
         }
       }
     );
+  }
+
+  public async createMeetingInvitee(tenantId: number, payload: IChatUserContactPayload) {
+    return axiosInstance
+      .post(API_CONSTANT.BOOK_MEET.CREATE_CONTACT(tenantId), payload)
+      .catch((err) => {});
   }
 
   public async createMeetingEvent(tenantId: number, payload: IEventPayload) {
