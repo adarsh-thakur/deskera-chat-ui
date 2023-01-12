@@ -35,6 +35,7 @@ export interface IEventPayload {
   questions: string;
   tzName: string;
   ownerId: number;
+  crmContactId?: string;
 }
 
 export interface ISlotResponse {

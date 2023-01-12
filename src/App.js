@@ -41,7 +41,7 @@ const App = (props) => {
             if (!isEmptyObject(props?.data?.bubblePosition) && Object.keys(CHAT_BUBBLE_POSITION).includes(props?.data?.bubblePosition)) {
                 tempBubblePosition = props?.data?.bubblePosition;
             }
-            setSettings({ ...settings, bubbleColor: tempBubbleColor, bubblePosition: tempBubblePosition });
+            setSettings({ ...(res || {}), ...settings, bubbleColor: tempBubbleColor, bubblePosition: tempBubblePosition });
         }).catch((error) => {
             console.log(error);
             console.error('Error while getting settings');

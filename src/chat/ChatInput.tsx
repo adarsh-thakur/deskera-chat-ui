@@ -44,7 +44,7 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
             <div className={`dk-chat-input-wrapper dk-chat-column dk-chat-parent-width ${this.props.className}`}>
             <div className="dk-chat-row dk-chat-parent-width dk-chat-border-m dk-chat-border-radius-m dk-chat-align-items-center">
                 <div
-                    placeholder="Type your message here"
+                    placeholder="Send a message..."
                     style={{
                         maxHeight: 60,
                         minHeight: 50,
@@ -76,8 +76,8 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                         <div
                             className="dk-chat-position-absolute"
                             style={{
-                                bottom: 110,
-                                right: 50,
+                                bottom: 88,
+                                right: 8,
                             }}
                         >
                             <Picker
@@ -86,15 +86,14 @@ export default class ChatInputBox extends Component<IChatInputBoxProps, any> {
                             />
                         </div>
                     )}
-                    <div
-                        onClick={this.hideShowEmojiPicker}
-                        className="dk-chat-mr-s dk-chat-fs-xl dk-chat-unselectable dk-chat-cursor-hand dk-chat-emoji-button"
-                    >
-                        😀
-                    </div>
                     <DKIcon
-                        src={DKIcons.ic_add}
-                        className="dk-chat-ic-s dk-chat-cursor-hand dk-chat-p-s dk-chat-border-radius-m"
+                        src={DKIcons.ic_emoji}
+                        className="dk-chat-ic- dk-chat-cursor-hand dk-chat-p-xs dk-chat-border-radius-m"
+                        onClick={() => this.hideShowEmojiPicker()}
+                    />
+                    <DKIcon
+                        src={DKIcons.ic_attachment}
+                        className="dk-chat-ic- dk-chat-cursor-hand dk-chat-p-xs dk-chat-border-radius-m"
                         onClick={() => {
                             this.openDocumentPicker();
                         }}
