@@ -317,7 +317,6 @@ export default function ChatWrapper(props) {
                         visibility: showPopup ? 'visible' : 'hidden',
                         width: 350,
                         height: '80vh',
-                        maxHeight: 500,
                         transition: 'visibility 0s, opacity 0.5s ease-in',
                         ...CHAT_POPUP_POSITION[props?.settings?.bubblePosition || DEFAULT_POSITION]
                     }}
