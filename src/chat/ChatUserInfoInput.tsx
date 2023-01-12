@@ -81,6 +81,11 @@ export default function ChatUserInfoInput({
       await onSend(value);
     } catch (err) {}
   };
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      onTriggerSend();
+    }
+  }
 
   return inputData ? (
     <div className="dk-chat-row dk-chat-ic-m dk-chat-m-v-r dk-chat-p-h-s">
@@ -88,6 +93,7 @@ export default function ChatUserInfoInput({
         value={inputData.value}
         placeholder={inputData.placeholder}
         type={inputData.type}
+        onKeyDown={onKeyDown}
         onChange={(e) => onChangeInput(e.target.value)}
         className={
           "dk-chat-row dk-chat-parent-height dk-chat-pl-r dk-chat-border-m " +
