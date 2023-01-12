@@ -296,11 +296,11 @@ export default function ChatWrapper(props) {
     }, []);
 
     React.useEffect(() => {
-        if (ChatManager.scrollToBottom) {
-            document.getElementById('message-bottom-ref')?.scrollIntoView({ behavior: 'smooth' });
+        if (ChatManager.scrollToBottom && showPopup) {
+            setTimeout(() => document.getElementById('message-bottom-ref')?.scrollIntoView({ behavior: 'smooth' }), 100);
         }
         ChatManager.scrollToBottom = true;
-    }, [messages]);
+    }, [messages, showPopup]);
     React.useEffect(() => {
         setShowChat(!isEmptyObject(currentThread));
     }, [currentThread]);
