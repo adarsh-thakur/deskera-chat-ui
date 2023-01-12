@@ -303,7 +303,15 @@ export default function ChatWrapper(props) {
     }, [messages]);
     React.useEffect(() => {
         setShowChat(!isEmptyObject(currentThread));
-    }, [currentThread])
+    }, [currentThread]);
+
+    React.useEffect(() => {
+        if (isEmptyObject(bdrInfo) || !isEmptyObject(getCookie(GUEST_USER_COOKIE))) return;
+
+        setTimeout(() => {
+            setShowPopup(true);
+        }, 3000);
+    }, [bdrInfo]);
     /* renderer will go here */
     return <>
         {(!showPopup && showNotification) && <div className="dk-chat-z-index-max dk-chat-notification">{_unreadCount.current}</div>}
