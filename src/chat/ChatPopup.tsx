@@ -117,7 +117,7 @@ export default function ChatPopup(props: any) {
                 meetLink: props.bdrInfo.meetingLink
             }}
             slot={message}
-            onBookMeeting={(meetStartDate) => props.onUserInfoSend(meetStartDate)}
+            onBookMeeting={props.onUserInfoSend}
             accentColor={props.settings?.bubbleColor}
         />
     }

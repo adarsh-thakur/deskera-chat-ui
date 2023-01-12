@@ -41,7 +41,6 @@ export class BookMeetService {
 
   public async createMeetingEvent(tenantId: number, payload: IEventPayload) {
     return axiosInstance
-      .post(API_CONSTANT.BOOK_MEET.CREATE_EVENT(tenantId), payload)
-      .catch((err) => {});
+      .post(API_CONSTANT.BOOK_MEET.CREATE_EVENT(tenantId), payload);
   }
 }

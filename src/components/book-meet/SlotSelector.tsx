@@ -5,7 +5,7 @@ import { WEEK_DAYS } from "../../Utility/Constants";
 import { IMeetHost, IMeetMember, IMeetSlot } from "../../model/MeetModel";
 import { BookMeetService } from "../../services/bookMeet";
 import HostAvatar from "./HostAvatar";
-import { getHexToRgbWithAlpha, getRgbTextColorForChip } from "../../Utility/Utility";
+import { DKChipButton } from "../common/DKChipButton";
 
 interface ISlotSelectorProps {
   tenantId: number;
@@ -133,14 +133,13 @@ export default function SlotSelector(props: ISlotSelectorProps) {
         style={{ columnGap: "2%", rowGap: 8 }}
       >
         {slots.map((slot) => (
-          <DKButton
+          <DKChipButton
+            accentColor={props.accentColor}
             title={slot.title}
             className={"dk-chat-justify-content-center dk-chat-fs-s-2 dk-chat-fw-m "}
             style={{
               width: "49%",
-              borderRadius: 4,
-              backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
-              color: getRgbTextColorForChip(props.accentColor)
+              borderRadius: 4
             }}
             onClick={() => {
               const [hours, minutes] = slot.format.split(":");

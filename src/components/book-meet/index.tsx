@@ -18,16 +18,25 @@ interface IBookAMeetProps {
   host: IMeetHost;
   slot?: string;
   accentColor?: string;
-  onBookMeeting: (meetStartDate: string) => Promise<any>;
+  onBookMeeting: (meetData: string) => Promise<any>;
 }
 
-function getSlotDataFromDateString(meetStartDate: string | null): IMeetSlot {
-  if (!meetStartDate) return null;
+function getSlotDataFromDateString(meetData: string | null): IMeetSlot {
+  if (!meetData) return null;
 
-  const startDate = new Date(meetStartDate);
-  const endDate = new Date(
-    new Date(meetStartDate).setMinutes(startDate.getMinutes() + 15)
-  );
+  let startDate: Date, endDate: Date;
+  try {
+    let parsedMeetData = JSON.parse(meetData);
+    startDate = new Date(parsedMeetData.startDate);
+    endDate = new Date(parsedMeetData.endDate)
+  } catch(err) {
+    startDate = new Date(meetData);
+    if (!startDate.getTime()) return null;
+    endDate = new Date(
+      new Date(meetData).setMinutes(startDate.getMinutes() + 15)
+    );
+  }
+
   const slotHours = startDate.getHours();
   const slotMinutes = startDate.getMinutes();
 
@@ -36,7 +45,7 @@ function getSlotDataFromDateString(meetStartDate: string | null): IMeetSlot {
       slotHours < 12 ? "AM" : "PM"
     }`,
     format: `${slotHours}:${slotMinutes}`,
-    startDate: meetStartDate,
+    startDate: startDate.toISOString(),
     endDate: endDate.toISOString()
   };
 }
@@ -97,9 +106,9 @@ export default function BookAMeet({
       // to avoid showing further step from this instance, as it will show up based on saved thread message
       onSkipToStep(MAX_STEPS + 1);
 
-      await onBookMeeting(selectedSlot.startDate);
+      await onBookMeeting(JSON.stringify(payload));
     } catch (err) {
-      onSkipToStep(1);
+      onSkipToStep(2);
 
       showAlert(
         "Error occured!",
@@ -162,15 +171,17 @@ export default function BookAMeet({
     >
       {stepHeader()}
       <div
-        className={"dk-chat-column dk-chat-flex-1 dk-chat-shadow-m dk-chat-p-r dk-chat-m-s dk-chat-border-blue"}
-        style={{ 
+        className={
+          "dk-chat-column dk-chat-flex-1 dk-chat-shadow-m dk-chat-p-r dk-chat-m-s dk-chat-border-blue"
+        }
+        style={{
           borderWidth: `2px 0 0`,
-          borderColor: accentColor ? accentColor : "rgb(22, 100, 215)" 
+          borderColor: accentColor ? accentColor : "rgb(22, 100, 215)"
         }}
       >
         {stepRenderer()}
       </div>
-      <div style={{height:10}}></div>
+      <div style={{ height: 10 }}></div>
     </div>
   ) : null;
 }

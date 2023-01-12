@@ -1,6 +1,7 @@
 import { GUEST_USER_COOKIE } from "../Utility/Constants";
-import { getCookie, getHexToRgbWithAlpha, getRgbTextColorForChip } from "../Utility/Utility";
+import { getCookie } from "../Utility/Utility";
 import ic_bdr from "../assets/images/ic_bdr.png";
+import { DKChipButton } from "../components/common/DKChipButton";
 export enum INITIAL_USER_SELECTION {
     TALK_TO_REP = `I want to talk to a Specialist 🙋‍♂️`,
     BOOK_A_MEET = `I want to schedule a meeting`
@@ -29,16 +30,17 @@ function BDRInfo(props) {
                     <div className="dk-chat-fs-r dk-chat-text-gray">{props.bdrInfo?.email}</div>
                 </div>
             </div>
-            {!getCookie(GUEST_USER_COOKIE) && ['TALK_TO_REP', 'BOOK_A_MEET'].map(item => <div
-                className={'dk-chat-parent-width dk-chat-p-s dk-chat-text-align-center dk-chat-cursor-hand dk-chat-fs-r '}
-                style={{
-                    backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
-                    color: getRgbTextColorForChip(props.accentColor)
-                }}
-                onClick={() => props.onItemClick(item)}
-            >
-                {INITIAL_USER_SELECTION[item]}
-            </div>
+            {!getCookie(GUEST_USER_COOKIE) && ['TALK_TO_REP', 'BOOK_A_MEET'].map(item => 
+                <DKChipButton 
+                    accentColor={props.accentColor}
+                    title={INITIAL_USER_SELECTION[item]}
+                    onClick={() => props.onItemClick(item)}
+                    className={"dk-chat-justify-content-center dk-chat-p-s dk-chat-fs-r "}
+                    style={{
+                        borderRadius: 4,
+                        width: "100%"
+                    }}
+                />
             )}
         </div></>
 }

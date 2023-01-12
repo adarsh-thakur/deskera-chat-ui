@@ -134,26 +134,3 @@ export const getFormattedTime = (date) => {
     return time;
 }
 export const getCapitalized = (str: string) => !isEmptyObject(str) ? (str?.charAt(0).toUpperCase() + str?.slice(1)) : str;
-
-
-export function getHexToRgbWithAlpha(color: string, opacity = 1) {
-    if (!color) return "rgb(210, 228, 249)";
-
-    if (color.length !== 7 || !REGEX.HEX_COLOR.test(color)) return color;
-
-    const res = REGEX.HEX_COMPONENTS.exec(color);
-    const rgb = res ? {
-        r: parseInt(res[1], 16),
-        g: parseInt(res[2], 16),
-        b: parseInt(res[3], 16)
-    } : null;
-    return rgb ? `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})` : color;
-}
-
-export function getRgbTextColorForChip(color: string) {
-    if (!color) return "rgb(22, 100, 215)";
-
-    if (color.length !== 7 || !REGEX.HEX_COLOR.test(color)) return "white";
-
-    return color;
-}
