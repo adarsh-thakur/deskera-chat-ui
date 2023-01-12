@@ -74,13 +74,13 @@ export default function ChatPopup(props: any) {
 
     /* helper renderer goes here */
     const renderHeader = () => {
-        return <div className="dk-chat-row dk-chat-p-v-l dk-chat-p-h-s dk-chat-parent-width dk-chat-d-flex dk-chat-justify-content-between"
+        return <div className="dk-chat-row dk-chat-pl-s dk-chat-parent-width dk-chat-d-flex dk-chat-justify-content-between"
             style={{
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
                 backgroundColor: props?.settings?.bubbleColor ? props?.settings?.bubbleColor : '#1c73e8',
             }}>
-            <div className='dk-chat-d-flex dk-chat-align-items-center'>
+            <div className='dk-chat-d-flex dk-chat-p-v-l dk-chat-align-items-center'>
                 {props.settings?.profilePicUrl &&
                     <img
                         src={props.settings?.profilePicUrl}
@@ -93,12 +93,10 @@ export default function ChatPopup(props: any) {
                     text={props?.settings?.name ? `Chat with <b>${props.settings.name} </b>` : '<b>Hey there 👋🏻 </b>'}
                 />
             </div>
-            <div className='dk-chat-pr-s'>
-                <DKIcon src={DKIcons.ic_close_2_white}
-                    onClick={() => props.onPopupClose?.()}
-                    className="dk-chat-ic-xs dk-chat-cursor-hand"
-                />
-            </div>
+            <DKIcon src={DKIcons.ic_close_2_white}
+                onClick={() => props.onPopupClose?.()}
+                className="dk-chat-ic-xs dk-chat-cursor-hand dk-chat-p-v-l dk-chat-p-h-l"
+            />
         </div>;
     }
 
