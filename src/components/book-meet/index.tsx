@@ -17,6 +17,7 @@ interface IBookAMeetProps {
   invitee: IMeetMember;
   host: IMeetHost;
   slot?: string;
+  accentColor?: string;
   onBookMeeting: (meetStartDate: string) => Promise<any>;
 }
 
@@ -47,6 +48,7 @@ export default function BookAMeet({
   host,
   slot,
   invitee,
+  accentColor,
   onBookMeeting
 }: IBookAMeetProps) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -114,6 +116,7 @@ export default function BookAMeet({
             tenantId={tenantId}
             host={host}
             invitee={invitee}
+            accentColor={accentColor}
             onSelectSlot={onSelectSlot}
           />
         );
@@ -122,6 +125,7 @@ export default function BookAMeet({
           <BookMeetConfirmation
             host={host}
             invitee={invitee}
+            accentColor={accentColor}
             selectedSlot={selectedSlot}
             onConfirmed={onConfirmSlot}
           />
@@ -158,8 +162,11 @@ export default function BookAMeet({
     >
       {stepHeader()}
       <div
-        className="dk-chat-column dk-chat-flex-1 dk-chat-shadow-m dk-chat-p-r dk-chat-m-s dk-chat-border-blue"
-        style={{ borderWidth: `2px 0 0` }}
+        className={"dk-chat-column dk-chat-flex-1 dk-chat-shadow-m dk-chat-p-r dk-chat-m-s dk-chat-border-blue"}
+        style={{ 
+          borderWidth: `2px 0 0`,
+          borderColor: accentColor ? accentColor : "rgb(22, 100, 215)" 
+        }}
       >
         {stepRenderer()}
       </div>

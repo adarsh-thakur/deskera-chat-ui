@@ -3,11 +3,13 @@ import { IMeetHost, IMeetMember, IMeetSlot } from "../../model/MeetModel";
 import { DKButton, DKLabel } from "../common";
 import { MONTHS, WEEK_DAYS } from "../../Utility/Constants";
 import HostAvatar from "./HostAvatar";
+import { getHexToRgbWithAlpha } from "../../Utility/Utility";
 
 interface IBookMeetConfirmationProps {
   host: IMeetHost;
   invitee: IMeetMember;
   selectedSlot: IMeetSlot;
+  accentColor?: string;
   onConfirmed: () => void;
 }
 
@@ -47,11 +49,13 @@ export default function BookMeetConfirmation(
         <DKButton
           title={"Book meeting"}
           className={
-            "dk-chat-text-blue dk-chat-bg-chip-blue dk-chat-mt-l dk-chat-justify-content-center"
+            "dk-chat-mt-l dk-chat-justify-content-center "
           }
           style={{
             borderRadius: 4,
-            width: 160
+            width: 160,
+            backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
+            color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
           }}
           onClick={() => props.onConfirmed()}
         />
