@@ -24,9 +24,9 @@ export default function ChatWrapper(props) {
     const [bdrInfo, setBDRInfo] = useState(null);
     const lastAutoChatStep = useRef(getLastActiveChatStep());
 
-    function getLastActiveChatStep() {
-        const lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY);
-        return AUTO_RESPONSE[lastInputStep]?.nextStep || null;
+    function getLastActiveChatStep(lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY)) {
+        const nextStep = AUTO_RESPONSE[lastInputStep]?.nextStep || AUTO_RESPONSE[lastInputStep]?.getNextStep?.() || null;
+        return nextStep;
     }
 
     const onBDRInfoFetched = (info) => {
@@ -45,7 +45,7 @@ export default function ChatWrapper(props) {
         let body = {
             stepId,
             text: message,
-            nextStepId: AUTO_RESPONSE[stepId]?.nextStep,
+            nextStepId: getLastActiveChatStep(stepId),
             attachments: [],
         }
         const payload: MessagePayload = {
@@ -78,7 +78,7 @@ export default function ChatWrapper(props) {
                 localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
             }
 
-            lastAutoChatStep.current = AUTO_RESPONSE[stepId]?.nextStep;
+            lastAutoChatStep.current = getLastActiveChatStep(stepId);
             getMessagesByThreadId(cookies.threadId);
         });
 
@@ -220,6 +220,7 @@ export default function ChatWrapper(props) {
         };
         ChatService.signUp(payload)
             .then((res: any) => {
+                localStorage.setItem(LOCAL_STORAGE_KEYS.FIRST_AUTO_RESPONSE_INPUT_KEY, item);
                 setCookiesValue({ ...res, ...payload, id: res.userId });
                 setShowChat(true);
                 onAutoResponseMessage(item, AUTO_RESPONSE[item].message, { ...res, ...payload, id: res.userId });
@@ -280,6 +281,7 @@ export default function ChatWrapper(props) {
                         visibility: showPopup ? 'visible' : 'hidden',
                         width: 350,
                         height: '80vh',
+                        maxHeight: 500,
                         transition: 'visibility 0s, opacity 0.5s ease-in',
                         ...CHAT_POPUP_POSITION[props?.settings?.bubblePosition || DEFAULT_POSITION]
                     }}
