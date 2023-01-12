@@ -1,4 +1,4 @@
-import { AUTO_RESPONSE_KEYS } from "./Enum";
+import { AUTO_RESPONSE_KEYS, LOCAL_STORAGE_KEYS } from "./Enum";
 
 export enum MESSAGE_TYPE {
     TEXT = 'text',
@@ -72,36 +72,40 @@ export const MONTHS = [
 ];
 
 export const AUTO_RESPONSE = {
-    [AUTO_RESPONSE_KEYS.TALK_TO_REP]: {
-        "message": "I want to talk to a Specialist 🙋‍♂️",
-        "nextStep": AUTO_RESPONSE_KEYS.EMAIL_STEP,
-    },
-    [AUTO_RESPONSE_KEYS.BOOK_A_MEET]: {
-        "message": "I want to schedule a meeting",
-        "nextStep": AUTO_RESPONSE_KEYS.EMAIL_STEP
-    },
-    [AUTO_RESPONSE_KEYS.EMAIL_STEP]: {
-        "message": "In case we get disconnected, can we have your email?",
-        "nextStep": AUTO_RESPONSE_KEYS.NAME_STEP,
-        "userInfoRequired": true,
-        "key": "email"
-    },
-    [AUTO_RESPONSE_KEYS.NAME_STEP]: {
-        "message": "Thanks! And can we get your name?",
-        "nextStep": AUTO_RESPONSE_KEYS.COMPANY_STEP,
-        "userInfoRequired": true,
-        "key": "name"
-    },
-    [AUTO_RESPONSE_KEYS.COMPANY_STEP]: {
-        "message": "And the company you work for?",
-        "nextStep": AUTO_RESPONSE_KEYS.PHONE_STEP,
-        "userInfoRequired": true,
-        "key": "organization"
-    },
-    [AUTO_RESPONSE_KEYS.PHONE_STEP]: {
-        "message": "Last Questions? <br/> What is the best number to reach you at?",
-        "nextStep": AUTO_RESPONSE_KEYS.MEET_SLOT_STEP,
-        "userInfoRequired": true,
-        "key": "phone"
-    }
-}
+  [AUTO_RESPONSE_KEYS.TALK_TO_REP]: {
+    message: "I want to talk to a Specialist 🙋‍♂️",
+    nextStep: AUTO_RESPONSE_KEYS.EMAIL_STEP
+  },
+  [AUTO_RESPONSE_KEYS.BOOK_A_MEET]: {
+    message: "I want to schedule a meeting",
+    nextStep: AUTO_RESPONSE_KEYS.EMAIL_STEP
+  },
+  [AUTO_RESPONSE_KEYS.EMAIL_STEP]: {
+    message: "In case we get disconnected, can we have your email?",
+    nextStep: AUTO_RESPONSE_KEYS.NAME_STEP,
+    userInfoRequired: true,
+    key: "email"
+  },
+  [AUTO_RESPONSE_KEYS.NAME_STEP]: {
+    message: "Thanks! And can we get your name?",
+    nextStep: AUTO_RESPONSE_KEYS.COMPANY_STEP,
+    userInfoRequired: true,
+    key: "name"
+  },
+  [AUTO_RESPONSE_KEYS.COMPANY_STEP]: {
+    message: "And the company you work for?",
+    nextStep: AUTO_RESPONSE_KEYS.PHONE_STEP,
+    userInfoRequired: true,
+    key: "organization"
+  },
+  [AUTO_RESPONSE_KEYS.PHONE_STEP]: {
+    message: "Last Questions? <br/> What is the best number to reach you at?",
+    getNextStep: () =>
+      localStorage.getItem(LOCAL_STORAGE_KEYS.FIRST_AUTO_RESPONSE_INPUT_KEY) ===
+      AUTO_RESPONSE_KEYS.TALK_TO_REP
+        ? AUTO_RESPONSE_KEYS.GET_BACK
+        : AUTO_RESPONSE_KEYS.MEET_SLOT_STEP,
+    userInfoRequired: true,
+    key: "phone"
+  }
+};

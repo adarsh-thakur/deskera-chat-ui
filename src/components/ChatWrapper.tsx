@@ -5,12 +5,14 @@ import { ChatService } from '../services/chat';
 import { customEvent } from '../services/customEvents';
 import { TenantService } from '../services/tenant';
 import { AUTO_RESPONSE, CHAT_BUBBLE_POSITION, CHAT_POPUP_POSITION, DEFAULT_POSITION, GUEST_USER_COOKIE, MESSAGE_TYPE } from '../Utility/Constants';
-import { LOCAL_MESSAGE_EVENT_TYPE, LOCAL_STORAGE_KEYS } from '../Utility/Enum';
+import { AUTO_RESPONSE_KEYS, LOCAL_MESSAGE_EVENT_TYPE, LOCAL_STORAGE_KEYS } from '../Utility/Enum';
 import { decodeJSON, encodeJSON, eraseCookie, getCookie, getDomain, getRandomHexString, isEmptyObject, isValidEmail, setCookie } from '../Utility/Utility';
 import { DKIcon, DKIcons } from './common';
 import ChatManager from '../manager/ChatManager';
 import WebSocketService from '../services/webSocket';
 import { BDR } from '../services/meeting';
+import { IChatUserContactPayload, IMeetMember } from '../model/MeetModel';
+import { BookMeetService } from '../services/bookMeet';
 export default function ChatWrapper(props) {
     const tenantService = TenantService.getInstance();
     const _webDocketService: any = WebSocketService.getInstance();
@@ -23,10 +25,11 @@ export default function ChatWrapper(props) {
     const _unreadCount = useRef(0);
     const [bdrInfo, setBDRInfo] = useState(null);
     const lastAutoChatStep = useRef(getLastActiveChatStep());
+    const [activeUserInfo, setActiveUserInfo] = useState(null);
 
-    function getLastActiveChatStep() {
-        const lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY);
-        return AUTO_RESPONSE[lastInputStep]?.nextStep || null;
+    function getLastActiveChatStep(lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY)) {
+        const nextStep = AUTO_RESPONSE[lastInputStep]?.nextStep || AUTO_RESPONSE[lastInputStep]?.getNextStep?.() || null;
+        return nextStep;
     }
 
     const onBDRInfoFetched = (info) => {
@@ -41,11 +44,30 @@ export default function ChatWrapper(props) {
             setMessages(ChatManager.getMessages().reverse());
         });
     }
+    const createCRMContact = async () => {
+        try {
+            const userData: IMeetMember = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA)) : {};
+            const contactPayload: IChatUserContactPayload = {
+                ...userData,
+                owner_id: bdrInfo?.iamUserId
+              };
+            const contactResponse: any = await BookMeetService.getInstance().createMeetingInvitee(
+                Number(tenantService.getTenantId()),
+                contactPayload
+            );
+
+            if (contactResponse?.body?.id) {
+                userData.id = contactResponse.body.id;
+                localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+                setActiveUserInfo(userData);
+            }
+        } catch(err) {}
+    }
     const onAutoResponseMessage = (stepId, message, cookieData) => {
         let body = {
             stepId,
             text: message,
-            nextStepId: AUTO_RESPONSE[stepId]?.nextStep,
+            nextStepId: getLastActiveChatStep(stepId),
             attachments: [],
         }
         const payload: MessagePayload = {
@@ -78,7 +100,11 @@ export default function ChatWrapper(props) {
                 localStorage.setItem(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
             }
 
-            lastAutoChatStep.current = AUTO_RESPONSE[stepId]?.nextStep;
+            if (stepId === AUTO_RESPONSE_KEYS.PHONE_STEP) {
+                createCRMContact();
+            }
+
+            lastAutoChatStep.current = getLastActiveChatStep(stepId);
             getMessagesByThreadId(cookies.threadId);
         });
 
@@ -220,6 +246,7 @@ export default function ChatWrapper(props) {
         };
         ChatService.signUp(payload)
             .then((res: any) => {
+                localStorage.setItem(LOCAL_STORAGE_KEYS.FIRST_AUTO_RESPONSE_INPUT_KEY, item);
                 setCookiesValue({ ...res, ...payload, id: res.userId });
                 setShowChat(true);
                 onAutoResponseMessage(item, AUTO_RESPONSE[item].message, { ...res, ...payload, id: res.userId });
@@ -228,6 +255,13 @@ export default function ChatWrapper(props) {
                 console.log(err);
                 tenantService.setUserId(getRandomHexString())
             })
+    }
+    const getActiveUserInfo = () => {
+        if (!isEmptyObject(activeUserInfo)) return activeUserInfo;
+        
+        let userData: any = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA);
+        userData = userData ? JSON.parse(userData) : null;
+        return userData;
     }
     /* effect will go here */
     React.useEffect(() => {
@@ -280,6 +314,7 @@ export default function ChatWrapper(props) {
                         visibility: showPopup ? 'visible' : 'hidden',
                         width: 350,
                         height: '80vh',
+                        maxHeight: 500,
                         transition: 'visibility 0s, opacity 0.5s ease-in',
                         ...CHAT_POPUP_POSITION[props?.settings?.bubblePosition || DEFAULT_POSITION]
                     }}
@@ -299,7 +334,7 @@ export default function ChatWrapper(props) {
                         onPopupClose={() => onBubbleClick()}
                         startNewChat={() => clearSession()}
                         bdrInfo={bdrInfo}
-                        activeUserInfo={localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA)) : null}
+                        activeUserInfo={getActiveUserInfo()}
                         stepId={lastAutoChatStep.current}
                         onBDRItemClicked={onBDRItemClicked}
                         onUserInfoSend={(value) => onAutoResponseMessage(lastAutoChatStep.current, value, cookies)}

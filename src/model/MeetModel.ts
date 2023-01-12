@@ -6,6 +6,7 @@ export interface IMeetSlot {
 }
 
 export interface IMeetMember {
+  id?: string;
   name: string;
   email: string;
   phone: string;
