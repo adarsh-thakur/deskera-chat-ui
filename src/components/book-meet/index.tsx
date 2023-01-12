@@ -173,6 +173,7 @@ export default function BookAMeet({
       >
         {stepRenderer()}
       </div>
+      <div style={{height:10}}></div>
     </div>
   ) : null;
 }
