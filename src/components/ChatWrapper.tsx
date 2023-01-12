@@ -189,11 +189,8 @@ export default function ChatWrapper(props) {
             onClick={() => onBubbleClick()}
         >
             <DKIcon
-                src={showPopup ? DKIcons.ic_add_white : DKIcons.ic_chat_white}
-                className={`dk-chat-chat-float-icon`}
-                style={{
-                    transform: showPopup ? `rotate(138deg)` : `rotate(0deg)`,
-                }}
+                src={DKIcons.ic_chat_white}
+                className={`dk-chat-chat-float-icon dk-chat-ic-s`}
             ></DKIcon>
         </div >
     }

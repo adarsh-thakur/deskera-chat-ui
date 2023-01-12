@@ -94,12 +94,10 @@ export default function ChatPopup(props: any) {
                 />
             </div>
             <div className='dk-chat-pr-s'>
-                <DKIcon src={DKIcons.ic_add_white}
-                    onClick={() => { props?.onPopupClose?.(); }}
-                    className="dk-chat-ic-r dk-chat-cursor-hand"
-                    style={{
-                        transform: `rotate(138deg)`,
-                    }} />
+                <DKIcon src={DKIcons.ic_close_2_white}
+                    onClick={() => props.onPopupClose?.()}
+                    className="dk-chat-ic-xs dk-chat-cursor-hand"
+                />
             </div>
         </div>;
     }

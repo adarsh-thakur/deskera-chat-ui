@@ -12,11 +12,17 @@ import ic_delete from "../../assets/icons/ic_delete.png";
 import ic_download from "../../assets/icons/ic_download.png";
 import ic_edit from "../../assets/icons/ic_edit.png";
 import ic_warning from "../../assets/icons/ic_warning.png";
+import ic_attachment from "../../assets/icons/ic_attachment.png";
+import ic_emoji from "../../assets/icons/ic_emoji.png";
+import ic_close_2_white from "../../assets/icons/ic_close_2_white.png";
 
 export const DKIcons = {
     ic_add: ic_add,
     ic_add_white: ic_add_white,
+    ic_attachment: ic_attachment,
+    ic_emoji: ic_emoji,
     ic_close: ic_close,
+    ic_close_2_white: ic_close_2_white,
     ic_arrow_down2: ic_arrow_down2,
     ic_comment: ic_comment,
     ic_chat_white: ic_chat_white,
