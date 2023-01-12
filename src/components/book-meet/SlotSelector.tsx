@@ -93,9 +93,10 @@ export default function SlotSelector(props: ISlotSelectorProps) {
           text={`${WEEK_DAYS[date.getDay()]} ${
             date.getMonth() + 1
           }/${date.getDate()}`}
-          className="dk-chat-text-align-center dk-chat-fs-r"
+          className={"dk-chat-text-align-center dk-chat-fs-r dk-chat-fw-m"}
           style={{
-            width: "33%"
+            width: "33%",
+            color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
           }}
         />
         <div
