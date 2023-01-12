@@ -27,8 +27,11 @@ export default function ChatWrapper(props) {
     const lastAutoChatStep = useRef(getLastActiveChatStep());
     const [activeUserInfo, setActiveUserInfo] = useState(null);
 
-    function getLastActiveChatStep(lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY)) {
-        const nextStep = AUTO_RESPONSE[lastInputStep]?.nextStep || AUTO_RESPONSE[lastInputStep]?.getNextStep?.() || null;
+    function getLastActiveChatStep(lastInputStep = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_AUTO_RESPONSE_INPUT_KEY), forAutoResponse = false) {
+        let nextStep = AUTO_RESPONSE[lastInputStep]?.nextStep || AUTO_RESPONSE[lastInputStep]?.getNextStep?.() || null;
+        if (nextStep === AUTO_RESPONSE_KEYS.GET_BACK && !forAutoResponse) {
+            return null;
+        }
         return nextStep;
     }
 
@@ -67,7 +70,7 @@ export default function ChatWrapper(props) {
         let body = {
             stepId,
             text: message,
-            nextStepId: getLastActiveChatStep(stepId),
+            nextStepId: getLastActiveChatStep(stepId, true),
             attachments: [],
         }
         const payload: MessagePayload = {
