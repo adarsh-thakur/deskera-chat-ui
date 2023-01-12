@@ -242,6 +242,7 @@ export default function ChatWrapper(props) {
         }
     }
     const onBDRItemClicked = (item) => {
+        lastAutoChatStep.current = getLastActiveChatStep(item);
         eraseCookie(GUEST_USER_COOKIE, getDomain(window.location.hostname));
         const payload: SignUpPayload = {
             userId: tenantService.getUserId(),
@@ -261,7 +262,7 @@ export default function ChatWrapper(props) {
     }
     const getActiveUserInfo = () => {
         if (!isEmptyObject(activeUserInfo)) return activeUserInfo;
-        
+
         let userData: any = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA);
         userData = userData ? JSON.parse(userData) : null;
         return userData;
