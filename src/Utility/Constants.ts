@@ -103,7 +103,7 @@ export const AUTO_RESPONSE = {
     getNextStep: () =>
       localStorage.getItem(LOCAL_STORAGE_KEYS.FIRST_AUTO_RESPONSE_INPUT_KEY) ===
       AUTO_RESPONSE_KEYS.TALK_TO_REP
-        ? undefined
+        ? AUTO_RESPONSE_KEYS.GET_BACK
         : AUTO_RESPONSE_KEYS.MEET_SLOT_STEP,
     userInfoRequired: true,
     key: "phone"
