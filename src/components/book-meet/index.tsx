@@ -8,8 +8,7 @@ import {
   IMeetSlot,
   IEventPayload,
   IMeetHost,
-  IMeetMember,
-  IChatUserContactPayload
+  IMeetMember
 } from "../../model/MeetModel";
 import { BookMeetService } from "../../services/bookMeet";
 
@@ -76,15 +75,6 @@ export default function BookAMeet({
     if (!selectedSlot) return;
 
     try {
-      const contactPayload: IChatUserContactPayload = {
-        ...invitee,
-        owner_id: host.userId
-      };
-      const contactResponse: any = await BookMeetService.getInstance().createMeetingInvitee(
-        tenantId,
-        contactPayload
-      );
-
       const payload: IEventPayload = {
         meetingLink: host.meetLink,
         startDate: selectedSlot.startDate,
@@ -96,8 +86,8 @@ export default function BookAMeet({
         ownerId: host.userId
       };
 
-      if (contactResponse?.body?.id) {
-        payload["crmContactId"] = contactResponse.body.id;
+      if (invitee.id) {
+        payload["crmContactId"] = invitee.id;
       }
 
       await BookMeetService.getInstance().createMeetingEvent(tenantId, payload);
