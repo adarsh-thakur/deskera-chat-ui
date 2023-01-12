@@ -41,7 +41,8 @@ const STEP_INPUT_DATA: { [key: string]: INPUT_DATA } = {
 export default function ChatUserInfoInput({
   stepId,
   defaultValue = "",
-  onSend
+  onSend,
+  accentColor = ""
 }) {
   const [saveTapped, setSaveTapped] = useState(false);
   const [inputData, setInputData] = useState<INPUT_DATA>(null);
@@ -108,10 +109,11 @@ export default function ChatUserInfoInput({
       <DKButton
         title={"Send"}
         className={
-          "dk-chat-parent-height dk-chat-text-white dk-chat-fs-s-2 dk-chat-fw-m dk-chat-bg-blue"
+          "dk-chat-parent-height dk-chat-text-white dk-chat-fs-s-2 dk-chat-fw-m"
         }
         style={{
-          borderRadius: "0 4px 4px 0"
+          borderRadius: "0 4px 4px 0",
+          backgroundColor: accentColor ? accentColor : "rgb(28, 115, 232)"
         }}
         onClick={onTriggerSend}
       />
