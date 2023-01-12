@@ -118,6 +118,7 @@ export default function ChatPopup(props: any) {
             }}
             slot={message}
             onBookMeeting={(meetStartDate) => props.onUserInfoSend(meetStartDate)}
+            accentColor={props.settings?.bubbleColor}
         />
     }
 
@@ -136,6 +137,7 @@ export default function ChatPopup(props: any) {
                 onItemClick={(item) => {
                     props.onBDRItemClicked(item)
                 }}
+                accentColor={props.settings?.bubbleColor}
             />}
             {props.showChat && <div className="dk-chat-screen dk-chat-parent-size dk-chat-border-radius-m dk-chat-pt-m" style={{ height: '98%' }}>
                 <div ref={messageTopRef} id="message-top-ref" className='dk-chat-parent-width'></div>
@@ -144,7 +146,7 @@ export default function ChatPopup(props: any) {
                         renderBookAMeetSection(message.body.text) : (
                         <ChatBubble
                             currentUserId={props.userId}
-                            accentColor={props?.settings?.bubbleColor}
+                            accentColor={props.settings?.bubbleColor}
                             avatar={props.avatar}
                             data={message}
                             onActionButtonClick={(messageId, threadId, attachemntId) => { }}

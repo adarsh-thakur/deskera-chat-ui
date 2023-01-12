@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { GUEST_USER_COOKIE } from "../Utility/Constants";
-import { getCookie } from "../Utility/Utility";
+import { getCookie, getHexToRgbWithAlpha } from "../Utility/Utility";
 import ic_bdr from "../assets/images/ic_bdr.png";
 export enum INITIAL_USER_SELECTION {
     TALK_TO_REP = `I want to talk to a Specialist 🙋‍♂️`,
     BOOK_A_MEET = `I want to schedule a meeting`
 }
+
 function BDRInfo(props) {
     return <>
         <div className="dk-chat-row dk-chat-flex-wrap" style={{ gap: 5, padding: '0 20px' }}>
@@ -30,7 +30,11 @@ function BDRInfo(props) {
                 </div>
             </div>
             {!getCookie(GUEST_USER_COOKIE) && ['TALK_TO_REP', 'BOOK_A_MEET'].map(item => <div
-                className='dk-chat-parent-width dk-chat-bg-chip-blue dk-chat-p-s dk-chat-text-blue dk-chat-text-align-center dk-chat-cursor-hand dk-chat-fs-r '
+                className={'dk-chat-parent-width dk-chat-p-s dk-chat-text-align-center dk-chat-cursor-hand dk-chat-fs-r '}
+                style={{
+                    backgroundColor: props.accentColor ? getHexToRgbWithAlpha(props.accentColor, 0.2) : "",
+                    color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
+                }}
                 onClick={() => props.onItemClick(item)}
             >
                 {INITIAL_USER_SELECTION[item]}
