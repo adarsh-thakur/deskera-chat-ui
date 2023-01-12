@@ -208,6 +208,7 @@ export default function ChatPopup(props: any) {
                 {props.stepId && AUTO_RESPONSE[props.stepId]?.userInfoRequired ? <ChatUserInfoInput
                     stepId={props.stepId}
                     onSend={(value) => props.onUserInfoSend(value)}
+                    accentColor={props.settings?.bubbleColor}
                 /> : null}
                 {!props.showChat && !props.bdrInfo && renderEmailInput()}
                 {props.showChat && !props.currentThread?.closed && !props.stepId && renderChatInput()}
