@@ -296,14 +296,22 @@ export default function ChatWrapper(props) {
     }, []);
 
     React.useEffect(() => {
-        if (ChatManager.scrollToBottom) {
-            document.getElementById('message-bottom-ref')?.scrollIntoView({ behavior: 'smooth' });
+        if (ChatManager.scrollToBottom && showPopup) {
+            setTimeout(() => document.getElementById('message-bottom-ref')?.scrollIntoView({ behavior: 'smooth' }), 100);
         }
         ChatManager.scrollToBottom = true;
-    }, [messages]);
+    }, [messages, showPopup]);
     React.useEffect(() => {
         setShowChat(!isEmptyObject(currentThread));
-    }, [currentThread])
+    }, [currentThread]);
+
+    React.useEffect(() => {
+        if (isEmptyObject(bdrInfo) || !isEmptyObject(getCookie(GUEST_USER_COOKIE))) return;
+
+        setTimeout(() => {
+            setShowPopup(true);
+        }, 3000);
+    }, [bdrInfo]);
     /* renderer will go here */
     return <>
         {(!showPopup && showNotification) && <div className="dk-chat-z-index-max dk-chat-notification">{_unreadCount.current}</div>}
