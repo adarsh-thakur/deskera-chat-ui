@@ -1,5 +1,5 @@
 import { GUEST_USER_COOKIE } from "../Utility/Constants";
-import { getCookie, getHexToRgbWithAlpha } from "../Utility/Utility";
+import { getCookie, getHexToRgbWithAlpha, getRgbTextColorForChip } from "../Utility/Utility";
 import ic_bdr from "../assets/images/ic_bdr.png";
 export enum INITIAL_USER_SELECTION {
     TALK_TO_REP = `I want to talk to a Specialist 🙋‍♂️`,
@@ -32,8 +32,8 @@ function BDRInfo(props) {
             {!getCookie(GUEST_USER_COOKIE) && ['TALK_TO_REP', 'BOOK_A_MEET'].map(item => <div
                 className={'dk-chat-parent-width dk-chat-p-s dk-chat-text-align-center dk-chat-cursor-hand dk-chat-fs-r '}
                 style={{
-                    backgroundColor: props.accentColor ? getHexToRgbWithAlpha(props.accentColor, 0.2) : "",
-                    color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
+                    backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
+                    color: getRgbTextColorForChip(props.accentColor)
                 }}
                 onClick={() => props.onItemClick(item)}
             >

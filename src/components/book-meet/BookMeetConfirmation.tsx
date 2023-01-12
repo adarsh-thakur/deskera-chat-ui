@@ -3,7 +3,7 @@ import { IMeetHost, IMeetMember, IMeetSlot } from "../../model/MeetModel";
 import { DKButton, DKLabel } from "../common";
 import { MONTHS, WEEK_DAYS } from "../../Utility/Constants";
 import HostAvatar from "./HostAvatar";
-import { getHexToRgbWithAlpha } from "../../Utility/Utility";
+import { getHexToRgbWithAlpha, getRgbTextColorForChip } from "../../Utility/Utility";
 
 interface IBookMeetConfirmationProps {
   host: IMeetHost;
@@ -55,7 +55,7 @@ export default function BookMeetConfirmation(
             borderRadius: 4,
             width: 160,
             backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
-            color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
+            color: getRgbTextColorForChip(props.accentColor)
           }}
           onClick={() => props.onConfirmed()}
         />

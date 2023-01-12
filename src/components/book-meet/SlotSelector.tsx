@@ -5,7 +5,7 @@ import { WEEK_DAYS } from "../../Utility/Constants";
 import { IMeetHost, IMeetMember, IMeetSlot } from "../../model/MeetModel";
 import { BookMeetService } from "../../services/bookMeet";
 import HostAvatar from "./HostAvatar";
-import { getHexToRgbWithAlpha } from "../../Utility/Utility";
+import { getHexToRgbWithAlpha, getRgbTextColorForChip } from "../../Utility/Utility";
 
 interface ISlotSelectorProps {
   tenantId: number;
@@ -140,7 +140,7 @@ export default function SlotSelector(props: ISlotSelectorProps) {
               width: "49%",
               borderRadius: 4,
               backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
-              color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
+              color: getRgbTextColorForChip(props.accentColor)
             }}
             onClick={() => {
               const [hours, minutes] = slot.format.split(":");

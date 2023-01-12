@@ -149,3 +149,11 @@ export function getHexToRgbWithAlpha(color: string, opacity = 1) {
     } : null;
     return rgb ? `rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})` : color;
 }
+
+export function getRgbTextColorForChip(color: string) {
+    if (!color) return "rgb(22, 100, 215)";
+
+    if (color.length !== 7 || !REGEX.HEX_COLOR.test(color)) return "white";
+
+    return color;
+}
