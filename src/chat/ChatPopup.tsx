@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import { DKLabel, DKButton, DKIcon, DKIcons } from '../components/common';
 import ControlledInput from '../components/ControlledInput';
 import ChatInputBox from './ChatInput';
-import { isEmptyObject, isValidEmail } from '../Utility/Utility';
+import { encodeJSON, isEmptyObject, isValidEmail } from '../Utility/Utility';
 import ChatBubble from './ChatBubble';
 import { AUTO_RESPONSE_KEYS, INPUT_TYPE, INPUT_VIEW_DIRECTION } from '../Utility/Enum';
 import BookAMeet from '../components/book-meet';
@@ -72,6 +73,51 @@ export default function ChatPopup(props: any) {
         setShowPopup(!props.hidePopup);
     }, [props.hidePopup]);
 
+    useEffect(() => {
+        if (props.stepId !== AUTO_RESPONSE_KEYS.MEET_SLOT_STEP) return;
+
+        function isCalendlyEvent(e) {
+            return e.origin?.indexOf("https://calendly.com") === 0 && e.data?.event && e.data.event.indexOf("calendly.") === 0;
+        };
+
+        function handleCalendlyMessage(e) {
+            if(!isCalendlyEvent(e) || e.data.event !== "calendly.event_scheduled") return;
+            
+            const payload = encodeJSON({
+                hostName: props.bdrInfo.displayName,
+                iamUserId: props.bdrInfo.iamUserId,
+                requestorName: props.activeUserInfo.name,
+                requestorEmail: props.activeUserInfo.email
+            });
+            props.onUserInfoSend(payload);
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.type = "text/javascript";
+        script.onload = () => {
+            if (!props.bdrInfo?.meetingLink || !props.activeUserInfo || !window["Calendly"]) return;
+
+            window["Calendly"].initInlineWidget({
+                url: `${props.bdrInfo.meetingLink}?hide_landing_page_details=1&hide_gdpr_banner=1`,
+                text: `Schedule time with ${props.bdrInfo.displayName || "our agent"}`,
+                color: '#d2e4f9', 
+                textColor: '#1664d7',
+                branding: false,
+                prefill: {
+                    name: props.activeUserInfo.name,
+                    email: props.activeUserInfo.email,
+                },
+                parentElement: document.getElementById("calendly-inline-widget")
+            });
+        };
+        document.head.appendChild(script);
+        
+        window.addEventListener("message", handleCalendlyMessage);
+
+        return () => window.removeEventListener("message", handleCalendlyMessage);
+    }, [props.stepId]);
+
     /* helper renderer goes here */
     const renderHeader = () => {
         return <div className="dk-chat-row dk-chat-pl-s dk-chat-parent-width dk-chat-d-flex dk-chat-justify-content-between"
@@ -103,7 +149,7 @@ export default function ChatPopup(props: any) {
     const renderBookAMeetSection = (message = null) => {
         if (isEmptyObject(props.bdrInfo)) return null;
 
-        return <BookAMeet
+        return message ? <BookAMeet
             tenantId={props.tenantId}
             invitee={props.activeUserInfo}
             host={{
@@ -117,7 +163,9 @@ export default function ChatPopup(props: any) {
             slot={message}
             onBookMeeting={props.onUserInfoSend}
             accentColor={props.settings?.bubbleColor}
-        />
+        /> : (
+            <div id={"calendly-inline-widget"} className="calendly-inline-widget" style={{ minWidth:320, height : 660 }} data-auto-load={false}></div>   
+        )
     }
 
     const renderChatHistory = () => {

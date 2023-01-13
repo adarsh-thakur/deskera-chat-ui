@@ -11,6 +11,7 @@ import {
   IMeetMember
 } from "../../model/MeetModel";
 import { BookMeetService } from "../../services/bookMeet";
+import { decodeJSON, encodeJSON, isEmptyObject } from "../../Utility/Utility";
 
 interface IBookAMeetProps {
   tenantId: number;
@@ -26,19 +27,25 @@ function getSlotDataFromDateString(meetData: string | null): IMeetSlot {
 
   let startDate: Date, endDate: Date;
   try {
-    let parsedMeetData = JSON.parse(meetData);
+    let parsedMeetData = decodeJSON(meetData);
     startDate = new Date(parsedMeetData.startDate);
-    endDate = new Date(parsedMeetData.endDate)
-  } catch(err) {
+  } catch (err) {
     startDate = new Date(meetData);
-    if (!startDate.getTime()) return null;
+  }
+
+  if (!startDate.getTime()) return null;
+
+  let slotHours: number, slotMinutes: number;
+  try {
     endDate = new Date(
       new Date(meetData).setMinutes(startDate.getMinutes() + 15)
     );
-  }
 
-  const slotHours = startDate.getHours();
-  const slotMinutes = startDate.getMinutes();
+    slotHours = startDate.getHours();
+    slotMinutes = startDate.getMinutes();
+  } catch (err) {
+    return null;
+  }
 
   return {
     title: `${slotHours % 12 || 12}:${slotMinutes === 0 ? "00" : slotMinutes} ${
@@ -64,9 +71,9 @@ export default function BookAMeet({
   const [selectedSlot, setSelectedSlot] = useState<IMeetSlot>(null);
 
   useEffect(() => {
-    const slotData = getSlotDataFromDateString(slot);
-    if (!slotData) return;
+    if (isEmptyObject(slot)) return;
 
+    const slotData = getSlotDataFromDateString(slot);
     setSelectedSlot(slotData);
     setCurrentStep(3);
   }, [slot]);
@@ -106,7 +113,7 @@ export default function BookAMeet({
       // to avoid showing further step from this instance, as it will show up based on saved thread message
       onSkipToStep(MAX_STEPS + 1);
 
-      await onBookMeeting(JSON.stringify(payload));
+      await onBookMeeting(encodeJSON(payload));
     } catch (err) {
       onSkipToStep(2);
 
