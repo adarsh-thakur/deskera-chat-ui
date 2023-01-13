@@ -96,7 +96,8 @@ export default function ChatPopup(props: any) {
         script.src = "https://assets.calendly.com/assets/external/widget.js";
         script.type = "text/javascript";
         script.onload = () => {
-            if (!props.bdrInfo?.meetingLink || !props.activeUserInfo || !window["Calendly"]) return;
+            const meetingLink: string = props.bdrInfo?.meetingLink || "";
+            if (!meetingLink || !meetingLink.includes("calendly.com") || !props.activeUserInfo || !window["Calendly"]) return;
 
             window["Calendly"].initInlineWidget({
                 url: `${props.bdrInfo.meetingLink}?hide_landing_page_details=1&hide_gdpr_banner=1`,
@@ -106,7 +107,7 @@ export default function ChatPopup(props: any) {
                 branding: false,
                 prefill: {
                     name: props.activeUserInfo.name,
-                    email: props.activeUserInfo.email,
+                    email: props.activeUserInfo.email
                 },
                 parentElement: document.getElementById("calendly-inline-widget")
             });
