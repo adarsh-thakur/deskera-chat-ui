@@ -11,6 +11,7 @@ import {
   IMeetMember
 } from "../../model/MeetModel";
 import { BookMeetService } from "../../services/bookMeet";
+import { decodeJSON, encodeJSON, isEmptyObject } from "../../Utility/Utility";
 
 interface IBookAMeetProps {
   tenantId: number;
@@ -18,25 +19,40 @@ interface IBookAMeetProps {
   host: IMeetHost;
   slot?: string;
   accentColor?: string;
-  onBookMeeting: (meetStartDate: string) => Promise<any>;
+  onBookMeeting: (meetData: string) => Promise<any>;
 }
 
-function getSlotDataFromDateString(meetStartDate: string | null): IMeetSlot {
-  if (!meetStartDate) return null;
+function getSlotDataFromDateString(meetData: string | null): IMeetSlot {
+  if (!meetData) return null;
 
-  const startDate = new Date(meetStartDate);
-  const endDate = new Date(
-    new Date(meetStartDate).setMinutes(startDate.getMinutes() + 15)
-  );
-  const slotHours = startDate.getHours();
-  const slotMinutes = startDate.getMinutes();
+  let startDate: Date, endDate: Date;
+  try {
+    let parsedMeetData = decodeJSON(meetData);
+    startDate = new Date(parsedMeetData.startDate);
+  } catch (err) {
+    startDate = new Date(meetData);
+  }
+
+  if (!startDate.getTime()) return null;
+
+  let slotHours: number, slotMinutes: number;
+  try {
+    endDate = new Date(
+      new Date(meetData).setMinutes(startDate.getMinutes() + 15)
+    );
+
+    slotHours = startDate.getHours();
+    slotMinutes = startDate.getMinutes();
+  } catch (err) {
+    return null;
+  }
 
   return {
     title: `${slotHours % 12 || 12}:${slotMinutes === 0 ? "00" : slotMinutes} ${
       slotHours < 12 ? "AM" : "PM"
     }`,
     format: `${slotHours}:${slotMinutes}`,
-    startDate: meetStartDate,
+    startDate: startDate.toISOString(),
     endDate: endDate.toISOString()
   };
 }
@@ -55,9 +71,9 @@ export default function BookAMeet({
   const [selectedSlot, setSelectedSlot] = useState<IMeetSlot>(null);
 
   useEffect(() => {
-    const slotData = getSlotDataFromDateString(slot);
-    if (!slotData) return;
+    if (isEmptyObject(slot)) return;
 
+    const slotData = getSlotDataFromDateString(slot);
     setSelectedSlot(slotData);
     setCurrentStep(3);
   }, [slot]);
@@ -97,9 +113,9 @@ export default function BookAMeet({
       // to avoid showing further step from this instance, as it will show up based on saved thread message
       onSkipToStep(MAX_STEPS + 1);
 
-      await onBookMeeting(selectedSlot.startDate);
+      await onBookMeeting(encodeJSON(payload));
     } catch (err) {
-      onSkipToStep(1);
+      onSkipToStep(2);
 
       showAlert(
         "Error occured!",
@@ -162,15 +178,17 @@ export default function BookAMeet({
     >
       {stepHeader()}
       <div
-        className={"dk-chat-column dk-chat-flex-1 dk-chat-shadow-m dk-chat-p-r dk-chat-m-s dk-chat-border-blue"}
-        style={{ 
+        className={
+          "dk-chat-column dk-chat-flex-1 dk-chat-shadow-m dk-chat-p-r dk-chat-m-s dk-chat-border-blue"
+        }
+        style={{
           borderWidth: `2px 0 0`,
-          borderColor: accentColor ? accentColor : "rgb(22, 100, 215)" 
+          borderColor: accentColor ? accentColor : "rgb(22, 100, 215)"
         }}
       >
         {stepRenderer()}
       </div>
-      <div style={{height:10}}></div>
+      <div style={{ height: 10 }}></div>
     </div>
   ) : null;
 }

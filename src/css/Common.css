@@ -169,6 +169,10 @@
   .dk-chat-dk-button-hover :active {
     opacity: 1;
   }
+
+  .dk-chat-chip-button-hover:hover {
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  }
   
   .dk-chat-dk-tooltip {
     min-width: 100px;

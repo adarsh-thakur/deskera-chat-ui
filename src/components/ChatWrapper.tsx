@@ -87,6 +87,7 @@ export default function ChatWrapper(props) {
             }
         };
         let lastMessages = ChatManager.getMessages();
+        const prevThread = [...lastMessages];
         lastMessages.push({ ...payload, sentAt: new Date().toISOString() });
         lastMessages = lastMessages.map((message) => ({ ...message, sender: message.from?.id == tenantService.getUserId() }));
         ChatManager.setMessages(lastMessages);
@@ -109,8 +110,13 @@ export default function ChatWrapper(props) {
 
             lastAutoChatStep.current = getLastActiveChatStep(stepId);
             getMessagesByThreadId(cookies.threadId);
+        }).catch(err => {
+            /* reset to previous state on message send failure */
+            setMessages(prevThread);
+            ChatManager.setMessages(prevThread);
+            ChatManager.setTotalCount(ChatManager.getTotalCount() - 1)
+            return Promise.reject(err);
         });
-
     }
     const sendMessage = (data, messageType = MESSAGE_TYPE.TEXT, cookieData = null) => {
         const payload: MessagePayload = {

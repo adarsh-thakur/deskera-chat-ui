@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import { IMeetHost, IMeetMember, IMeetSlot } from "../../model/MeetModel";
-import { DKButton, DKLabel } from "../common";
+import { DKLabel } from "../common";
 import { MONTHS, WEEK_DAYS } from "../../Utility/Constants";
 import HostAvatar from "./HostAvatar";
-import { getHexToRgbWithAlpha } from "../../Utility/Utility";
+import { DKChipButton } from "../common/DKChipButton";
 
 interface IBookMeetConfirmationProps {
   host: IMeetHost;
@@ -46,16 +46,15 @@ export default function BookMeetConfirmation(
   function getCTA() {
     return (
       <Fragment>
-        <DKButton
+        <DKChipButton
+          accentColor={props.accentColor}
           title={"Book meeting"}
           className={
             "dk-chat-mt-l dk-chat-justify-content-center "
           }
           style={{
             borderRadius: 4,
-            width: 160,
-            backgroundColor: getHexToRgbWithAlpha(props.accentColor, 0.2),
-            color: props.accentColor ? props.accentColor : "rgb(22, 100, 215)"
+            width: 160
           }}
           onClick={() => props.onConfirmed()}
         />
